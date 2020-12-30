@@ -1,0 +1,2 @@
+# ImageInserter_ExcelAddin
+画像をセルやメモに挿入するExcelアドイン
