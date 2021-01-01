@@ -35,19 +35,24 @@ namespace ImageInserter
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon_imageInserter));
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl3 = this.Factory.CreateRibbonDropDownItem();
-            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl7 = this.Factory.CreateRibbonDropDownItem();
-            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl8 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl4 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl5 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl6 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl7 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl8 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl9 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl10 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl11 = this.Factory.CreateRibbonDropDownItem();
             this.tab_imageInserter = this.Factory.CreateRibbonTab();
             this.group_insert = this.Factory.CreateRibbonGroup();
+            this.splitButton_insert = this.Factory.CreateRibbonSplitButton();
+            this.button_insertFile = this.Factory.CreateRibbonButton();
+            this.button_insertLink = this.Factory.CreateRibbonButton();
+            this.button_insertFolder = this.Factory.CreateRibbonButton();
             this.group_setting = this.Factory.CreateRibbonGroup();
             this.label1 = this.Factory.CreateRibbonLabel();
             this.checkBox_cell = this.Factory.CreateRibbonCheckBox();
@@ -57,6 +62,7 @@ namespace ImageInserter
             this.editBox_setW = this.Factory.CreateRibbonEditBox();
             this.editBox_setH = this.Factory.CreateRibbonEditBox();
             this.dropDown_shrink = this.Factory.CreateRibbonDropDown();
+            this.dropDown_writeCell = this.Factory.CreateRibbonDropDown();
             this.separator2 = this.Factory.CreateRibbonSeparator();
             this.label2 = this.Factory.CreateRibbonLabel();
             this.dropDown_direction = this.Factory.CreateRibbonDropDown();
@@ -64,12 +70,7 @@ namespace ImageInserter
             this.checkBox_maxSize = this.Factory.CreateRibbonCheckBox();
             this.editBox_maxW = this.Factory.CreateRibbonEditBox();
             this.editBox_maxH = this.Factory.CreateRibbonEditBox();
-            this.splitButton_insert = this.Factory.CreateRibbonSplitButton();
-            this.button_insertFile = this.Factory.CreateRibbonButton();
-            this.button_insertFolder = this.Factory.CreateRibbonButton();
-            this.dropDown_writeCell = this.Factory.CreateRibbonDropDown();
             this.dropDown_writeMemo = this.Factory.CreateRibbonDropDown();
-            this.button_insertLink = this.Factory.CreateRibbonButton();
             this.tab_imageInserter.SuspendLayout();
             this.group_insert.SuspendLayout();
             this.group_setting.SuspendLayout();
@@ -84,38 +85,73 @@ namespace ImageInserter
             this.tab_imageInserter.Groups.Add(this.group_setting);
             this.tab_imageInserter.Groups.Add(this.group_cell);
             this.tab_imageInserter.Groups.Add(this.group_memo);
-            this.tab_imageInserter.Label = "画像挿入";
+            resources.ApplyResources(this.tab_imageInserter, "tab_imageInserter");
             this.tab_imageInserter.Name = "tab_imageInserter";
             // 
             // group_insert
             // 
             this.group_insert.Items.Add(this.splitButton_insert);
-            this.group_insert.Label = "画像の挿入";
+            resources.ApplyResources(this.group_insert, "group_insert");
             this.group_insert.Name = "group_insert";
+            // 
+            // splitButton_insert
+            // 
+            this.splitButton_insert.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.splitButton_insert.Items.Add(this.button_insertFile);
+            this.splitButton_insert.Items.Add(this.button_insertLink);
+            this.splitButton_insert.Items.Add(this.button_insertFolder);
+            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
+            this.splitButton_insert.Name = "splitButton_insert";
+            this.splitButton_insert.OfficeImageId = "RestoreImageSize";
+            this.splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
+            // 
+            // button_insertFile
+            // 
+            resources.ApplyResources(this.button_insertFile, "button_insertFile");
+            this.button_insertFile.Name = "button_insertFile";
+            this.button_insertFile.OfficeImageId = "RestoreImageSize";
+            this.button_insertFile.ShowImage = true;
+            this.button_insertFile.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
+            // 
+            // button_insertLink
+            // 
+            resources.ApplyResources(this.button_insertLink, "button_insertLink");
+            this.button_insertLink.Name = "button_insertLink";
+            this.button_insertLink.OfficeImageId = "OmsImageFromClip";
+            this.button_insertLink.ShowImage = true;
+            this.button_insertLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertLink_Click);
+            // 
+            // button_insertFolder
+            // 
+            resources.ApplyResources(this.button_insertFolder, "button_insertFolder");
+            this.button_insertFolder.Name = "button_insertFolder";
+            this.button_insertFolder.OfficeImageId = "ApplyImageBackgroundTile";
+            this.button_insertFolder.ShowImage = true;
+            this.button_insertFolder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFolder_Click);
             // 
             // group_setting
             // 
             this.group_setting.Items.Add(this.label1);
             this.group_setting.Items.Add(this.checkBox_cell);
             this.group_setting.Items.Add(this.checkBox_memo);
-            this.group_setting.Label = "全般設定";
+            resources.ApplyResources(this.group_setting, "group_setting");
             this.group_setting.Name = "group_setting";
             // 
             // label1
             // 
-            this.label1.Label = "挿入する場所";
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
             // 
             // checkBox_cell
             // 
             this.checkBox_cell.Checked = true;
-            this.checkBox_cell.Label = "セル";
+            resources.ApplyResources(this.checkBox_cell, "checkBox_cell");
             this.checkBox_cell.Name = "checkBox_cell";
             // 
             // checkBox_memo
             // 
             this.checkBox_memo.Checked = true;
-            this.checkBox_memo.Label = "メモ";
+            resources.ApplyResources(this.checkBox_memo, "checkBox_memo");
             this.checkBox_memo.Name = "checkBox_memo";
             // 
             // group_cell
@@ -128,52 +164,66 @@ namespace ImageInserter
             this.group_cell.Items.Add(this.separator2);
             this.group_cell.Items.Add(this.label2);
             this.group_cell.Items.Add(this.dropDown_direction);
-            this.group_cell.Label = "セル設定";
+            resources.ApplyResources(this.group_cell, "group_cell");
             this.group_cell.Name = "group_cell";
             // 
             // checkBox_setSize
             // 
-            this.checkBox_setSize.Label = "セルサイズ指定";
+            resources.ApplyResources(this.checkBox_setSize, "checkBox_setSize");
             this.checkBox_setSize.Name = "checkBox_setSize";
-            this.checkBox_setSize.SuperTip = "画像挿入時にセルのサイズを変更します";
             this.checkBox_setSize.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox_setSize_Click);
             // 
             // editBox_setW
             // 
-            this.editBox_setW.Enabled = false;
-            this.editBox_setW.Label = "　幅";
+            resources.ApplyResources(this.editBox_setW, "editBox_setW");
             this.editBox_setW.MaxLength = 4;
             this.editBox_setW.Name = "editBox_setW";
-            this.editBox_setW.Text = "15";
             // 
             // editBox_setH
             // 
-            this.editBox_setH.Enabled = false;
-            this.editBox_setH.Label = "高さ";
+            resources.ApplyResources(this.editBox_setH, "editBox_setH");
             this.editBox_setH.MaxLength = 4;
             this.editBox_setH.Name = "editBox_setH";
-            this.editBox_setH.Text = "15";
             // 
             // dropDown_shrink
             // 
-            ribbonDropDownItemImpl1.Label = "セル内に収める";
+            resources.ApplyResources(ribbonDropDownItemImpl1, "ribbonDropDownItemImpl1");
             ribbonDropDownItemImpl1.OfficeImageId = "BackgroundImageGallery";
             ribbonDropDownItemImpl1.Tag = "fit";
-            ribbonDropDownItemImpl2.Label = "セル幅に合わせる";
+            resources.ApplyResources(ribbonDropDownItemImpl2, "ribbonDropDownItemImpl2");
             ribbonDropDownItemImpl2.OfficeImageId = "CellHeight";
             ribbonDropDownItemImpl2.Tag = "fitW";
-            ribbonDropDownItemImpl3.Label = "セル高さに合わせる";
+            resources.ApplyResources(ribbonDropDownItemImpl3, "ribbonDropDownItemImpl3");
             ribbonDropDownItemImpl3.OfficeImageId = "GroupTableCellFormat";
             ribbonDropDownItemImpl3.Tag = "fitH";
             this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl1);
             this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl2);
             this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl3);
-            this.dropDown_shrink.Label = "縮小方法";
+            resources.ApplyResources(this.dropDown_shrink, "dropDown_shrink");
             this.dropDown_shrink.Name = "dropDown_shrink";
             this.dropDown_shrink.OfficeImageId = "DiagramResizeClassic";
             this.dropDown_shrink.ShowImage = true;
-            this.dropDown_shrink.SuperTip = "セルの中に画像をどのように挿入するかを指定します";
             this.dropDown_shrink.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_shrink_SelectionChanged);
+            // 
+            // dropDown_writeCell
+            // 
+            resources.ApplyResources(ribbonDropDownItemImpl4, "ribbonDropDownItemImpl4");
+            ribbonDropDownItemImpl4.OfficeImageId = "CancelRequest";
+            ribbonDropDownItemImpl4.Tag = "none";
+            resources.ApplyResources(ribbonDropDownItemImpl5, "ribbonDropDownItemImpl5");
+            ribbonDropDownItemImpl5.OfficeImageId = "FileNew";
+            ribbonDropDownItemImpl5.Tag = "name";
+            resources.ApplyResources(ribbonDropDownItemImpl6, "ribbonDropDownItemImpl6");
+            ribbonDropDownItemImpl6.OfficeImageId = "GroupImapFolderOptions";
+            ribbonDropDownItemImpl6.Tag = "path";
+            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl4);
+            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl5);
+            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl6);
+            resources.ApplyResources(this.dropDown_writeCell, "dropDown_writeCell");
+            this.dropDown_writeCell.Name = "dropDown_writeCell";
+            this.dropDown_writeCell.OfficeImageId = "IconPencilTool";
+            this.dropDown_writeCell.ShowImage = true;
+            this.dropDown_writeCell.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_shrink_SelectionChanged);
             // 
             // separator2
             // 
@@ -181,22 +231,21 @@ namespace ImageInserter
             // 
             // label2
             // 
-            this.label2.Label = "複数セルの配置";
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
             // 
             // dropDown_direction
             // 
-            ribbonDropDownItemImpl7.Label = "下";
+            resources.ApplyResources(ribbonDropDownItemImpl7, "ribbonDropDownItemImpl7");
             ribbonDropDownItemImpl7.OfficeImageId = "ChartNavDrillDown";
-            ribbonDropDownItemImpl7.Tag = "bottom";
-            ribbonDropDownItemImpl8.Label = "右";
+            ribbonDropDownItemImpl7.Tag = "under";
+            resources.ApplyResources(ribbonDropDownItemImpl8, "ribbonDropDownItemImpl8");
             ribbonDropDownItemImpl8.OfficeImageId = "OrgChartReportMoveRight";
             ribbonDropDownItemImpl8.Tag = "right";
             this.dropDown_direction.Items.Add(ribbonDropDownItemImpl7);
             this.dropDown_direction.Items.Add(ribbonDropDownItemImpl8);
-            this.dropDown_direction.Label = "配置方向";
+            resources.ApplyResources(this.dropDown_direction, "dropDown_direction");
             this.dropDown_direction.Name = "dropDown_direction";
-            this.dropDown_direction.SuperTip = "複数の画像を挿入する際に選択したセルからどの方向に画像を追加していくかを指定します";
             // 
             // group_memo
             // 
@@ -204,107 +253,47 @@ namespace ImageInserter
             this.group_memo.Items.Add(this.editBox_maxW);
             this.group_memo.Items.Add(this.editBox_maxH);
             this.group_memo.Items.Add(this.dropDown_writeMemo);
-            this.group_memo.Label = "メモ設定";
+            resources.ApplyResources(this.group_memo, "group_memo");
             this.group_memo.Name = "group_memo";
             // 
             // checkBox_maxSize
             // 
             this.checkBox_maxSize.Checked = true;
-            this.checkBox_maxSize.Label = "最大サイズ";
+            resources.ApplyResources(this.checkBox_maxSize, "checkBox_maxSize");
             this.checkBox_maxSize.Name = "checkBox_maxSize";
-            this.checkBox_maxSize.SuperTip = "メモに挿入する画像のサイズの上限を指定します";
             this.checkBox_maxSize.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox_maxSize_Click);
             // 
             // editBox_maxW
             // 
-            this.editBox_maxW.Label = "　幅";
+            resources.ApplyResources(this.editBox_maxW, "editBox_maxW");
             this.editBox_maxW.MaxLength = 4;
             this.editBox_maxW.Name = "editBox_maxW";
-            this.editBox_maxW.Text = "512";
             // 
             // editBox_maxH
             // 
-            this.editBox_maxH.Label = "高さ";
+            resources.ApplyResources(this.editBox_maxH, "editBox_maxH");
             this.editBox_maxH.MaxLength = 4;
             this.editBox_maxH.Name = "editBox_maxH";
-            this.editBox_maxH.Text = "512";
-            // 
-            // splitButton_insert
-            // 
-            this.splitButton_insert.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.splitButton_insert.Items.Add(this.button_insertFile);
-            this.splitButton_insert.Items.Add(this.button_insertLink);
-            this.splitButton_insert.Items.Add(this.button_insertFolder);
-            this.splitButton_insert.Label = "指定した画像を挿入";
-            this.splitButton_insert.Name = "splitButton_insert";
-            this.splitButton_insert.OfficeImageId = "RestoreImageSize";
-            this.splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
-            // 
-            // button_insertFile
-            // 
-            this.button_insertFile.Label = "指定した画像を挿入";
-            this.button_insertFile.Name = "button_insertFile";
-            this.button_insertFile.OfficeImageId = "RestoreImageSize";
-            this.button_insertFile.ShowImage = true;
-            this.button_insertFile.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
-            // 
-            // button_insertFolder
-            // 
-            this.button_insertFolder.Label = "フォルダ内の画像を挿入";
-            this.button_insertFolder.Name = "button_insertFolder";
-            this.button_insertFolder.OfficeImageId = "ApplyImageBackgroundTile";
-            this.button_insertFolder.ShowImage = true;
-            this.button_insertFolder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFolder_Click);
-            // 
-            // dropDown_writeCell
-            // 
-            ribbonDropDownItemImpl4.Label = "しない";
-            ribbonDropDownItemImpl4.OfficeImageId = "CancelRequest";
-            ribbonDropDownItemImpl4.Tag = "none";
-            ribbonDropDownItemImpl5.Label = "ファイル名";
-            ribbonDropDownItemImpl5.OfficeImageId = "FileNew";
-            ribbonDropDownItemImpl5.Tag = "file";
-            ribbonDropDownItemImpl6.Label = "パス";
-            ribbonDropDownItemImpl6.OfficeImageId = "GroupImapFolderOptions";
-            ribbonDropDownItemImpl6.Tag = "path";
-            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl4);
-            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl5);
-            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl6);
-            this.dropDown_writeCell.Label = "情報書込";
-            this.dropDown_writeCell.Name = "dropDown_writeCell";
-            this.dropDown_writeCell.OfficeImageId = "IconPencilTool";
-            this.dropDown_writeCell.ShowImage = true;
-            this.dropDown_writeCell.SuperTip = "セルにファイル名やパスを書き込みます";
-            this.dropDown_writeCell.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_shrink_SelectionChanged);
             // 
             // dropDown_writeMemo
             // 
-            ribbonDropDownItemImpl9.Label = "しない";
+            resources.ApplyResources(ribbonDropDownItemImpl9, "ribbonDropDownItemImpl9");
             ribbonDropDownItemImpl9.OfficeImageId = "CancelRequest";
             ribbonDropDownItemImpl9.Tag = "none";
-            ribbonDropDownItemImpl10.Label = "ファイル名";
+            resources.ApplyResources(ribbonDropDownItemImpl10, "ribbonDropDownItemImpl10");
             ribbonDropDownItemImpl10.OfficeImageId = "FileNew";
-            ribbonDropDownItemImpl10.Tag = "file";
-            ribbonDropDownItemImpl11.Label = "パス";
+            ribbonDropDownItemImpl10.Tag = "name";
+            resources.ApplyResources(ribbonDropDownItemImpl11, "ribbonDropDownItemImpl11");
             ribbonDropDownItemImpl11.OfficeImageId = "GroupImapFolderOptions";
             ribbonDropDownItemImpl11.Tag = "path";
             this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl9);
             this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl10);
             this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl11);
-            this.dropDown_writeMemo.Label = "情報書込";
+            resources.ApplyResources(this.dropDown_writeMemo, "dropDown_writeMemo");
             this.dropDown_writeMemo.Name = "dropDown_writeMemo";
             this.dropDown_writeMemo.OfficeImageId = "IconPencilTool";
             this.dropDown_writeMemo.ShowImage = true;
-            this.dropDown_writeMemo.SuperTip = "メモにファイル名やパスを書き込みます";
             this.dropDown_writeMemo.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_shrink_SelectionChanged);
-            // 
-            // button_insertLink
-            // 
-            this.button_insertLink.Label = "セルのリンク先画像を挿入";
-            this.button_insertLink.Name = "button_insertLink";
-            this.button_insertLink.OfficeImageId = "OmsImageFromClip";
-            this.button_insertLink.ShowImage = true;
-            this.button_insertLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertLink_Click);
             // 
             // Ribbon_imageInserter
             // 

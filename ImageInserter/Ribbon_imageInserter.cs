@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 using Debug = System.Diagnostics.Debug;
 using Image = System.Drawing.Image;
 using Microsoft.Office.Core;
@@ -166,20 +167,19 @@ namespace ImageInserter
             }
 
             // フォルダ内のファイルを取得
-            string[] files = System.IO.Directory.GetFiles(folderPath);
-#if false   // 高速だがcountが使えない
-            IEnumerable<string> files = System.IO.Directory.EnumerateFiles(
-                folderPath,                             // path
-                "*",                                　  // searchPattern
-                System.IO.SearchOption.TopDirectoryOnly // searchOption
-                );
+//            string[] files = System.IO.Directory.GetFiles(folderPath);
+#if true   // 高速だがcountが使えない
+            string[] extCheck = { ".jpg", ".jpeg" };
+            List<string> files = System.IO.Directory.GetFiles(folderPath)
+                .Where(f => extCheck.Contains(System.IO.Path.GetExtension(f), System.StringComparer.OrdinalIgnoreCase))
+                .ToList();
 #endif
 
             // ファイルを1つずつ処理
             string direction = dropDown_direction.SelectedItem.Tag.ToString();
             int offsetCol = 0;
             int offsetRow = 0;
-            if (direction == "bottom")
+            if (direction == "under")
             {
                 offsetCol = 1;
             }
@@ -192,14 +192,14 @@ namespace ImageInserter
             splitButton_insert.Enabled = false;
 
             WaitDialog waitDlg = new WaitDialog();
-            waitDlg.ProgressMax = files.Length;
+            waitDlg.ProgressMax = files.Count;
             waitDlg.Show();
             Application.DoEvents();
 
             int count = 0;
             foreach (string imagePath in files)
             {
-                if (checkImagePath(imagePath))
+//                if (checkImagePath(imagePath))
                 {
                     if (count == 0)
                     {
@@ -221,7 +221,7 @@ namespace ImageInserter
                 else
                 {
                     // 進行状況ダイアログのメーターを設定
-                    waitDlg.Msg = files.Length.ToString() + "件中: " + count.ToString() + "件目";
+                    waitDlg.Msg = files.Count.ToString() + "件中: " + count.ToString() + "件目";
                     waitDlg.PerformStep();
                     Application.DoEvents();
                 }
@@ -300,7 +300,7 @@ namespace ImageInserter
             {
                 ;
             }
-            else if (write == "file")
+            else if (write == "name")
             {
                 info = System.IO.Path.GetFileName(imagePath);
             }
@@ -325,7 +325,7 @@ namespace ImageInserter
             {
                 ;
             }
-            else if (write == "file")
+            else if (write == "name")
             {
                 info = System.IO.Path.GetFileName(imagePath);
             }
@@ -445,7 +445,8 @@ namespace ImageInserter
         {
             bool isExist = false;
             string ext = System.IO.Path.GetExtension(path);
-            if ((ext == ".jpg") || (ext == ".jpeg"))
+            string[] extCheck = {".jpg",".jpeg"};
+            if ( extCheck.Contains(ext, System.StringComparer.OrdinalIgnoreCase))
             {
                 // 存在確認
                 if (System.IO.File.Exists(path))
