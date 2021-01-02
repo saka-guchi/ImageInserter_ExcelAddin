@@ -6,13 +6,13 @@ This is an Excel add-in that inserts images into cells and notes.
 When using Excel, it takes time to paste the image to fit the cell and resize it.This add-in can optimize the size of cells and images and arrange them as you want in a short time.
 
 <div align="center">
-<img src="../images/demo_description.png" alt="description" title="demo_description_JP">
+<img src="./images/demo_description.png" alt="description" title="demo_description_JP">
 </div>
 
 ## Demo
 
 <div align="center">
-<img src="../images/demo_insert_JP.gif" alt="insert" title="demo_insert_JP">
+<img src="./images/demo_insert_JP.gif" alt="insert" title="demo_insert_JP">
 </div>
 
 ## Environment
@@ -34,7 +34,7 @@ When using Excel, it takes time to paste the image to fit the cell and resize it
 1. Check "Insert image"
 
 <div align="center">
-<img src="../images/demo_install_JP.gif" alt="install" title="demo_install_JP">
+<img src="./images/demo_install_JP.gif" alt="install" title="demo_install_JP">
 </div>
 
 ## Uninstall
@@ -44,4 +44,4 @@ When using Excel, it takes time to paste the image to fit the cell and resize it
 
 ## License
 
-[MIT](../LICENSE)
+[MIT](./LICENSE)
