@@ -14,7 +14,7 @@ namespace ImageInserter
         //アドイン起動時にリボンの読み込みを行う処理
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
-#if debug
+#if false
             // 設定前のカルチャを表示
             System.Diagnostics.Debug.WriteLine("CurrentCulture: {0}", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
             System.Diagnostics.Debug.WriteLine("CurrentUICulture: {0}", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
