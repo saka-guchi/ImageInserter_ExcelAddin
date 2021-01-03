@@ -15,7 +15,8 @@ namespace ImageInserter
     {
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
-            dropDown_writeCell.SelectedItemIndex = 2;   // パス
+            // 初期設定
+            dropDown_writeCell.SelectedItemIndex = 2;       // パス
             dropDown_writeMemo.SelectedItemIndex = 1;   // ファイル名
         }
 

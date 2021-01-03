@@ -18,8 +18,8 @@ namespace ImageInserter
             // 設定前のカルチャを表示
             System.Diagnostics.Debug.WriteLine("CurrentCulture: {0}", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
             System.Diagnostics.Debug.WriteLine("CurrentUICulture: {0}", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("us");
-            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("us");
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
             // 設定後のカルチャを表示
             System.Diagnostics.Debug.WriteLine("CurrentCulture: {0}", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
             System.Diagnostics.Debug.WriteLine("CurrentUICulture: {0}", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);

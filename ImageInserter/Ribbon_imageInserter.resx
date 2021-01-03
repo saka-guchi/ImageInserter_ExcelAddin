@@ -141,9 +141,6 @@
   <data name="&gt;&gt;dropDown_writeCell.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="&gt;&gt;separator2.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="&gt;&gt;editBox_maxW.Parent" xml:space="preserve">
     <value>group_memo</value>
   </data>
@@ -158,9 +155,6 @@
   </data>
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.LabelView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="&gt;&gt;dropDown_shrink.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;Ribbon_imageInserter.OfficeMenu.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -197,6 +191,9 @@
   </data>
   <data name="&gt;&gt;button_insertFile.Parent" xml:space="preserve">
     <value>splitButton_insert.Items</value>
+  </data>
+  <data name="dropDown_direction.Label" xml:space="preserve">
+    <value>Placement direction</value>
   </data>
   <data name="dropDown_shrink.Label" xml:space="preserve">
     <value>Strorage method</value>
@@ -261,8 +258,9 @@
   <data name="button_insertLink.Label" xml:space="preserve">
     <value>Inserts the entered linked image in the selected cell</value>
   </data>
-  <data name="&gt;&gt;editBox_setW.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="editBox_setH.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="editBox_maxH.Text" xml:space="preserve">
     <value>512</value>
@@ -288,6 +286,9 @@
   <data name="&gt;&gt;separator2.Parent" xml:space="preserve">
     <value>group_cell</value>
   </data>
+  <data name="&gt;&gt;checkBox_maxSize.Parent" xml:space="preserve">
+    <value>group_memo</value>
+  </data>
   <data name="ribbonDropDownItemImpl11.Label" xml:space="preserve">
     <value>File path</value>
   </data>
@@ -303,14 +304,17 @@
   <data name="&gt;&gt;editBox_maxH.Parent" xml:space="preserve">
     <value>group_memo</value>
   </data>
+  <data name="&gt;&gt;editBox_setH.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="checkBox_maxSize.SuperTip" xml:space="preserve">
     <value>Specifies the upper limit of the size of the image to be inserted in the memo</value>
   </data>
   <data name="&gt;&gt;Ribbon_imageInserter.OfficeMenu.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;checkBox_maxSize.Parent" xml:space="preserve">
-    <value>group_memo</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Ribbon_imageInserter</value>
   </data>
   <data name="dropDown_direction.SuperTip" xml:space="preserve">
     <value>Specifies the direction in which images are added from the selected cell when inserting multiple images</value>
@@ -405,18 +409,14 @@
   <data name="&gt;&gt;checkBox_cell.Name" xml:space="preserve">
     <value>checkBox_cell</value>
   </data>
-  <data name="&gt;&gt;checkBox_setSize.Name" xml:space="preserve">
-    <value>checkBox_setSize</value>
+  <data name="&gt;&gt;editBox_setW.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;checkBox_setSize.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="editBox_setH.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Ribbon_imageInserter</value>
+  <data name="&gt;&gt;separator2.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SeparatorView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="checkBox_setSize.Label" xml:space="preserve">
     <value>Specify cell size</value>
@@ -439,9 +439,6 @@
   <data name="&gt;&gt;button_insertFolder.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;separator2.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SeparatorView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="&gt;&gt;dropDown_writeMemo.Name" xml:space="preserve">
     <value>dropDown_writeMemo</value>
   </data>
@@ -463,6 +460,9 @@
   <data name="button_insertFile.Label" xml:space="preserve">
     <value>Insert image</value>
   </data>
+  <data name="&gt;&gt;group_memo.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="&gt;&gt;checkBox_maxSize.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.CheckBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -471,9 +471,6 @@
   </data>
   <data name="&gt;&gt;editBox_maxH.Name" xml:space="preserve">
     <value>editBox_maxH</value>
-  </data>
-  <data name="checkBox_maxSize.Label" xml:space="preserve">
-    <value>Maximum size of image</value>
   </data>
   <data name="&gt;&gt;button_insertLink.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -511,6 +508,9 @@
   <data name="&gt;&gt;editBox_maxH.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="&gt;&gt;checkBox_setSize.Name" xml:space="preserve">
+    <value>checkBox_setSize</value>
+  </data>
   <data name="editBox_setW.Text" xml:space="preserve">
     <value>15</value>
   </data>
@@ -544,14 +544,14 @@
   <data name="&gt;&gt;checkBox_maxSize.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;editBox_setH.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="&gt;&gt;dropDown_shrink.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;group_memo.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="checkBox_maxSize.Label" xml:space="preserve">
+    <value>Maximum size of image</value>
   </data>
-  <data name="dropDown_direction.Label" xml:space="preserve">
-    <value>Placement direction</value>
+  <data name="&gt;&gt;separator2.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="&gt;&gt;dropDown_direction.ZOrder" xml:space="preserve">
     <value>7</value>
