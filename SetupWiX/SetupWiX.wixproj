@@ -12,17 +12,17 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>..\setup\$(Configuration)_$(Platform)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFilesFolder</DefineConstants>
+    <DefineConstants>Debug;Version=1.0.3;AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFilesFolder</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>..\setup\$(Configuration)_$(Platform)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFilesFolder</DefineConstants>
+    <DefineConstants>Version=1.0.3;AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFilesFolder</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug;AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFiles64Folder</DefineConstants>
+    <DefineConstants>Debug;Version=1.0.3;AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFiles64Folder</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
     <OutputPath>..\setup\$(Configuration)_$(Platform)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
