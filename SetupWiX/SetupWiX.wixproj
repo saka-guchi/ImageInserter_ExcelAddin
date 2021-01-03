@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>6dd48a54-b0ab-40fd-a0a6-e1c8431221f5</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>setup</OutputName>
+    <OutputName>ImageInserterSetup-1.0.3-x64</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -31,7 +31,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>..\setup\$(Configuration)_$(Platform)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFiles64Folder</DefineConstants>
+    <DefineConstants>Version=1.0.3;AddinFiles=..\ImageInserter\bin\$(Configuration)\; InstallFolder=ProgramFiles64Folder</DefineConstants>
     <SuppressPdbOutput>True</SuppressPdbOutput>
     <CompilerAdditionalOptions>-arch x64</CompilerAdditionalOptions>
   </PropertyGroup>

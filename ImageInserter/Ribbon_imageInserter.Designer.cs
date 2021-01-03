@@ -97,10 +97,10 @@ namespace ImageInserter
             // splitButton_insert
             // 
             this.splitButton_insert.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
             this.splitButton_insert.Items.Add(this.button_insertFile);
             this.splitButton_insert.Items.Add(this.button_insertLink);
             this.splitButton_insert.Items.Add(this.button_insertFolder);
-            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
             this.splitButton_insert.Name = "splitButton_insert";
             this.splitButton_insert.OfficeImageId = "RestoreImageSize";
             this.splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
@@ -187,6 +187,7 @@ namespace ImageInserter
             // 
             // dropDown_shrink
             // 
+            resources.ApplyResources(this.dropDown_shrink, "dropDown_shrink");
             resources.ApplyResources(ribbonDropDownItemImpl1, "ribbonDropDownItemImpl1");
             ribbonDropDownItemImpl1.OfficeImageId = "BackgroundImageGallery";
             ribbonDropDownItemImpl1.Tag = "fit";
@@ -199,7 +200,6 @@ namespace ImageInserter
             this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl1);
             this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl2);
             this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl3);
-            resources.ApplyResources(this.dropDown_shrink, "dropDown_shrink");
             this.dropDown_shrink.Name = "dropDown_shrink";
             this.dropDown_shrink.OfficeImageId = "DiagramResizeClassic";
             this.dropDown_shrink.ShowImage = true;
@@ -207,6 +207,7 @@ namespace ImageInserter
             // 
             // dropDown_writeCell
             // 
+            resources.ApplyResources(this.dropDown_writeCell, "dropDown_writeCell");
             resources.ApplyResources(ribbonDropDownItemImpl4, "ribbonDropDownItemImpl4");
             ribbonDropDownItemImpl4.OfficeImageId = "CancelRequest";
             ribbonDropDownItemImpl4.Tag = "none";
@@ -219,7 +220,6 @@ namespace ImageInserter
             this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl4);
             this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl5);
             this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl6);
-            resources.ApplyResources(this.dropDown_writeCell, "dropDown_writeCell");
             this.dropDown_writeCell.Name = "dropDown_writeCell";
             this.dropDown_writeCell.OfficeImageId = "IconPencilTool";
             this.dropDown_writeCell.ShowImage = true;
@@ -227,6 +227,7 @@ namespace ImageInserter
             // 
             // separator2
             // 
+            resources.ApplyResources(this.separator2, "separator2");
             this.separator2.Name = "separator2";
             // 
             // label2
@@ -236,6 +237,7 @@ namespace ImageInserter
             // 
             // dropDown_direction
             // 
+            resources.ApplyResources(this.dropDown_direction, "dropDown_direction");
             resources.ApplyResources(ribbonDropDownItemImpl7, "ribbonDropDownItemImpl7");
             ribbonDropDownItemImpl7.OfficeImageId = "ChartNavDrillDown";
             ribbonDropDownItemImpl7.Tag = "under";
@@ -244,7 +246,6 @@ namespace ImageInserter
             ribbonDropDownItemImpl8.Tag = "right";
             this.dropDown_direction.Items.Add(ribbonDropDownItemImpl7);
             this.dropDown_direction.Items.Add(ribbonDropDownItemImpl8);
-            resources.ApplyResources(this.dropDown_direction, "dropDown_direction");
             this.dropDown_direction.Name = "dropDown_direction";
             // 
             // group_memo
@@ -277,6 +278,7 @@ namespace ImageInserter
             // 
             // dropDown_writeMemo
             // 
+            resources.ApplyResources(this.dropDown_writeMemo, "dropDown_writeMemo");
             resources.ApplyResources(ribbonDropDownItemImpl9, "ribbonDropDownItemImpl9");
             ribbonDropDownItemImpl9.OfficeImageId = "CancelRequest";
             ribbonDropDownItemImpl9.Tag = "none";
@@ -289,7 +291,6 @@ namespace ImageInserter
             this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl9);
             this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl10);
             this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl11);
-            resources.ApplyResources(this.dropDown_writeMemo, "dropDown_writeMemo");
             this.dropDown_writeMemo.Name = "dropDown_writeMemo";
             this.dropDown_writeMemo.OfficeImageId = "IconPencilTool";
             this.dropDown_writeMemo.ShowImage = true;
@@ -300,6 +301,7 @@ namespace ImageInserter
             this.Name = "Ribbon_imageInserter";
             this.RibbonType = "Microsoft.Excel.Workbook";
             this.Tabs.Add(this.tab_imageInserter);
+            resources.ApplyResources(this, "$this");
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon1_Load);
             this.tab_imageInserter.ResumeLayout(false);
             this.tab_imageInserter.PerformLayout();

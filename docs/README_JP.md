@@ -1,3 +1,8 @@
+<div align="left">
+<img src="./images/icon.png" alt="icon" title="icon" width="10%">
+<h1>ImageInserter for Excel Addin</h1>
+</div>
+
 - [In English](../README.md)
 
 画像をセルやメモに挿入するExcelアドインです。

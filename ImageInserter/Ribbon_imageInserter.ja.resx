@@ -157,13 +157,13 @@
     <value>高さ</value>
   </data>
   <data name="ribbonDropDownItemImpl1.Label" xml:space="preserve">
-    <value>セル内に収める</value>
+    <value>セルに収める</value>
   </data>
   <data name="ribbonDropDownItemImpl2.Label" xml:space="preserve">
-    <value>セル幅に合わせる</value>
+    <value>セル幅に合わせる（セル高さ調整）</value>
   </data>
   <data name="ribbonDropDownItemImpl3.Label" xml:space="preserve">
-    <value>セル高さに合わせる</value>
+    <value>セル高さに合わせる（セル幅調整）</value>
   </data>
   <data name="dropDown_shrink.Label" xml:space="preserve">
     <value>格納方法</value>
