@@ -15,7 +15,7 @@
 		Name: インストーラーの画面の各箇所に表示されるアプリケーション名
     Manufacturer: インストーラーの作成者やプログラム一覧の発行元
   -->
-	<Product Id="85ECE525-641E-4960-8E72-54FCB620A646" Name="ImageInserter_ExcelAddin" Language="1033" Version="1.0.2.0" Manufacturer="saka-guchi" UpgradeCode="661472ad-167f-47e7-b761-562247fda9b4">
+	<Product Id="85ECE525-641E-4960-8E72-54FCB620A646" Name="ImageInserter_ExcelAddin" Language="1033" Version="$(var.Version)" Manufacturer="saka-guchi" UpgradeCode="661472ad-167f-47e7-b761-562247fda9b4">
 
     <Package InstallerVersion="200" Compressed="yes" />
 
@@ -36,15 +36,15 @@
       Value: ファイル名
     -->
     <WixVariable Id="WixUILicenseRtf" Value="..\LICENSE.rtf" />
-    <WixVariable Id="WixUIDialogBmp" Value="..\images\dialog.bmp" />
-    <WixVariable Id="WixUIBannerBmp" Value="..\images\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="..\images\dialog.png" />
+    <WixVariable Id="WixUIBannerBmp" Value="..\images\banner.png" />
 
     <!-- Icon: 「プログラムの追加と削除」などに表示されるアプリケーションのアイコン
       Id: 適当な名前
       SourceFile: プロジェクトファイルからの相対パス（.ico）
       ※「Property Id="ARPPRODUCTICON"」はアイコンの関連付け定義
     -->
-    <Icon Id="FAVICON.ICO" SourceFile="..\ImageInserter\favicon.ico" />
+    <Icon Id="FAVICON.ICO" SourceFile="..\images\favicon.ico" />
     <Property Id="ARPPRODUCTICON" Value="FAVICON.ICO" />
 
     <!-- Feature: 個々のコンポーネントをグループ分けして、インストールするかどうかを決める仕組み

@@ -1,3 +1,8 @@
+<div align="left">
+<img src="./images/icon.png" alt="icon" title="icon" width="10%">
+<h1>ImageInserter for Excel Addin</h1>
+</div>
+
 - [日本語版](/docs/README_JP.md)
 
 This is an Excel add-in that inserts images into cells and notes.
