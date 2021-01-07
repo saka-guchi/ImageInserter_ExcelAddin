@@ -135,7 +135,7 @@
   <data name="button_deleteAll.Label" xml:space="preserve">
     <value>シート内の画像を削除</value>
   </data>
-  <data name="splitButton1.Label" xml:space="preserve">
+  <data name="splitButton_delete.Label" xml:space="preserve">
     <value>選択セルの画像を削除</value>
   </data>
   <data name="group_control.Label" xml:space="preserve">
@@ -232,6 +232,12 @@
     <value>高さ</value>
   </data>
   <data name="ribbonDropDownItemImpl11.Label" xml:space="preserve">
+    <value>しない</value>
+  </data>
+  <data name="ribbonDropDownItemImpl12.Label" xml:space="preserve">
+    <value>ファイル名</value>
+  </data>
+  <data name="ribbonDropDownItemImpl13.Label" xml:space="preserve">
     <value>ファイルパス</value>
   </data>
   <data name="dropDown_writeMemo.Label" xml:space="preserve">

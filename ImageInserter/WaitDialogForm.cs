@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Threading;
 using System.Diagnostics;
 
 namespace WaitDialogForm
@@ -7,14 +6,16 @@ namespace WaitDialogForm
     /// <summary>
     /// WaitDialog の概要の説明です。
     /// </summary>
-    public class WaitDialog : System.Windows.Forms.Form
+    public class WaitDialog : Form
     {
         private bool bAborting = false;     // 中止フラグ
         private bool bShowing = false;      // ダイアログ表示中フラグ
 
-        public System.Windows.Forms.Label labelMsg;
-        public System.Windows.Forms.ProgressBar progBarMeter;
-        private System.Windows.Forms.Button btnCancel;
+        public Label labelMsg;
+        public Label labelPercentage;
+        public Label labelCount;
+        public ProgressBar progBarMeter;
+        private Button btnCancel;
 
         /// <summary>
         /// 必要なデザイナ変数です。
@@ -31,8 +32,6 @@ namespace WaitDialogForm
             //
             // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
             //
-            this.Title = "画像挿入中 ...";
-            this.Msg = "処理準備中、しばらくお待ちください";
             this.ProgressMin   = 0;  // 処理件数の最小値（0件から開始）
             this.ProgressStep  = 1;  // 何件ごとにメーターを進めるか
             this.ProgressValue = 0;  // 最初の件数
@@ -64,50 +63,51 @@ namespace WaitDialogForm
             this.labelMsg = new System.Windows.Forms.Label();
             this.progBarMeter = new System.Windows.Forms.ProgressBar();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.labelPercentage = new System.Windows.Forms.Label();
+            this.labelCount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelMsg
             // 
-            this.labelMsg.Location = new System.Drawing.Point(18, 9);
+            resources.ApplyResources(this.labelMsg, "labelMsg");
             this.labelMsg.Name = "labelMsg";
-            this.labelMsg.Size = new System.Drawing.Size(408, 16);
-            this.labelMsg.TabIndex = 0;
-            this.labelMsg.Text = "処理準備中、しばらくお待ちください";
             // 
             // progBarMeter
             // 
-            this.progBarMeter.Location = new System.Drawing.Point(18, 35);
+            resources.ApplyResources(this.progBarMeter, "progBarMeter");
             this.progBarMeter.Name = "progBarMeter";
-            this.progBarMeter.Size = new System.Drawing.Size(408, 23);
-            this.progBarMeter.TabIndex = 3;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(179, 64);
+            resources.ApplyResources(this.btnCancel, "btnCancel");
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(88, 23);
-            this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "キャンセル";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // labelPercentage
+            // 
+            resources.ApplyResources(this.labelPercentage, "labelPercentage");
+            this.labelPercentage.Name = "labelPercentage";
+            // 
+            // labelCount
+            // 
+            resources.ApplyResources(this.labelCount, "labelCount");
+            this.labelCount.Name = "labelCount";
             // 
             // WaitDialog
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(7, 18);
+            resources.ApplyResources(this, "$this");
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(440, 95);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.progBarMeter);
+            this.Controls.Add(this.labelCount);
+            this.Controls.Add(this.labelPercentage);
             this.Controls.Add(this.labelMsg);
-            this.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "WaitDialog";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "画像挿入中 ...";
             this.Closing += new System.ComponentModel.CancelEventHandler(this.WaitDialog_Closing);
             this.ResumeLayout(false);
 
@@ -233,6 +233,36 @@ namespace WaitDialogForm
             set
             {
                 this.labelMsg.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// メイン・メッセージのテキストを設定する。
+        /// </summary>
+        /// <remarks>
+        /// 処理の概要を表示する。
+        /// 例えば、ファイルの転送を行っているなら、「ファイルを転送しています……」のように表示する。
+        /// </remarks>
+        public string Count
+        {
+            set
+            {
+                this.labelCount.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// メイン・メッセージのテキストを設定する。
+        /// </summary>
+        /// <remarks>
+        /// 処理の概要を表示する。
+        /// 例えば、ファイルの転送を行っているなら、「ファイルを転送しています……」のように表示する。
+        /// </remarks>
+        public string Percentage
+        {
+            set
+            {
+                this.labelPercentage.Text = value;
             }
         }
 

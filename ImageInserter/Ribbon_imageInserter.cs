@@ -14,65 +14,27 @@ namespace ImageInserter
 {
     public partial class Ribbon_imageInserter
     {
-        private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
+        private void Ribbon_imageInserter_Load(object sender, RibbonUIEventArgs e)
         {
-            // 初期設定
-            dropDown_writeCell.SelectedItemIndex = 2;       // パス
-            dropDown_writeMemo.SelectedItemIndex = 1;   // ファイル名
-            dropDown_deleteCell.SelectedItemIndex = 1;     // セル保持
-            dropDown_deleteMemo.SelectedItemIndex = 0; // メモ削除
-        }
-
-        private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
-        {
-            dropDown_shrink_SelectionChanged(sender, null);
-        }
-        private void checkBox_maxSize_Click(object sender, RibbonControlEventArgs e)
-        {
-            editBox_maxW.Enabled = (checkBox_maxSize.Checked) ? true : false;
-            editBox_maxH.Enabled = (checkBox_maxSize.Checked) ? true : false;
-        }
-
-        private void dropDown_shrink_SelectionChanged(object sender, RibbonControlEventArgs e)
-        {
-            if (checkBox_setSize.Checked)
-            {
-                string shrink = dropDown_shrink.SelectedItem.Tag.ToString();
-                if (shrink == "fit")
-                {
-                    editBox_setW.Enabled = true;
-                    editBox_setH.Enabled = true;
-                }
-                else if (shrink == "fitW")
-                {
-                    editBox_setW.Enabled = true;
-                    editBox_setH.Enabled = false;
-                }
-                else if (shrink == "fitH")
-                {
-                    editBox_setW.Enabled = false;
-                    editBox_setH.Enabled = true;
-                }
-            }
-            else
-            {
-                editBox_setW.Enabled = false;
-                editBox_setH.Enabled = false;
-            }
+            // Initialize UI
+            dropDown_writeCell.SelectedItemIndex = 2;       // Write path in cell when images inserting
+            dropDown_writeMemo.SelectedItemIndex = 1;   // Write file name in memo when images inserting
+            dropDown_deleteCell.SelectedItemIndex = 1;     // Keep cell contents when deleting
+            dropDown_deleteMemo.SelectedItemIndex = 0; // Keep memo contents when deleting
         }
 
         private void button_insertFile_Click(object sender, RibbonControlEventArgs e)
         {
+            // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cell = getActiveCell();
+            string imagePath = getImagePathFromDialog();
 
-            string imagePath = getImagePathFromDialog(); 
-            Debug.WriteLine(imagePath);
-
+            // Check params
             if (imagePath == null)
             {
                 MessageBox.Show(
-                    "画像ファイルが存在しません",
+                    "Image file does not exist\n画像ファイルが存在しません",
                     "ERROR",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
@@ -85,263 +47,437 @@ namespace ImageInserter
 
         private void button_insertLink_Click(object sender, RibbonControlEventArgs e)
         {
+            // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cells = getSelection();
 
-            // プログレスバーを表示開始
-            splitButton_insert.Enabled = false;
+            // Disable UI
+            switch_control_state(false);
 
-            WaitDialog waitDlg = new WaitDialog();
-            waitDlg.ProgressMax = cells.Count;
-            waitDlg.Show();
-            Application.DoEvents();
-
-            int count = 0;
-            foreach (Excel.Range cell in cells)
-            {
-                string imagePath = getImagePathFromCell(cell);
-                Debug.WriteLine(imagePath);
-
-                if (imagePath != null)
-                {
-                    pasteImage(sheet, cell, imagePath);
-                }
-#if false
-                else
-                {
-                    MessageBox.Show(
-                    "画像ファイルが存在しません",
-                        "ERROR",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                        );
-                    return;
-                }
-#endif
-
-                // 処理中止かどうかをチェック
-                if (waitDlg.IsAborting == true)
-                {
-                    break;
-                }
-                else
-                {
-                    // 進行状況ダイアログのメーターを設定
-                    waitDlg.Msg = cells.Count.ToString() + "件中: " + count.ToString() + "件目";
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
-                }
-            }
-            Debug.WriteLine("count = \t" + count);
-
-            // 最終メッセージを表示
-            if (waitDlg.DialogResult == DialogResult.Abort)
-            {
-                waitDlg.Msg = "処理を中断しました。";
-            }
-            else
-            {
-                waitDlg.Msg = "処理を完了しました。";
-            }
-            Application.DoEvents();
-            System.Threading.Thread.Sleep(100);
-            waitDlg.Close();
-
-            // プログレスバーを表示終了
-            splitButton_insert.Enabled = true;
+            // Paste Linked images on cells
+            pasteLinkedImages(sheet, cells);
         }
 
         private void button_insertFolder_Click(object sender, RibbonControlEventArgs e)
         {
+            // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cell = getActiveCell();
-
+            string direction = dropDown_direction.SelectedItem.Tag.ToString();
             string folderPath = getFolderPath(cell);
-            Debug.WriteLine(folderPath);
 
+            // Check params
             if (folderPath == null)
             {
                 MessageBox.Show(
-                    "フォルダが存在しません",
+                    "Folder does not exist\nフォルダが存在しません",
                     "ERROR",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                     );
                 return;
             }
+            int offsetCol = (direction == "under") ? 1 : 0;
+            int offsetRow = (direction == "right") ? 1 : 0;
 
-            // フォルダ内のファイルを取得
-//            string[] files = System.IO.Directory.GetFiles(folderPath);
-#if true   // 高速だがcountが使えない
-            string[] extCheck = { ".jpg", ".jpeg" };
-            List<string> files = System.IO.Directory.GetFiles(folderPath)
-                .Where(f => extCheck.Contains(System.IO.Path.GetExtension(f), System.StringComparer.OrdinalIgnoreCase))
-                .ToList();
-#endif
+            // Get files in specified folder
+            string[] exts = { ".jpg", ".jpeg" };
+            List<string> imgList = GetFilesInFolder(folderPath, exts);
 
-            // ファイルを1つずつ処理
-            string direction = dropDown_direction.SelectedItem.Tag.ToString();
-            int offsetCol = 0;
-            int offsetRow = 0;
-            if (direction == "under")
-            {
-                offsetCol = 1;
-            }
-            if (direction == "right")
-            {
-                offsetRow = 1;
-            }
+            // Disable UI
+            switch_control_state(false);
 
-            // プログレスバーを表示開始
-            splitButton_insert.Enabled = false;
-
-            WaitDialog waitDlg = new WaitDialog();
-            waitDlg.ProgressMax = files.Count;
-            waitDlg.Show();
-            Application.DoEvents();
-
-            int count = 0;
-            foreach (string imagePath in files)
-            {
-//                if (checkImagePath(imagePath))
-                {
-                    if (count == 0)
-                    {
-                        cell = cell.Offset[0, 0];
-                    }
-                    else
-                    {
-                        cell = cell.Offset[offsetCol, offsetRow];
-                    }
-                    pasteImage(sheet, cell, imagePath);
-                    count++;
-                }
-
-                // 処理中止かどうかをチェック
-                if (waitDlg.IsAborting == true)
-                {
-                    break;
-                }
-                else
-                {
-                    // 進行状況ダイアログのメーターを設定
-                    waitDlg.Msg = files.Count.ToString() + "件中: " + count.ToString() + "件目";
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
-                }
-            }
-            Debug.WriteLine("count = \t" + count);
-
-            // 最終メッセージを表示
-            if (waitDlg.DialogResult == DialogResult.Abort)
-            {
-                waitDlg.Msg = "処理を中断しました。";
-            }
-            else
-            {
-                waitDlg.Msg = "処理を完了しました。";
-            }
-            Application.DoEvents();
-            System.Threading.Thread.Sleep(100);
-            waitDlg.Close();
-
-            // プログレスバーを表示終了
-            splitButton_insert.Enabled = true;
+            // Paste images on cells
+            pasteImages(imgList, sheet, cell, offsetCol, offsetRow);
         }
 
         private void button_deleteSelection_Click(object sender, RibbonControlEventArgs e)
         {
+            // Get UI params
+            Excel.Worksheet sheet = getActiveSheet();
+            Excel.Range cells = getSelection();
             bool checkCell = checkBox_cell.Checked;
             bool checkMemo = checkBox_memo.Checked;
+            bool checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
             bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
 
-            Excel.Worksheet sheet = getActiveSheet();
-            Excel.Range selectionRange = getSelection();
+            // Disable UI
+            switch_control_state(false);
 
-            foreach (Excel.Shape shape in sheet.Shapes)
-            {
-                if (checkCell)
-                {
-                    if (shape.Type == MsoShapeType.msoLinkedPicture)
-                    {
-                        // Intersect: 2つ以上の範囲の長方形の交差を表すRangeオブジェクトを返す
-                        Excel.Range shapeRange = shape.TopLeftCell;
-                        if (sheet.Application.Intersect(shapeRange, selectionRange) != null)
-                        {
-                            shape.Delete();         // delete image in cell
-                            continue;
-                        }
-                    }
-                }
-                if (checkMemo)
-                {
-                    if (shape.Type == MsoShapeType.msoComment)
-                    {
-                        // 選択範囲内のコメントを含むセルのコメントのShapeのIDと比較
-                        foreach (Excel.Range cell in selectionRange)
-                        {
-                            if (cell.Comment == null)
-                            {
-                                continue;
-                            }
-                            if (cell.Comment.Shape.ID == shape.ID)
-                            {
-                                if (checkMemoKeep)
-                                {
-                                    shape.Fill.Solid();     // delete image in memo
-                                }
-                                else
-                                {
-                                    cell.Comment.Delete();  // delete memo
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
+            // Delete Images in selection
+            deleteImagesInSelection(sheet, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
         }
 
         private void button_deleteAll_Click(object sender, RibbonControlEventArgs e)
         {
+            // Get UI params
+            Excel.Worksheet sheet = getActiveSheet();
             bool checkCell = checkBox_cell.Checked;
             bool checkMemo = checkBox_memo.Checked;
-            bool checkMemoKeep = ( dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep" );
+            bool checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
+            bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
 
-            Excel.Worksheet sheet = getActiveSheet();
-            foreach (Excel.Shape shape in sheet.Shapes)
+            // Disable UI
+            switch_control_state(false);
+
+            // Delete all images
+            deleteAllImages(sheet, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
+        }
+
+        private void switch_control_state(bool enable)
+        {
+            foreach(RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
             {
-                if (checkCell)
+                foreach (RibbonControl ctrl in group.Items)
                 {
-                    if (shape.Type == MsoShapeType.msoLinkedPicture)
+                    ctrl.Enabled = enable;
+                }
+            }
+
+            if (enable)
+            {
+                bool max_w = false;
+                bool max_h = false;
+                if (checkBox_maxSize.Checked)
+                {
+                    max_w = true;
+                    max_h = true;
+                }
+                editBox_maxW.Enabled = max_w;
+                editBox_maxH.Enabled = max_h;
+
+                bool set_w = false;
+                bool set_h = false;
+                if (checkBox_setSize.Checked)
+                {
+                    string shrink = dropDown_shrink.SelectedItem.Tag.ToString();
+                    if (shrink == "fit")
                     {
-                        shape.Delete();         // delete image in cell
-                        continue;
+                        set_w = true;
+                        set_h = true;
+                    }
+                    else if (shrink == "fitW")
+                    {
+                        set_w = true;
+                    }
+                    else if (shrink == "fitH")
+                    {
+                        set_h = true;
                     }
                 }
-                if(checkMemo)
+                editBox_setW.Enabled = set_w;
+                editBox_setH.Enabled = set_h;
+            }
+        }
+
+        private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
+        {
+            switch_control_state(true);
+        }
+        private void checkBox_maxSize_Click(object sender, RibbonControlEventArgs e)
+        {
+            switch_control_state(true);
+        }
+
+        private void dropDown_shrink_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            switch_control_state(true);
+        }
+
+        private async void pasteLinkedImages(Excel.Worksheet sheet, Excel. Range cells)
+        {
+            // Stop screen updating
+            Excel.Application app = getApplication();
+            app.ScreenUpdating = false;
+
+            int countMax = cells.Count;
+            await System.Threading.Tasks.Task.Run(() => {
+                // Progress bar: Setting
+                WaitDialog waitDlg = new WaitDialog();
+                waitDlg.ProgressMax = countMax;
+
+                // Progress bar: Show
+                waitDlg.Show();
+                Application.DoEvents();
+
+                int count = 1;
+                foreach (Excel.Range cell in cells)
                 {
-                    if (shape.Type == MsoShapeType.msoComment)
+                    // Stop decision
+                    if (waitDlg.IsAborting == true)
                     {
-                        if (checkMemoKeep)
+                        break;
+                    }
+
+                    // Display progress message
+                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
+                    waitDlg.PerformStep();
+                    Application.DoEvents();
+
+                    // Processing
+                    string imagePath = cell.Text;
+
+                    // Paste image
+                    if ( checkImagePath(imagePath) == true )
+                    {
+                        pasteImage(sheet, cell, imagePath);
+                    }
+                    count++;
+                }
+
+                // Progress bar: Close
+                waitDlg.Close();
+                Application.DoEvents();
+            });
+
+            // Statr screen updating
+            app.ScreenUpdating = true;
+
+            // Enable UI
+            switch_control_state(true);
+        }
+
+        private List<string> GetFilesInFolder(string path, string[] exts)
+        {
+            string[] extCheck = { ".jpg", ".jpeg" };
+            List<string> files = System.IO.Directory.GetFiles(path)
+                .Where(f => extCheck.Contains(System.IO.Path.GetExtension(f), System.StringComparer.OrdinalIgnoreCase))
+                .ToList();
+            return files;
+        }
+
+        private async void pasteImages(List<string> imgList, Excel.Worksheet sheet, Excel.Range cell, int offsetCol, int offsetRow)
+        {
+            // Stop screen updating
+            Excel.Application app = getApplication();
+            app.ScreenUpdating = false;
+
+            int countMax = imgList.Count;
+            await System.Threading.Tasks.Task.Run(() => {
+                // Progress bar: Setting
+                WaitDialog waitDlg = new WaitDialog();
+                waitDlg.ProgressMax = countMax;
+
+                // Progress bar: Show
+                waitDlg.Show();
+                Application.DoEvents();
+
+                int count = 1;
+                foreach (string imagePath in imgList)
+                {
+                    // Stop decision
+                    if (waitDlg.IsAborting == true)
+                    {
+                        break;
+                    }
+
+                    // Display progress message
+                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
+                    waitDlg.PerformStep();
+                    Application.DoEvents();
+
+                    // Processing
+                    cell = (count == 0) ? cell.Offset[0, 0] : cell.Offset[offsetCol, offsetRow];
+
+                    // Paste image
+                    if (checkImagePath(imagePath) == true)
+                    {
+                        pasteImage(sheet, cell, imagePath);
+                    }
+                    count++;
+                }
+
+                // Progress bar: Close
+                waitDlg.Close();
+                Application.DoEvents();
+            });
+
+            // Statr screen updating
+            app.ScreenUpdating = true;
+
+            // Enable UI
+            switch_control_state(true);
+        }
+
+        private async void deleteImagesInSelection(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        {
+            // Stop screen updating
+            Excel.Application app = getApplication();
+            app.ScreenUpdating = false;
+
+            int countMax = sheet.Shapes.Count;
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                // Progress bar: Setting
+                WaitDialog waitDlg = new WaitDialog();
+                waitDlg.ProgressMax = countMax;
+
+                // Progress bar: Show
+                waitDlg.Show();
+                Application.DoEvents();
+
+                int count = 1;
+                foreach (Excel.Shape shape in sheet.Shapes)
+                {
+                    // Stop decision
+                    if (waitDlg.IsAborting == true)
+                    {
+                        break;
+                    }
+
+                    // Display progress message
+                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
+                    waitDlg.PerformStep();
+                    Application.DoEvents();
+
+                    // Processing
+                    if (checkCell)
+                    {
+                        // Target: Cell
+                        if (shape.Type == MsoShapeType.msoLinkedPicture)
                         {
-                            shape.Fill.Solid();     // delete image in memo
-                        }
-                        else
-                        {
-                            // すべてのコメントを含むセルのShapeのIDと比較
-                            foreach (Excel.Range cell in sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments))
+                            // Intersect: 2つ以上の範囲の長方形の交差を表すRangeオブジェクトを返す
+                            Excel.Range shapeRange = shape.TopLeftCell;
+                            if (sheet.Application.Intersect(shapeRange, cells) != null)
                             {
+                                if (!checkCellKeep)
+                                {
+                                    shapeRange.Value = "";
+                                }
+                                shape.Delete();          // Delete an image in a cell
+                                count++;
+                                continue;                   // Skip checkMemo
+                            }
+                        }
+                    }
+                    if (checkMemo)
+                    {
+                        // Target: Memo
+                        if (shape.Type == MsoShapeType.msoComment)
+                        {
+                            // 選択範囲内のコメントを含むセルのコメントのShapeのIDと比較
+                            foreach (Excel.Range cell in cells)
+                            {
+                                if (cell.Comment == null)
+                                {
+                                    continue;
+                                }
                                 if (cell.Comment.Shape.ID == shape.ID)
                                 {
-                                    cell.Comment.Delete();  // delete memo
+                                    if (checkMemoKeep)
+                                    {
+                                        shape.Fill.Solid();     // Delete image in memo
+                                    }
+                                    else
+                                    {
+                                        cell.Comment.Delete();  // Delete memo
+                                    }
                                     break;
                                 }
                             }
                         }
                     }
+                    count++;
                 }
-            }
+
+                // Progress bar: Close
+                waitDlg.Close();
+                Application.DoEvents();
+            });
+
+            // Statr screen updating
+            app.ScreenUpdating = true;
+
+            // Enable UI
+            switch_control_state(true);
+        }
+
+        private async void deleteAllImages(Excel.Worksheet sheet, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        {
+            // Stop screen updating
+            Excel.Application app = getApplication();
+            app.ScreenUpdating = false;
+
+            int countMax = sheet.Shapes.Count;
+            await System.Threading.Tasks.Task.Run(() => {
+                // Progress bar: Setting
+                WaitDialog waitDlg = new WaitDialog();
+                waitDlg.ProgressMax = countMax;
+
+                // Progress bar: Show
+                waitDlg.Show();
+                Application.DoEvents();
+
+                int count = 1;
+                foreach (Excel.Shape shape in sheet.Shapes)
+                {
+                    // Stop decision
+                    if (waitDlg.IsAborting == true)
+                    {
+                        break;
+                    }
+
+                    // Display progress message
+                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
+                    waitDlg.PerformStep();
+                    Application.DoEvents();
+
+                    // Processing
+                    if (checkCell)
+                    {
+                        // Target: Cell
+                        if (shape.Type == MsoShapeType.msoLinkedPicture)
+                        {
+                            if (!checkCellKeep)
+                            {
+                                Excel.Range shapeRange = shape.TopLeftCell;
+                                shapeRange.Value = "";
+                            }
+                            shape.Delete();          // Delete an image in a cell
+                            count++;
+                            continue;                   // Skip checkMemo
+                        }
+                    }
+                    if (checkMemo)
+                    {
+                        // Target: Memo
+                        if (shape.Type == MsoShapeType.msoComment)
+                        {
+                            if (checkMemoKeep)
+                            {
+                                shape.Fill.Solid();     // Delete image in memo
+                            }
+                            else
+                            {
+                                // すべてのコメントを含むセルのShapeのIDと比較
+                                foreach (Excel.Range cell in sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments))
+                                {
+                                    if (cell.Comment.Shape.ID == shape.ID)
+                                    {
+                                        cell.Comment.Delete();  // Delete memo
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    count++;
+                }
+
+                // Progress bar: Close
+                waitDlg.Close();
+                Application.DoEvents();
+            });
+
+            // Statr screen updating
+            app.ScreenUpdating = true;
+
+            // Enable UI
+            switch_control_state(true);
         }
 
         private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imagePath)
@@ -349,7 +485,7 @@ namespace ImageInserter
             if (checkBox_cell.Checked)
             {
                 // セルに画像貼付
-                pasteImageOnCell(sheet, cell, imagePath);
+                pasteImageOnCell(sheet, cell, imagePath, editBox_setW.Enabled, editBox_setH.Enabled);
             }
             if (checkBox_memo.Checked)
             {
@@ -414,7 +550,7 @@ namespace ImageInserter
             cell.Comment.Shape.Height = h;
         }
 
-        private void pasteImageOnCell(Excel.Worksheet sheet, Excel.Range cell, string imagePath)
+        private void pasteImageOnCell(Excel.Worksheet sheet, Excel.Range cell, string imagePath, bool isSetW, bool isSetH)
         {
             // 情報書込
             string write = dropDown_writeCell.SelectedItem.Tag.ToString();
@@ -438,11 +574,11 @@ namespace ImageInserter
             double ratioR = cell.RowHeight / cell.Height;
             Debug.WriteLine("ratioC = \t" + ratioC);
             Debug.WriteLine("ratioR = \t" + ratioR);
-            if (editBox_setW.Enabled)
+            if (isSetW)
             {
                 cell.ColumnWidth = int.Parse(editBox_setW.Text) * ratioC;
             }
-            if (editBox_setH.Enabled)
+            if (isSetH)
             {
                 cell.RowHeight = int.Parse(editBox_setH.Text) * ratioR;
             }

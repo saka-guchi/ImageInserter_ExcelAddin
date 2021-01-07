@@ -187,7 +187,7 @@
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;button_deleteSelection.Parent" xml:space="preserve">
-    <value>splitButton1.Items</value>
+    <value>splitButton_delete.Items</value>
   </data>
   <data name="&gt;&gt;button_deleteSelection.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -202,24 +202,24 @@
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;button_deleteAll.Parent" xml:space="preserve">
-    <value>splitButton1.Items</value>
+    <value>splitButton_delete.Items</value>
   </data>
   <data name="&gt;&gt;button_deleteAll.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="splitButton1.Label" xml:space="preserve">
+  <data name="splitButton_delete.Label" xml:space="preserve">
     <value>Delete image</value>
   </data>
-  <data name="&gt;&gt;splitButton1.Name" xml:space="preserve">
-    <value>splitButton1</value>
+  <data name="&gt;&gt;splitButton_delete.Name" xml:space="preserve">
+    <value>splitButton_delete</value>
   </data>
-  <data name="&gt;&gt;splitButton1.Type" xml:space="preserve">
+  <data name="&gt;&gt;splitButton_delete.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SplitButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;splitButton1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;splitButton_delete.Parent" xml:space="preserve">
     <value>group_control</value>
   </data>
-  <data name="&gt;&gt;splitButton1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;splitButton_delete.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="group_control.Label" xml:space="preserve">
