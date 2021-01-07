@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using Debug = System.Diagnostics.Debug;
@@ -18,6 +19,8 @@ namespace ImageInserter
             // 初期設定
             dropDown_writeCell.SelectedItemIndex = 2;       // パス
             dropDown_writeMemo.SelectedItemIndex = 1;   // ファイル名
+            dropDown_deleteCell.SelectedItemIndex = 1;     // セル保持
+            dropDown_deleteMemo.SelectedItemIndex = 0; // メモ削除
         }
 
         private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
@@ -246,6 +249,100 @@ namespace ImageInserter
             splitButton_insert.Enabled = true;
         }
 
+        private void button_deleteSelection_Click(object sender, RibbonControlEventArgs e)
+        {
+            bool checkCell = checkBox_cell.Checked;
+            bool checkMemo = checkBox_memo.Checked;
+            bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
+
+            Excel.Worksheet sheet = getActiveSheet();
+            Excel.Range selectionRange = getSelection();
+
+            foreach (Excel.Shape shape in sheet.Shapes)
+            {
+                if (checkCell)
+                {
+                    if (shape.Type == MsoShapeType.msoLinkedPicture)
+                    {
+                        // Intersect: 2つ以上の範囲の長方形の交差を表すRangeオブジェクトを返す
+                        Excel.Range shapeRange = shape.TopLeftCell;
+                        if (sheet.Application.Intersect(shapeRange, selectionRange) != null)
+                        {
+                            shape.Delete();         // delete image in cell
+                            continue;
+                        }
+                    }
+                }
+                if (checkMemo)
+                {
+                    if (shape.Type == MsoShapeType.msoComment)
+                    {
+                        // 選択範囲内のコメントを含むセルのコメントのShapeのIDと比較
+                        foreach (Excel.Range cell in selectionRange)
+                        {
+                            if (cell.Comment == null)
+                            {
+                                continue;
+                            }
+                            if (cell.Comment.Shape.ID == shape.ID)
+                            {
+                                if (checkMemoKeep)
+                                {
+                                    shape.Fill.Solid();     // delete image in memo
+                                }
+                                else
+                                {
+                                    cell.Comment.Delete();  // delete memo
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button_deleteAll_Click(object sender, RibbonControlEventArgs e)
+        {
+            bool checkCell = checkBox_cell.Checked;
+            bool checkMemo = checkBox_memo.Checked;
+            bool checkMemoKeep = ( dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep" );
+
+            Excel.Worksheet sheet = getActiveSheet();
+            foreach (Excel.Shape shape in sheet.Shapes)
+            {
+                if (checkCell)
+                {
+                    if (shape.Type == MsoShapeType.msoLinkedPicture)
+                    {
+                        shape.Delete();         // delete image in cell
+                        continue;
+                    }
+                }
+                if(checkMemo)
+                {
+                    if (shape.Type == MsoShapeType.msoComment)
+                    {
+                        if (checkMemoKeep)
+                        {
+                            shape.Fill.Solid();     // delete image in memo
+                        }
+                        else
+                        {
+                            // すべてのコメントを含むセルのShapeのIDと比較
+                            foreach (Excel.Range cell in sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments))
+                            {
+                                if (cell.Comment.Shape.ID == shape.ID)
+                                {
+                                    cell.Comment.Delete();  // delete memo
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imagePath)
         {
@@ -503,6 +600,12 @@ namespace ImageInserter
             ofd.Dispose();
 
             return imagePath;
+        }
+
+        private Excel.Application getApplication()
+        {
+            Excel.Application application = Globals.ThisAddIn.Application;
+            return application;
         }
 
         // アクティブワークブックの取得

@@ -3,7 +3,7 @@
 
 <?define ProductName = "ImageInserter_ExcelAddin" ?>
 <?define Manufacturer = "saka-guchi" ?>
-<?define Version="1.0.3" ?>
+<?define Version="1.0.4" ?>
 
 <!-- 準備：マクロ変数の追加
 1.  Setupプロジェクト上で右クリック「プロパティ」を選択

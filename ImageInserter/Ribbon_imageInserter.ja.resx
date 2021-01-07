@@ -129,11 +129,20 @@
   <data name="splitButton_insert.Label" xml:space="preserve">
     <value>画像を選択セルに挿入</value>
   </data>
-  <data name="group_insert.Label" xml:space="preserve">
-    <value>画像の挿入</value>
+  <data name="button_deleteSelection.Label" xml:space="preserve">
+    <value>選択セルの画像を削除</value>
+  </data>
+  <data name="button_deleteAll.Label" xml:space="preserve">
+    <value>シート内の画像を削除</value>
+  </data>
+  <data name="splitButton1.Label" xml:space="preserve">
+    <value>選択セルの画像を削除</value>
+  </data>
+  <data name="group_control.Label" xml:space="preserve">
+    <value>挿入/削除</value>
   </data>
   <data name="label1.Label" xml:space="preserve">
-    <value>画像の挿入場所</value>
+    <value>挿入/削除対象</value>
   </data>
   <data name="checkBox_cell.Label" xml:space="preserve">
     <value>セル</value>
@@ -186,14 +195,26 @@
   <data name="dropDown_writeCell.SuperTip" xml:space="preserve">
     <value>セルにファイル名やファイルパスをセルに記入します</value>
   </data>
+  <data name="ribbonDropDownItemImpl7.Label" xml:space="preserve">
+    <value>内容を削除</value>
+  </data>
+  <data name="ribbonDropDownItemImpl8.Label" xml:space="preserve">
+    <value>内容を保持</value>
+  </data>
+  <data name="dropDown_deleteCell.Label" xml:space="preserve">
+    <value>削除方法</value>
+  </data>
+  <data name="dropDown_deleteCell.SuperTip" xml:space="preserve">
+    <value>セルの内容を消すか、保持するか選択します</value>
+  </data>
   <data name="label2.Label" xml:space="preserve">
     <value>複数セルへの配置</value>
   </data>
-  <data name="ribbonDropDownItemImpl7.Label" xml:space="preserve">
-    <value>下</value>
+  <data name="ribbonDropDownItemImpl9.Label" xml:space="preserve">
+    <value>しない</value>
   </data>
-  <data name="ribbonDropDownItemImpl8.Label" xml:space="preserve">
-    <value>右</value>
+  <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
+    <value>ファイル名</value>
   </data>
   <data name="dropDown_direction.Label" xml:space="preserve">
     <value>配置方向</value>
@@ -210,12 +231,6 @@
   <data name="editBox_maxH.Label" xml:space="preserve">
     <value>高さ</value>
   </data>
-  <data name="ribbonDropDownItemImpl9.Label" xml:space="preserve">
-    <value>しない</value>
-  </data>
-  <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
-    <value>ファイル名</value>
-  </data>
   <data name="ribbonDropDownItemImpl11.Label" xml:space="preserve">
     <value>ファイルパス</value>
   </data>
@@ -224,6 +239,18 @@
   </data>
   <data name="dropDown_writeMemo.SuperTip" xml:space="preserve">
     <value>メモにファイル名やファイルパスをセルに記入します</value>
+  </data>
+  <data name="ribbonDropDownItemImpl14.Label" xml:space="preserve">
+    <value>内容を削除</value>
+  </data>
+  <data name="ribbonDropDownItemImpl15.Label" xml:space="preserve">
+    <value>内容を保持</value>
+  </data>
+  <data name="dropDown_deleteMemo.Label" xml:space="preserve">
+    <value>削除方法</value>
+  </data>
+  <data name="dropDown_deleteMemo.SuperTip" xml:space="preserve">
+    <value>メモ自体を消すか、メモの内容を保持するか選択します</value>
   </data>
   <data name="group_memo.Label" xml:space="preserve">
     <value>メモ設定</value>
