@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
+<!-- バージョンアップ時はVersionとCode（ツール＞GUIDの作成）を変更する -->
+<?define ProductVersion="1.0.4" ?>
+<?define ProductCode = "32ACDB26-A6B0-421E-8E43-64BC0F3520B5" ?>
+<?define UpgradeCode = "661472ad-167f-47e7-b761-562247fda9b4" ?>
 <?define ProductName = "ImageInserter_ExcelAddin" ?>
 <?define Manufacturer = "saka-guchi" ?>
-<?define Version="1.0.4" ?>
-
+  
 <!-- 準備：マクロ変数の追加
 1.  Setupプロジェクト上で右クリック「プロパティ」を選択
 2. 「Build」タブを選択
@@ -14,17 +17,19 @@
 -->
   
 <!-- Product
-	Id: アプリケーションを識別するID「ツール＞GUIDの作成」
-	Name: インストーラーの画面の各箇所に表示されるアプリケーション名
+	Id: Windows InstallerのProductCodeに相当、アプリケーションを識別するID「ツール＞GUIDの作成」
+	Name: Windows InstallerのProductNameに相当、インストーラーの画面の各箇所に表示されるアプリケーション名
+  Version: Windows InstallerのProductVersionに相当
+  UpgradeCode: Windows InstallerのUpgradeCodeに相当
   Manufacturer: インストーラーの作成者やプログラム一覧の発行元
 -->
 <Product
-  Id="85ECE525-641E-4960-8E72-54FCB620A646"
+  Id="$(var.ProductCode)"
   Name="$(var.ProductName)"
   Language="1033"
-  Version="$(var.Version)"
-  Manufacturer="$(var.ProductName)"
-  UpgradeCode="661472ad-167f-47e7-b761-562247fda9b4"
+  Version="$(var.ProductVersion)"
+  Manufacturer="$(var.Manufacturer)"
+  UpgradeCode="$(var.UpgradeCode)"
 >
 
   <!-- インストーラの情報 -->
@@ -34,7 +39,7 @@
   />
 
   <!-- エラー処理 -->
-  <MajorUpgrade DowngradeErrorMessage="A newer version of ImageInserter is already installed." />
+  <MajorUpgrade DowngradeErrorMessage="A later version of ImageInserter is already installed. Setup will now exit." />
 
   <!-- MSI形式 -->
   <Media Id="1" Cabinet="ImageInserter_ExcelAddin.cab" EmbedCab="yes" />
