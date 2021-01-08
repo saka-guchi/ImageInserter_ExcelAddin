@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Debug = System.Diagnostics.Debug;
+using System.Drawing;
+using Image = System.Drawing.Image;
 using System.Windows.Forms;
 using System.Linq;
-using Debug = System.Diagnostics.Debug;
-using Image = System.Drawing.Image;
 using Microsoft.Office.Core;
 using Microsoft.Office.Tools.Ribbon;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -50,6 +51,12 @@ namespace ImageInserter
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cells = getSelection();
+
+            // Check params
+            if (cells == null)
+            {
+                return;
+            }
 
             // Disable UI
             switch_control_state(false);
@@ -100,6 +107,12 @@ namespace ImageInserter
             bool checkMemo = checkBox_memo.Checked;
             bool checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
             bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
+
+            // Check params
+            if (cells == null)
+            {
+                return;
+            }
 
             // Disable UI
             switch_control_state(false);
@@ -279,7 +292,7 @@ namespace ImageInserter
                     Application.DoEvents();
 
                     // Processing
-                    cell = (count == 0) ? cell.Offset[0, 0] : cell.Offset[offsetCol, offsetRow];
+                    cell = (count == 1) ? cell.Offset[0, 0] : cell.Offset[offsetCol, offsetRow];
 
                     // Paste image
                     if (checkImagePath(imagePath) == true)
@@ -505,31 +518,13 @@ namespace ImageInserter
 
         private void pasteImageOnMemo(Excel.Worksheet sheet, Excel.Range cell, string imagePath, int maxW, int maxH)
         {
-            System.IO.FileStream fs = System.IO.File.OpenRead(imagePath);
-            Image image = Image.FromStream(fs, false, false);
-            float w = image.Width;
-            float h = image.Height;
-            image.Dispose();
+            Debug.WriteLine("<<< pasteImageOnMemo() >>>");
 
-            // アスペクト比を維持して最大サイズまで縮小
-            float limW = (maxW != 0) ? maxW : w;
-            float limH = (maxH != 0) ? maxH : h;
-            double ratioW = (double)w / limW;
-            double ratioH = (double)h / limH;
-            if (ratioW > ratioH)
-            {
-                w = (float)limW;
-                h /= (float)ratioW;
-            }
-            else
-            {
-                w /= (float)ratioH;
-                h = (float)limH;
-            }
-
-            // 情報書込
+            // Get UI params
             string write = dropDown_writeMemo.SelectedItem.Tag.ToString();
-            string info = (cell.Comment != null)? cell.Comment.Text(): "";
+            string info = (cell.Comment != null) ? cell.Comment.Text() : "";
+
+            // Write information
             if (write == "none")
             {
                 ;
@@ -542,19 +537,106 @@ namespace ImageInserter
             {
                 info = imagePath;
             }
+            Debug.WriteLine("Write \"{0}\" to \"{1}\" to Memo", info, write);
 
+            // Read image file to get size
+#if true
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imagePath);
+            System.Drawing.RotateFlipType rotation = System.Drawing.RotateFlipType.RotateNoneFlipNone;
+            foreach( System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems)
+            {
+                if( item.Id != 0x0112 )
+                {
+                    continue;
+                }
+                else
+                {
+                    switch( item.Value[0] )
+                    {
+                        case 3:
+                            rotation = System.Drawing.RotateFlipType.Rotate180FlipNone;
+                            break;
+                        case 6:
+                            rotation = System.Drawing.RotateFlipType.Rotate90FlipNone;
+                            break;
+                        case 8:
+                            rotation = System.Drawing.RotateFlipType.Rotate270FlipNone;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+            }
+            float imageW = bmp.Width;
+            float imageH = bmp.Height;
+            Debug.WriteLine("Image: Path = {0}, (w, h) = ({1:F2}, {2:F2}), rotaion = {3}", imagePath, imageW, imageH, rotation.ToString());
+
+            string tempPath = "";
+            if ( rotation != System.Drawing.RotateFlipType.RotateNoneFlipNone)
+            {
+                System.Drawing.Bitmap tempBmp = (System.Drawing.Bitmap)bmp.Clone();
+                tempBmp.RotateFlip(rotation);
+                tempPath = System.IO.Path.GetTempFileName();
+                tempBmp.Save(tempPath);
+                imageW = tempBmp.Width;
+                imageH = tempBmp.Height;
+                imagePath = tempPath;
+                tempBmp.Dispose();
+                Debug.WriteLine("Image rotated: Path = {0}, (w, h) = ({1:F2}, {2:F2})", tempPath, imageW, imageH);
+            }
+            bmp.Dispose();
+#else
+            System.IO.FileStream fs = System.IO.File.OpenRead(imagePath);
+            Image image = Image.FromStream(fs, false, false);
+            float imageW = image.Width;
+            float imageH = image.Height;
+            image.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
+            image.Dispose();
+            Debug.WriteLine("Image: Path = {0}, (w, h) = ({1:F2}, {2:F2})", imagePath, imageW, imageH);
+#endif
+
+            // Reduce to the specified maximum size (Keep aspect ratio)
+            Debug.WriteLine("Specified max size: (w, h) = ({0:D}, {1:D})", maxW, maxH);
+            float shapeW = (maxW != 0) ? maxW : imageW;
+            float shapeH = (maxH != 0) ? maxH : imageH;
+            float ratioW = imageW / shapeW;
+            float ratioH = imageH / shapeH;
+            Debug.WriteLine("Resize ratio of Shape: (w, h) = ({0:F2}, {1:F2})", ratioW, ratioH);
+            if (ratioW < ratioH)
+            {
+                shapeW = imageW / ratioH;
+            }
+            else
+            {
+                shapeH = imageH / ratioW;
+            }
+            Debug.WriteLine("Shape: (w, h) = ({0:F2}, {1:F2})", shapeW, shapeH);
+
+            // Initialize Memo
             cell.ClearComments();
+
+            // Add information and image to Memo
             cell.AddComment(info);
             cell.Comment.Shape.Fill.UserPicture(imagePath);
-            cell.Comment.Shape.Width = w;
-            cell.Comment.Shape.Height = h;
+            cell.Comment.Shape.Width = shapeW;
+            cell.Comment.Shape.Height = shapeH;
+
+            if (tempPath != "")
+            {
+                System.IO.File.Delete(imagePath);
+            }
         }
 
         private void pasteImageOnCell(Excel.Worksheet sheet, Excel.Range cell, string imagePath, bool isSetW, bool isSetH)
         {
-            // 情報書込
+            Debug.WriteLine("<<< pasteImageOnCell() >>>");
+
+            // Get UI params
             string write = dropDown_writeCell.SelectedItem.Tag.ToString();
             string info = cell.Value;
+
+            // Write information
             if (write == "none")
             {
                 ;
@@ -568,101 +650,122 @@ namespace ImageInserter
                 info = imagePath;
             }
             cell.Value = info;
+            Debug.WriteLine("Write \"{0}\" to \"{1}\" to Cell", info, write);
 
-            // セルのサイズ変更
-            double ratioC = cell.ColumnWidth / cell.Width;
-            double ratioR = cell.RowHeight / cell.Height;
-            Debug.WriteLine("ratioC = \t" + ratioC);
-            Debug.WriteLine("ratioR = \t" + ratioR);
+            // Calculation ratio for unit conversion
+            //  - ColumnWidth: 1 character width (DPI dependent)
+            //  - Width: point
+            //  - RowHeight: point
+            //  - Height: point
+            double convRatioW = cell.ColumnWidth / cell.Width;
+            Debug.WriteLine("Conversion ratio: ColumnWidth / Width = {0:F2} / {1:F2} = {2:F2}", (double)cell.ColumnWidth, (double)cell.Width, convRatioW);
+
+            // Resize to the specified Cell size
+            Debug.WriteLine("Change cell size to specified size: Before");
+            Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2},{1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
             if (isSetW)
             {
-                cell.ColumnWidth = int.Parse(editBox_setW.Text) * ratioC;
+                cell.ColumnWidth = int.Parse(editBox_setW.Text) * convRatioW;       // point to 1 character width
             }
             if (isSetH)
             {
-                cell.RowHeight = int.Parse(editBox_setH.Text) * ratioR;
+                cell.RowHeight = int.Parse(editBox_setH.Text);
             }
+            Debug.WriteLine("Change cell size to specified size: After");
+            Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2},{1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
 
-            float left = (float)cell.Left;
-            float top = (float)cell.Top;
+            // Paste image
+            Debug.WriteLine("Paste image to Shape:");
+            float cellLeft = (float)cell.Left;
+            float cellTop = (float)cell.Top;
+            Debug.WriteLine(" - Cell: (Left, Top) = ({0:F2},{1:F2})", cellLeft, cellTop);
 
-            // 読み込む画像の幅と高さが不明な場合、ゼロにして後で等倍に拡大
-            float width = 0.0f;
-            float height = 0.0f;
+            float imageWidth = (float)-1;                                       // Set the width and height to -1 to get the original size
+            float imageHeight = (float)-1;
+            Debug.WriteLine(" - Image: (Left, Top, Width, Height) = ({0:F2},{1:F2})", imageWidth, imageHeight);
 
             Excel.Shape shape = sheet.Shapes.AddPicture2(
                 imagePath,
-                MsoTriState.msoTrue,                        // LinkToFile: 図を作成元のファイルにリンクするかどうか
-                MsoTriState.msoTrue,                        // SaveWithDocument: リンクされた図が、挿入先のドキュメントと共に保存されるかどうか
-                left, top, width, height,
+                MsoTriState.msoFalse,                                           // LinkToFile: 図を作成元のファイルにリンクするかどうか
+                MsoTriState.msoTrue,                                            // SaveWithDocument: リンクされた図が、挿入先のドキュメントと共に保存されるかどうか
+                cellLeft, cellTop, imageWidth, imageHeight,
                 MsoPictureCompress.msoPictureCompressTrue   // Compress: 画像を挿入するときに圧縮するかどうか
                 );
+            shape.Left = cellLeft;
+            shape.Top = cellTop;
+            Application.DoEvents();
 
-            // 縦横比を固定
-//            shape.LockAspectRatio = MsoTriState.msoTrue;
-            shape.LockAspectRatio = MsoTriState.msoFalse;
+            // Shape setting
+            shape.LockAspectRatio = MsoTriState.msoFalse;           // When resizing: 高さと幅を個別に変更できる
+            shape.Placement = Excel.XlPlacement.xlFreeFloating;     // When deleting or moving cells: 移動とリサイズを行わない
 
-            // セルに合わせて移動・サイズ変更
-//            shape.Placement = Excel.XlPlacement.xlMoveAndSize;
-            shape.Placement = Excel.XlPlacement.xlFreeFloating;
+            // Resize Shape
+            Debug.WriteLine("Resize shape: ");
+            string shrink = dropDown_shrink.SelectedItem.Tag.ToString();    // Image placement settings
+            Debug.WriteLine(" - mode: " + shrink);
 
-            // 元のサイズに戻す
-            shape.ScaleHeight(1.0f, MsoTriState.msoTrue);
-            shape.ScaleWidth(1.0f, MsoTriState.msoTrue);
+            // Calculate considering rotation
+            float cellRotWidth = (float)cell.Width;
+            float cellRotHeight = (float)cell.Height;
+            if( ( shape.Rotation.Equals(90f)  ) || (shape.Rotation.Equals(270f)) )
+            {
+                cellRotWidth = (float)cell.Height;
+                cellRotHeight = (float)cell.Width;
+            }
+            Debug.WriteLine(" - Cell (Rotation): (Width, Height) = ({0:F2},{1:F2})", cellRotWidth, cellRotHeight);
 
-            // 配置設定を取得
-            string shrink = dropDown_shrink.SelectedItem.Tag.ToString();
+            // Keep aspect and scale
+            double resizeRatioW = (double)shape.Width / (double)cellRotWidth;
+            double resizeRatioH = (double)shape.Height / (double)cellRotHeight;
+            Debug.WriteLine(" - resizeRatioW: shape.Width / cellRotWidth = {0:F2} / {1:F2} = {2:F2}", (double)shape.Width, (double)cellRotWidth, resizeRatioW);
+            Debug.WriteLine(" - resizeRatioH: shape.Height / cellRotHeight = {0:F2} / {1:F2} = {2:F2}", (double)shape.Height, (double)cellRotHeight, resizeRatioH);
 
-            // アスペクトを維持して拡大縮小する
-            double ratioW = (double)shape.Width / cell.Width;
-            double ratioH = (double)shape.Height / cell.Height;
-            Debug.WriteLine("ratioW = \t" + ratioW);
-            Debug.WriteLine("ratioH = \t" + ratioH);
-
-            Debug.WriteLine("BEFORE");
-            Debug.WriteLine("shape.Width = \t" + shape.Width);
-            Debug.WriteLine("shape.Height = \t" + shape.Height);
-            Debug.WriteLine("cell.Width = \t" + (float)cell.Width);
-            Debug.WriteLine("cell.Height = \t" + (float)cell.Height);
-            Debug.WriteLine("cell.ColumnWidth = \t" + (float)cell.ColumnWidth);
-            Debug.WriteLine("cell.RowHeight = \t" + (float)cell.RowHeight);
+            Debug.WriteLine("<Before>");
+            Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2}, {1:F2})", (float)shape.Left, (float)shape.Top);
+            Debug.WriteLine(" - Shape: (w, h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
+            Debug.WriteLine(" - Cell: (cw, rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
 
             if (shrink == "fit")
             {
-                if( ratioW > ratioH )
+                if(resizeRatioW > resizeRatioH)
                 {
-                    shape.Width = (float)cell.Width;
-                    shape.Height /= (float)ratioW;
+                    shape.Width = (float)cellRotWidth;
+                    shape.Height /= (float)resizeRatioW;
                 }
                 else
                 {
-                    shape.Width /= (float)ratioH;
-                    shape.Height = (float)cell.Height;
+                    shape.Width /= (float)resizeRatioH;
+                    shape.Height = (float)cellRotHeight;
                 }
             }
             else if (shrink == "fitW")
             {
                 // 幅:セル合わせ、高さ:幅縮小後の画像合わせ
-                shape.Width = (float)cell.Width;
-                shape.Height /= (float)ratioW;
-                cell.RowHeight = (double)shape.Height * ratioR;
+                shape.Width = (float)cellRotWidth;
+                shape.Height /= (float)resizeRatioW;
+                cell.RowHeight = (float)shape.Height;
             }
             else if (shrink == "fitH")
             {
                 // 幅:高さ縮小後の画像合わせ、高さ:セル合わせ
-                shape.Width /= (float)ratioH;
-                shape.Height = (float)cell.Height;
-                cell.ColumnWidth = (double)shape.Width * ratioC;
+                shape.Width /= (float)resizeRatioH;
+                shape.Height = (float)cellRotHeight;
+                cell.ColumnWidth = (float)shape.Width * (float)convRatioW;
             }
-            Debug.WriteLine("AFTER");
-            Debug.WriteLine("shape.Width = \t" + shape.Width);
-            Debug.WriteLine("shape.Height = \t" + shape.Height);
-            Debug.WriteLine("cell.Width = \t" + (float)cell.Width);
-            Debug.WriteLine("cell.Height = \t" + (float)cell.Height);
-            Debug.WriteLine("cell.ColumnWidth = \t" + (float)cell.ColumnWidth);
-            Debug.WriteLine("cell.RowHeight = \t" + (float)cell.RowHeight);
-        }
 
+            if ((shape.Rotation.Equals(90f)) || (shape.Rotation.Equals(270f)))
+            {
+                float leftMargin = (shape.Width - shape.Height) / 2;
+                float topMargin = (shape.Height - shape.Width) / 2;
+                shape.Left = cellLeft - leftMargin;
+                shape.Top = cellTop - topMargin;
+            }
+
+            Debug.WriteLine("<After>");
+            Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2},{1:F2})", (float)shape.Left, (float)shape.Top);
+            Debug.WriteLine(" - Shape: (w,h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
+            Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+        }
 
         private string getImagePathFromCell(Excel.Range cell)
         {
@@ -761,6 +864,10 @@ namespace ImageInserter
         // 選択範囲の取得
         private Excel.Range getSelection()
         {
+            if(Globals.ThisAddIn.Application.Selection == null)
+            {
+                return null;
+            }
             Excel.Range selection = Globals.ThisAddIn.Application.Selection;
             return selection;
         }

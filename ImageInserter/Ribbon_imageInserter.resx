@@ -322,6 +322,9 @@
   <data name="editBox_setW.Label" xml:space="preserve">
     <value>Width</value>
   </data>
+  <data name="editBox_setW.SuperTip" xml:space="preserve">
+    <value>unit is point</value>
+  </data>
   <data name="editBox_setW.Text" xml:space="preserve">
     <value>15</value>
   </data>
@@ -342,6 +345,9 @@
   </data>
   <data name="editBox_setH.Label" xml:space="preserve">
     <value>Height</value>
+  </data>
+  <data name="editBox_setH.SuperTip" xml:space="preserve">
+    <value>unit is point</value>
   </data>
   <data name="editBox_setH.Text" xml:space="preserve">
     <value>15</value>
@@ -523,6 +529,9 @@
   <data name="editBox_maxW.Label" xml:space="preserve">
     <value>Width</value>
   </data>
+  <data name="editBox_maxW.SuperTip" xml:space="preserve">
+    <value>unit is point</value>
+  </data>
   <data name="editBox_maxW.Text" xml:space="preserve">
     <value>512</value>
   </data>
@@ -540,6 +549,9 @@
   </data>
   <data name="editBox_maxH.Label" xml:space="preserve">
     <value>Height</value>
+  </data>
+  <data name="editBox_maxH.SuperTip" xml:space="preserve">
+    <value>unit is point</value>
   </data>
   <data name="editBox_maxH.Text" xml:space="preserve">
     <value>512</value>
