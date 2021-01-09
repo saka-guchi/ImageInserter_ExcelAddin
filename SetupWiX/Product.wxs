@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-<!-- バージョンアップ時はVersionとCode（ツール＞GUIDの作成）を変更する -->
-<?define ProductVersion="1.0.4" ?>
-<?define ProductCode = "32ACDB26-A6B0-421E-8E43-64BC0F3520B5" ?>
+<!-- バージョンアップ時はProductVersionとProductCode（ツール＞GUIDの作成）を変更する -->
+<?define ProductVersion="1.0.5" ?>
+<?define ProductCode = "E54A8D85-89A2-48DF-8E17-B6AD572A42A2" ?>
 <?define UpgradeCode = "661472ad-167f-47e7-b761-562247fda9b4" ?>
 <?define ProductName = "ImageInserter_ExcelAddin" ?>
 <?define Manufacturer = "saka-guchi" ?>
