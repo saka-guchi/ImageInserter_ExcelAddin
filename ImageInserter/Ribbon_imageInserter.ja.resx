@@ -211,10 +211,10 @@
     <value>複数セルへの配置</value>
   </data>
   <data name="ribbonDropDownItemImpl9.Label" xml:space="preserve">
-    <value>しない</value>
+    <value>下</value>
   </data>
   <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
-    <value>ファイル名</value>
+    <value>右</value>
   </data>
   <data name="dropDown_direction.Label" xml:space="preserve">
     <value>配置方向</value>

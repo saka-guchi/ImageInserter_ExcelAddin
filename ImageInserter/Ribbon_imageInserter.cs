@@ -34,12 +34,6 @@ namespace ImageInserter
             // Check params
             if (imagePath == null)
             {
-                MessageBox.Show(
-                    "Image file does not exist\n画像ファイルが存在しません",
-                    "ERROR",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                    );
                 return;
             }
 
@@ -76,19 +70,14 @@ namespace ImageInserter
             // Check params
             if (folderPath == null)
             {
-                MessageBox.Show(
-                    "Folder does not exist\nフォルダが存在しません",
-                    "ERROR",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                    );
                 return;
             }
+
             int offsetCol = (direction == "under") ? 1 : 0;
             int offsetRow = (direction == "right") ? 1 : 0;
 
             // Get files in specified folder
-            string[] exts = { ".jpg", ".jpeg" };
+            string[] exts = { ".jpg", ".jpeg", ".bmp", ".png", ".gif" };
             List<string> imgList = GetFilesInFolder(folderPath, exts);
 
             // Disable UI
@@ -125,6 +114,7 @@ namespace ImageInserter
         {
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
+            Excel.Range cells = (sheet.Cells.Comment == null) ? sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments): null;
             bool checkCell = checkBox_cell.Checked;
             bool checkMemo = checkBox_memo.Checked;
             bool checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
@@ -134,11 +124,12 @@ namespace ImageInserter
             switch_control_state(false);
 
             // Delete all images
-            deleteAllImages(sheet, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
+            deleteAllImages(sheet, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
         }
 
         private void switch_control_state(bool enable)
         {
+            // Get all UI controls
             foreach(RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
             {
                 foreach (RibbonControl ctrl in group.Items)
@@ -147,6 +138,7 @@ namespace ImageInserter
                 }
             }
 
+            // Correspond individually
             if (enable)
             {
                 bool max_w = false;
@@ -181,6 +173,7 @@ namespace ImageInserter
                 editBox_setW.Enabled = set_w;
                 editBox_setH.Enabled = set_h;
             }
+            Application.DoEvents();
         }
 
         private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
@@ -197,20 +190,22 @@ namespace ImageInserter
             switch_control_state(true);
         }
 
-        private async void pasteLinkedImages(Excel.Worksheet sheet, Excel. Range cells)
+        private /*async*/ void pasteLinkedImages(Excel.Worksheet sheet, Excel. Range cells)
         {
-            // Stop screen updating
-            Excel.Application app = getApplication();
-            app.ScreenUpdating = false;
-
             int countMax = cells.Count;
-            await System.Threading.Tasks.Task.Run(() => {
+//         await System.Threading.Tasks.Task.Run(() =>
+            {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
                 waitDlg.ProgressMax = countMax;
 
                 // Progress bar: Show
                 waitDlg.Show();
+
+                // Stop screen updating
+                Excel.Application app = getApplication();
+                app.ScreenUpdating = false;
+
                 Application.DoEvents();
 
                 int count = 1;
@@ -232,20 +227,22 @@ namespace ImageInserter
                     string imagePath = cell.Text;
 
                     // Paste image
-                    if ( checkImagePath(imagePath) == true )
+                    if (checkImagePath(imagePath) == true)
                     {
                         pasteImage(sheet, cell, imagePath);
                     }
                     count++;
                 }
 
+                // Statr screen updating
+                app.ScreenUpdating = true;
+
                 // Progress bar: Close
                 waitDlg.Close();
-                Application.DoEvents();
-            });
 
-            // Statr screen updating
-            app.ScreenUpdating = true;
+                Application.DoEvents();
+            }
+//         );
 
             // Enable UI
             switch_control_state(true);
@@ -253,27 +250,28 @@ namespace ImageInserter
 
         private List<string> GetFilesInFolder(string path, string[] exts)
         {
-            string[] extCheck = { ".jpg", ".jpeg" };
             List<string> files = System.IO.Directory.GetFiles(path)
-                .Where(f => extCheck.Contains(System.IO.Path.GetExtension(f), System.StringComparer.OrdinalIgnoreCase))
+                .Where(f => exts.Contains(System.IO.Path.GetExtension(f), System.StringComparer.OrdinalIgnoreCase))
                 .ToList();
             return files;
         }
 
-        private async void pasteImages(List<string> imgList, Excel.Worksheet sheet, Excel.Range cell, int offsetCol, int offsetRow)
+        private /*async*/ void pasteImages(List<string> imgList, Excel.Worksheet sheet, Excel.Range cell, int offsetCol, int offsetRow)
         {
-            // Stop screen updating
-            Excel.Application app = getApplication();
-            app.ScreenUpdating = false;
-
             int countMax = imgList.Count;
-            await System.Threading.Tasks.Task.Run(() => {
+//         await System.Threading.Tasks.Task.Run(() =>
+            {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
                 waitDlg.ProgressMax = countMax;
 
                 // Progress bar: Show
                 waitDlg.Show();
+
+                // Stop screen updating
+                Excel.Application app = getApplication();
+                app.ScreenUpdating = false;
+
                 Application.DoEvents();
 
                 int count = 1;
@@ -302,26 +300,24 @@ namespace ImageInserter
                     count++;
                 }
 
+                // Statr screen updating
+                app.ScreenUpdating = true;
+
                 // Progress bar: Close
                 waitDlg.Close();
-                Application.DoEvents();
-            });
 
-            // Statr screen updating
-            app.ScreenUpdating = true;
+                Application.DoEvents();
+            }
+//         );
 
             // Enable UI
             switch_control_state(true);
         }
 
-        private async void deleteImagesInSelection(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        private /*async*/ void deleteImagesInSelection(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
         {
-            // Stop screen updating
-            Excel.Application app = getApplication();
-            app.ScreenUpdating = false;
-
             int countMax = sheet.Shapes.Count;
-            await System.Threading.Tasks.Task.Run(() =>
+//         await System.Threading.Tasks.Task.Run(() =>
             {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
@@ -329,6 +325,11 @@ namespace ImageInserter
 
                 // Progress bar: Show
                 waitDlg.Show();
+
+                // Stop screen updating
+                Excel.Application app = getApplication();
+                app.ScreenUpdating = false;
+
                 Application.DoEvents();
 
                 int count = 1;
@@ -346,119 +347,79 @@ namespace ImageInserter
                     waitDlg.PerformStep();
                     Application.DoEvents();
 
-                    // Processing
-                    if (checkCell)
-                    {
-                        // Target: Cell
-                        if (shape.Type == MsoShapeType.msoLinkedPicture)
-                        {
-                            // Intersect: 2つ以上の範囲の長方形の交差を表すRangeオブジェクトを返す
-                            Excel.Range shapeRange = shape.TopLeftCell;
-                            if (sheet.Application.Intersect(shapeRange, cells) != null)
-                            {
-                                if (!checkCellKeep)
-                                {
-                                    shapeRange.Value = "";
-                                }
-                                shape.Delete();          // Delete an image in a cell
-                                count++;
-                                continue;                   // Skip checkMemo
-                            }
-                        }
-                    }
-                    if (checkMemo)
-                    {
-                        // Target: Memo
-                        if (shape.Type == MsoShapeType.msoComment)
-                        {
-                            // 選択範囲内のコメントを含むセルのコメントのShapeのIDと比較
-                            foreach (Excel.Range cell in cells)
-                            {
-                                if (cell.Comment == null)
-                                {
-                                    continue;
-                                }
-                                if (cell.Comment.Shape.ID == shape.ID)
-                                {
-                                    if (checkMemoKeep)
-                                    {
-                                        shape.Fill.Solid();     // Delete image in memo
-                                    }
-                                    else
-                                    {
-                                        cell.Comment.Delete();  // Delete memo
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, false);
+
                     count++;
                 }
 
+                // Statr screen updating
+                app.ScreenUpdating = true;
+
                 // Progress bar: Close
                 waitDlg.Close();
-                Application.DoEvents();
-            });
 
-            // Statr screen updating
-            app.ScreenUpdating = true;
+                Application.DoEvents();
+            }
+//         );
 
             // Enable UI
             switch_control_state(true);
         }
 
-        private async void deleteAllImages(Excel.Worksheet sheet, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        private void deleteImage(Excel.Worksheet sheet, Excel.Shape shape, Excel.Range selectedCells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep, bool isAll)
         {
-            // Stop screen updating
-            Excel.Application app = getApplication();
-            app.ScreenUpdating = false;
-
-            int countMax = sheet.Shapes.Count;
-            await System.Threading.Tasks.Task.Run(() => {
-                // Progress bar: Setting
-                WaitDialog waitDlg = new WaitDialog();
-                waitDlg.ProgressMax = countMax;
-
-                // Progress bar: Show
-                waitDlg.Show();
-                Application.DoEvents();
-
-                int count = 1;
-                foreach (Excel.Shape shape in sheet.Shapes)
+            // Target: Cell
+            if (checkCell)
+            {
+                if (shape.Type == MsoShapeType.msoPicture)     // image
                 {
-                    // Stop decision
-                    if (waitDlg.IsAborting == true)
+                    // Get Cell under Shape
+                    Excel.Range shapeRange = shape.TopLeftCell;
+
+                    // Erase the contents of the cell
+                    bool isValueClear = false;
+                    if ( isAll )
                     {
-                        break;
+                        isValueClear = true;
                     }
-
-                    // Display progress message
-                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
-                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
-
-                    // Processing
-                    if (checkCell)
+                    else
                     {
-                        // Target: Cell
-                        if (shape.Type == MsoShapeType.msoLinkedPicture)
+                        // Check the intersection of Shape and Selected cells
+                        if(sheet.Application.Intersect(shapeRange, selectedCells) != null)
                         {
-                            if (!checkCellKeep)
-                            {
-                                Excel.Range shapeRange = shape.TopLeftCell;
-                                shapeRange.Value = "";
-                            }
-                            shape.Delete();          // Delete an image in a cell
-                            count++;
-                            continue;                   // Skip checkMemo
+                            isValueClear = true;
                         }
                     }
-                    if (checkMemo)
+                    if (isValueClear)
                     {
-                        // Target: Memo
-                        if (shape.Type == MsoShapeType.msoComment)
+                        if (!checkCellKeep)
+                        {
+                            shapeRange.Value = "";
+                        }
+                        // Delete an image in a cell
+                        shape.Delete();
+
+                        // Skip checkMemo
+                        return;
+                    }
+                }
+            }
+
+            // Target: Memo
+            if (checkMemo)
+            {
+                if (shape.Type == MsoShapeType.msoComment)  // memo
+                {
+                    // Get cells containing comment
+                    foreach (Excel.Range cell in selectedCells)
+                    {
+                        if (cell.Comment == null)
+                        {
+                            continue;
+                        }
+
+                        // Compare ID
+                        if (cell.Comment.Shape.ID == shape.ID)
                         {
                             if (checkMemoKeep)
                             {
@@ -466,191 +427,225 @@ namespace ImageInserter
                             }
                             else
                             {
-                                // すべてのコメントを含むセルのShapeのIDと比較
-                                foreach (Excel.Range cell in sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments))
-                                {
-                                    if (cell.Comment.Shape.ID == shape.ID)
-                                    {
-                                        cell.Comment.Delete();  // Delete memo
-                                        break;
-                                    }
-                                }
+                                cell.Comment.Delete();  // Delete memo
                             }
+                            break;
                         }
                     }
+                }
+            }
+        }
+
+        private /*async*/ void deleteAllImages(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        {
+            int countMax = sheet.Shapes.Count;
+//         await System.Threading.Tasks.Task.Run(() =>
+            {
+                // Progress bar: Setting
+                WaitDialog waitDlg = new WaitDialog();
+                waitDlg.ProgressMax = countMax;
+
+                // Progress bar: Show
+                waitDlg.Show();
+
+                // Stop screen updating
+                Excel.Application app = getApplication();
+                app.ScreenUpdating = false;
+
+                Application.DoEvents();
+
+                int count = 1;
+                foreach (Excel.Shape shape in sheet.Shapes)
+                {
+                    // Stop decision
+                    if (waitDlg.IsAborting == true)
+                    {
+                        break;
+                    }
+
+                    // Display progress message
+                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
+                    waitDlg.PerformStep();
+                    Application.DoEvents();
+
+                    deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, true);
+
                     count++;
                 }
 
+                // Statr screen updating
+                app.ScreenUpdating = true;
+
                 // Progress bar: Close
                 waitDlg.Close();
-                Application.DoEvents();
-            });
 
-            // Statr screen updating
-            app.ScreenUpdating = true;
+                Application.DoEvents();
+            }
+//         );
 
             // Enable UI
             switch_control_state(true);
         }
 
-        private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imagePath)
+        private string preloadImage(ref string imagePath, ref float imageW, ref float imageH)
         {
-            if (checkBox_cell.Checked)
+            // Read image file to get size and rotation
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imagePath);
+            System.Drawing.RotateFlipType rotation = System.Drawing.RotateFlipType.RotateNoneFlipNone;
+            imageW = bmp.Width;
+            imageH = bmp.Height;
+            Debug.WriteLine("Image: Path = {0}, (w, h) = ({1:F2}, {2:F2})", imagePath, imageW, imageH);
+            try
             {
-                // セルに画像貼付
-                pasteImageOnCell(sheet, cell, imagePath, editBox_setW.Enabled, editBox_setH.Enabled);
+                foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems)
+                {
+                    if (item.Id != 0x0112)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        switch (item.Value[0])
+                        {
+                            case 3:
+                                rotation = System.Drawing.RotateFlipType.Rotate180FlipNone;
+                                break;
+                            case 6:
+                                rotation = System.Drawing.RotateFlipType.Rotate90FlipNone;
+                                break;
+                            case 8:
+                                rotation = System.Drawing.RotateFlipType.Rotate270FlipNone;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    }
+                }
+                Debug.WriteLine("Image: rotaion = {0}", rotation.ToString());
             }
-            if (checkBox_memo.Checked)
+            catch (Exception e)
             {
-                // 最大サイズの取得
-                int maxW = 0;
-                int maxH = 0;
-                if (checkBox_maxSize.Checked)
+                Debug.WriteLine("ERROR: {0}", e);
+            }
+
+            // Comment.Shape.Fil.UserPicture() is displayed without rotation.
+            // Create a rotated image and display it instead
+            string tempPath = "";
+            if (rotation != System.Drawing.RotateFlipType.RotateNoneFlipNone)
+            {
+                System.Drawing.Bitmap tempBmp = null;
+                try
+                {
+                    tempBmp = (System.Drawing.Bitmap)bmp.Clone();
+                    tempBmp.RotateFlip(rotation);
+                    tempPath = System.IO.Path.GetTempFileName();
+                    tempBmp.Save(tempPath);
+                    imageW = tempBmp.Width;
+                    imageH = tempBmp.Height;
+                    imagePath = tempPath;
+                    Debug.WriteLine("Image rotated: Path = {0}, (w, h) = ({1:F2}, {2:F2})", tempPath, imageW, imageH);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ERROR tempBmp: {0}", e);
+                }
+                tempBmp.Dispose();
+            }
+            bmp.Dispose();
+
+            return tempPath;
+        }
+
+        private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imageOrgPath)
+        {
+            // Get UI params
+            bool pasteCell = false;
+            bool pasteMemo = false;
+            bool setMaxSize = false;
+            int maxW = 0;
+            int maxH = 0;
+            bool isSetW = false;
+            bool isSetH = false;
+            string writeInfoCell = "";
+            string writeInfoMemo = "";
+            string comment = "";
+            try
+            {
+                pasteCell = checkBox_cell.Checked;
+                pasteMemo = checkBox_memo.Checked;
+                setMaxSize = checkBox_maxSize.Checked;
+                if (setMaxSize)
                 {
                     maxW = int.Parse(editBox_maxW.Text);
                     maxH = int.Parse(editBox_maxH.Text);
                 }
+                isSetW = editBox_setW.Enabled;
+                isSetH = editBox_setH.Enabled;
+                writeInfoCell = dropDown_writeCell.SelectedItem.Tag.ToString();
+                writeInfoMemo = dropDown_writeMemo.SelectedItem.Tag.ToString();
+                comment = (cell.Comment != null) ? cell.Comment.Text() : "";
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine("ERROR pasteImage() Get UI params: {0}", e);
+                return;
+            }
 
-                // メモに画像貼付
-                pasteImageOnMemo(sheet, cell, imagePath, maxW, maxH);
+            // imageOriginalPath: Path to the original picture
+            // imagePath: Path to the load picture (original or temporary)
+            // tempPath: Path to the rotated picture
+            float imageW = 0f;
+            float imageH = 0f;
+            string imagePath = imageOrgPath;
+            string tempPath = preloadImage(ref imagePath, ref imageW, ref imageH);
+
+            // Paste image on Cell
+            if (pasteCell)
+            {
+                string writeInfo = getWriteInfo(imageOrgPath, writeInfoCell, cell.Value);
+                pasteImageOnCell(sheet, cell, writeInfo, imagePath, imageW, imageH, isSetW, isSetH);
+            }
+
+            // Paste image on Memo
+            if (pasteMemo)
+            {
+                string writeInfo = getWriteInfo(imageOrgPath, writeInfoMemo, comment);
+                pasteImageOnMemo(sheet, cell, writeInfo, imagePath, imageW, imageH, maxW, maxH);
+            }
+
+            // Delete temporary file.
+            if (tempPath != "")
+            {
+                System.IO.File.Delete(tempPath);
             }
         }
 
-        private void pasteImageOnMemo(Excel.Worksheet sheet, Excel.Range cell, string imagePath, int maxW, int maxH)
+        private string getWriteInfo(string imagePath, string type, string infoInit)
         {
-            Debug.WriteLine("<<< pasteImageOnMemo() >>>");
-
-            // Get UI params
-            string write = dropDown_writeMemo.SelectedItem.Tag.ToString();
-            string info = (cell.Comment != null) ? cell.Comment.Text() : "";
-
-            // Write information
-            if (write == "none")
+            string info = infoInit;
+            if (type == "none")
             {
                 ;
             }
-            else if (write == "name")
+            else if (type == "name")
             {
                 info = System.IO.Path.GetFileName(imagePath);
             }
-            else if (write == "path")
+            else if (type == "path")
             {
                 info = imagePath;
             }
-            Debug.WriteLine("Write \"{0}\" to \"{1}\" to Memo", info, write);
-
-            // Read image file to get size
-#if true
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imagePath);
-            System.Drawing.RotateFlipType rotation = System.Drawing.RotateFlipType.RotateNoneFlipNone;
-            foreach( System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems)
-            {
-                if( item.Id != 0x0112 )
-                {
-                    continue;
-                }
-                else
-                {
-                    switch( item.Value[0] )
-                    {
-                        case 3:
-                            rotation = System.Drawing.RotateFlipType.Rotate180FlipNone;
-                            break;
-                        case 6:
-                            rotation = System.Drawing.RotateFlipType.Rotate90FlipNone;
-                            break;
-                        case 8:
-                            rotation = System.Drawing.RotateFlipType.Rotate270FlipNone;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-            }
-            float imageW = bmp.Width;
-            float imageH = bmp.Height;
-            Debug.WriteLine("Image: Path = {0}, (w, h) = ({1:F2}, {2:F2}), rotaion = {3}", imagePath, imageW, imageH, rotation.ToString());
-
-            string tempPath = "";
-            if ( rotation != System.Drawing.RotateFlipType.RotateNoneFlipNone)
-            {
-                System.Drawing.Bitmap tempBmp = (System.Drawing.Bitmap)bmp.Clone();
-                tempBmp.RotateFlip(rotation);
-                tempPath = System.IO.Path.GetTempFileName();
-                tempBmp.Save(tempPath);
-                imageW = tempBmp.Width;
-                imageH = tempBmp.Height;
-                imagePath = tempPath;
-                tempBmp.Dispose();
-                Debug.WriteLine("Image rotated: Path = {0}, (w, h) = ({1:F2}, {2:F2})", tempPath, imageW, imageH);
-            }
-            bmp.Dispose();
-#else
-            System.IO.FileStream fs = System.IO.File.OpenRead(imagePath);
-            Image image = Image.FromStream(fs, false, false);
-            float imageW = image.Width;
-            float imageH = image.Height;
-            image.RotateFlip(System.Drawing.RotateFlipType.Rotate90FlipNone);
-            image.Dispose();
-            Debug.WriteLine("Image: Path = {0}, (w, h) = ({1:F2}, {2:F2})", imagePath, imageW, imageH);
-#endif
-
-            // Reduce to the specified maximum size (Keep aspect ratio)
-            Debug.WriteLine("Specified max size: (w, h) = ({0:D}, {1:D})", maxW, maxH);
-            float shapeW = (maxW != 0) ? maxW : imageW;
-            float shapeH = (maxH != 0) ? maxH : imageH;
-            float ratioW = imageW / shapeW;
-            float ratioH = imageH / shapeH;
-            Debug.WriteLine("Resize ratio of Shape: (w, h) = ({0:F2}, {1:F2})", ratioW, ratioH);
-            if (ratioW < ratioH)
-            {
-                shapeW = imageW / ratioH;
-            }
-            else
-            {
-                shapeH = imageH / ratioW;
-            }
-            Debug.WriteLine("Shape: (w, h) = ({0:F2}, {1:F2})", shapeW, shapeH);
-
-            // Initialize Memo
-            cell.ClearComments();
-
-            // Add information and image to Memo
-            cell.AddComment(info);
-            cell.Comment.Shape.Fill.UserPicture(imagePath);
-            cell.Comment.Shape.Width = shapeW;
-            cell.Comment.Shape.Height = shapeH;
-
-            if (tempPath != "")
-            {
-                System.IO.File.Delete(imagePath);
-            }
+            return info;
         }
 
-        private void pasteImageOnCell(Excel.Worksheet sheet, Excel.Range cell, string imagePath, bool isSetW, bool isSetH)
+        private void pasteImageOnCell(Excel.Worksheet sheet, Excel.Range cell, string writeInfo, string imagePath, float imageW, float imageH, bool isSetW, bool isSetH)
         {
             Debug.WriteLine("<<< pasteImageOnCell() >>>");
 
-            // Get UI params
-            string write = dropDown_writeCell.SelectedItem.Tag.ToString();
-            string info = cell.Value;
-
-            // Write information
-            if (write == "none")
-            {
-                ;
-            }
-            else if (write == "name")
-            {
-                info = System.IO.Path.GetFileName(imagePath);
-            }
-            else if (write == "path")
-            {
-                info = imagePath;
-            }
-            cell.Value = info;
-            Debug.WriteLine("Write \"{0}\" to \"{1}\" to Cell", info, write);
+            Debug.WriteLine("Write \"{0}\" to Cell", writeInfo);
+            cell.Value = writeInfo;
 
             // Calculation ratio for unit conversion
             //  - ColumnWidth: 1 character width (DPI dependent)
@@ -679,92 +674,128 @@ namespace ImageInserter
             float cellLeft = (float)cell.Left;
             float cellTop = (float)cell.Top;
             Debug.WriteLine(" - Cell: (Left, Top) = ({0:F2},{1:F2})", cellLeft, cellTop);
-
-            float imageWidth = (float)-1;                                       // Set the width and height to -1 to get the original size
-            float imageHeight = (float)-1;
-            Debug.WriteLine(" - Image: (Left, Top, Width, Height) = ({0:F2},{1:F2})", imageWidth, imageHeight);
+            Debug.WriteLine(" - Image: (w, h) = ({0:F2},{1:F2})", imageW, imageH);
 
             Excel.Shape shape = sheet.Shapes.AddPicture2(
                 imagePath,
-                MsoTriState.msoFalse,                                           // LinkToFile: 図を作成元のファイルにリンクするかどうか
-                MsoTriState.msoTrue,                                            // SaveWithDocument: リンクされた図が、挿入先のドキュメントと共に保存されるかどうか
-                cellLeft, cellTop, imageWidth, imageHeight,
-                MsoPictureCompress.msoPictureCompressTrue   // Compress: 画像を挿入するときに圧縮するかどうか
+                MsoTriState.msoFalse,                                           // LinkToFile: Picture will be linked to the file from which it was created
+                MsoTriState.msoTrue,                                            // SaveWithDocument: Linked picture will be saved with the document
+                cellLeft, cellTop, imageW, imageH,
+                MsoPictureCompress.msoPictureCompressTrue   // Compress: Picture should be compressed when inserted
                 );
-            shape.Left = cellLeft;
-            shape.Top = cellTop;
-            Application.DoEvents();
-
-            // Shape setting
-            shape.LockAspectRatio = MsoTriState.msoFalse;           // When resizing: 高さと幅を個別に変更できる
-            shape.Placement = Excel.XlPlacement.xlFreeFloating;     // When deleting or moving cells: 移動とリサイズを行わない
-
-            // Resize Shape
-            Debug.WriteLine("Resize shape: ");
-            string shrink = dropDown_shrink.SelectedItem.Tag.ToString();    // Image placement settings
-            Debug.WriteLine(" - mode: " + shrink);
-
-            // Calculate considering rotation
-            float cellRotWidth = (float)cell.Width;
-            float cellRotHeight = (float)cell.Height;
-            if( ( shape.Rotation.Equals(90f)  ) || (shape.Rotation.Equals(270f)) )
+            try
             {
-                cellRotWidth = (float)cell.Height;
-                cellRotHeight = (float)cell.Width;
-            }
-            Debug.WriteLine(" - Cell (Rotation): (Width, Height) = ({0:F2},{1:F2})", cellRotWidth, cellRotHeight);
+                shape.Left = cellLeft;
+                shape.Top = cellTop;
+                Application.DoEvents();
 
-            // Keep aspect and scale
-            double resizeRatioW = (double)shape.Width / (double)cellRotWidth;
-            double resizeRatioH = (double)shape.Height / (double)cellRotHeight;
-            Debug.WriteLine(" - resizeRatioW: shape.Width / cellRotWidth = {0:F2} / {1:F2} = {2:F2}", (double)shape.Width, (double)cellRotWidth, resizeRatioW);
-            Debug.WriteLine(" - resizeRatioH: shape.Height / cellRotHeight = {0:F2} / {1:F2} = {2:F2}", (double)shape.Height, (double)cellRotHeight, resizeRatioH);
+                // Shape setting
+                shape.LockAspectRatio = MsoTriState.msoFalse;           // Shape retains its original proportions
+                shape.Placement = Excel.XlPlacement.xlFreeFloating;     // Shape is free floating
 
-            Debug.WriteLine("<Before>");
-            Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2}, {1:F2})", (float)shape.Left, (float)shape.Top);
-            Debug.WriteLine(" - Shape: (w, h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
-            Debug.WriteLine(" - Cell: (cw, rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+                // Resize Shape
+                Debug.WriteLine("Resize shape: ");
+                string shrink = dropDown_shrink.SelectedItem.Tag.ToString();    // Image placement settings
+                Debug.WriteLine(" - mode: " + shrink);
 
-            if (shrink == "fit")
-            {
-                if(resizeRatioW > resizeRatioH)
+                // Calculate considering rotation
+                float cellRotWidth = (float)cell.Width;
+                float cellRotHeight = (float)cell.Height;
+                if ((shape.Rotation.Equals(90f)) || (shape.Rotation.Equals(270f)))
                 {
+                    cellRotWidth = (float)cell.Height;
+                    cellRotHeight = (float)cell.Width;
+                }
+                Debug.WriteLine(" - Cell (Rotation): (Width, Height) = ({0:F2},{1:F2})", cellRotWidth, cellRotHeight);
+
+                // Keep aspect and scale
+                double resizeRatioW = (double)shape.Width / (double)cellRotWidth;
+                double resizeRatioH = (double)shape.Height / (double)cellRotHeight;
+                Debug.WriteLine(" - resizeRatioW: shape.Width / cellRotWidth = {0:F2} / {1:F2} = {2:F2}", (double)shape.Width, (double)cellRotWidth, resizeRatioW);
+                Debug.WriteLine(" - resizeRatioH: shape.Height / cellRotHeight = {0:F2} / {1:F2} = {2:F2}", (double)shape.Height, (double)cellRotHeight, resizeRatioH);
+
+                Debug.WriteLine("<Before>");
+                Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2}, {1:F2})", (float)shape.Left, (float)shape.Top);
+                Debug.WriteLine(" - Shape: (w, h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
+                Debug.WriteLine(" - Cell: (cw, rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+
+                if (shrink == "fit")
+                {
+                    if (resizeRatioW > resizeRatioH)
+                    {
+                        shape.Width = (float)cellRotWidth;
+                        shape.Height /= (float)resizeRatioW;
+                    }
+                    else
+                    {
+                        shape.Width /= (float)resizeRatioH;
+                        shape.Height = (float)cellRotHeight;
+                    }
+                }
+                else if (shrink == "fitW")
+                {
+                    // Width: Cell width, Height: Resized Image height
                     shape.Width = (float)cellRotWidth;
                     shape.Height /= (float)resizeRatioW;
+                    cell.RowHeight = (float)shape.Height;
                 }
-                else
+                else if (shrink == "fitH")
                 {
+                    // Width: Resized Cell width, Height: Cell height
                     shape.Width /= (float)resizeRatioH;
                     shape.Height = (float)cellRotHeight;
+                    cell.ColumnWidth = (float)shape.Width * (float)convRatioW;
+                }
+
+                if ((shape.Rotation.Equals(90f)) || (shape.Rotation.Equals(270f)))
+                {
+                    float leftMargin = (shape.Width - shape.Height) / 2;
+                    float topMargin = (shape.Height - shape.Width) / 2;
+                    shape.Left = cellLeft - leftMargin;
+                    shape.Top = cellTop - topMargin;
                 }
             }
-            else if (shrink == "fitW")
+            catch (Exception e)
             {
-                // 幅:セル合わせ、高さ:幅縮小後の画像合わせ
-                shape.Width = (float)cellRotWidth;
-                shape.Height /= (float)resizeRatioW;
-                cell.RowHeight = (float)shape.Height;
+                Debug.WriteLine("ERROR shape: {0}", e);
             }
-            else if (shrink == "fitH")
-            {
-                // 幅:高さ縮小後の画像合わせ、高さ:セル合わせ
-                shape.Width /= (float)resizeRatioH;
-                shape.Height = (float)cellRotHeight;
-                cell.ColumnWidth = (float)shape.Width * (float)convRatioW;
-            }
-
-            if ((shape.Rotation.Equals(90f)) || (shape.Rotation.Equals(270f)))
-            {
-                float leftMargin = (shape.Width - shape.Height) / 2;
-                float topMargin = (shape.Height - shape.Width) / 2;
-                shape.Left = cellLeft - leftMargin;
-                shape.Top = cellTop - topMargin;
-            }
-
             Debug.WriteLine("<After>");
             Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2},{1:F2})", (float)shape.Left, (float)shape.Top);
             Debug.WriteLine(" - Shape: (w,h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
             Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+        }
+
+        private void pasteImageOnMemo(Excel.Worksheet sheet, Excel.Range cell, string writeInfo, string imagePath, float imageW, float imageH, int maxW, int maxH)
+        {
+            Debug.WriteLine("<<< pasteImageOnMemo() >>>");
+
+            // Reduce to the specified maximum size (Keep aspect ratio)
+            Debug.WriteLine("Specified max size: (w, h) = ({0:D}, {1:D})", maxW, maxH);
+            float shapeW = (maxW != 0) ? maxW : imageW;
+            float shapeH = (maxH != 0) ? maxH : imageH;
+            float ratioW = imageW / shapeW;
+            float ratioH = imageH / shapeH;
+            Debug.WriteLine("Resize ratio of Shape: (w, h) = ({0:F2}, {1:F2})", ratioW, ratioH);
+
+            if (ratioW < ratioH)
+            {
+                shapeW = imageW / ratioH;
+            }
+            else
+            {
+                shapeH = imageH / ratioW;
+            }
+            Debug.WriteLine("Shape: (w, h) = ({0:F2}, {1:F2})", shapeW, shapeH);
+
+            // Initialize Memo
+            cell.ClearComments();
+
+            // Add information and image to Memo
+            Debug.WriteLine("Write \"{0}\" to Memo", writeInfo);
+            cell.AddComment(writeInfo);
+            cell.Comment.Shape.Fill.UserPicture(imagePath);
+            cell.Comment.Shape.Width = shapeW;
+            cell.Comment.Shape.Height = shapeH;
         }
 
         private string getImagePathFromCell(Excel.Range cell)
@@ -772,7 +803,6 @@ namespace ImageInserter
             string imagePath = null;
             if (checkImagePath(cell.Text))
             {
-                // セルから取得
                 imagePath = cell.Text;
             }
             return imagePath;
@@ -780,12 +810,12 @@ namespace ImageInserter
 
         private bool checkImagePath(string path)
         {
+            // Checking the existence and extension
             bool isExist = false;
             string ext = System.IO.Path.GetExtension(path);
-            string[] extCheck = {".jpg",".jpeg"};
+            string[] extCheck = {".jpg",".jpeg", ".bmp", ".png", ".gif"};
             if ( extCheck.Contains(ext, System.StringComparer.OrdinalIgnoreCase))
             {
-                // 存在確認
                 if (System.IO.File.Exists(path))
                 {
                     isExist = true;
@@ -798,44 +828,24 @@ namespace ImageInserter
         {
             string imagePath = null;
 
-            // OpenFileDialogクラスのインスタンスを作成
+            // Create an instance of the OpenFileDialog class
             OpenFileDialog ofd = new OpenFileDialog();
-
-            // はじめに表示されるフォルダを指定する
-            // 指定しない（空の文字列）の時は、現在のディレクトリが表示される
-//          ofd.InitialDirectory = @"C:\";
-
-            // [ファイルの種類]に表示される選択肢を指定する
-            // 指定しないとすべてのファイルが表示される
-            ofd.Filter = "画像ファイル(*.jpegl;*.jpg)|*.jpeg;*.jpg|すべてのファイル(*.*)|*.*";
-
-            // [ファイルの種類]ではじめに選択されるものを指定する
-            ofd.FilterIndex = 1;    // 1:画像ファイル, 2:すべてのファイル
-
-            // タイトルを設定する
-            ofd.Title = "開くファイルを選択してください";
-
-            // ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
-            ofd.RestoreDirectory = true;
-
-            // 存在しないファイルの名前が指定されたとき警告を表示する
-            // デフォルトでTrueなので指定する必要はない
-//          ofd.CheckFileExists = true;
-
-            // 存在しないパスが指定されたとき警告を表示する
-            // デフォルトでTrueなので指定する必要はない
-//          ofd.CheckPathExists = true;
-
-            // ダイアログ ボックスに [ヘルプ] ボタンを表示する
-            ofd.ShowHelp = true;
-
-            // ダイアログを表示する
-            if (ofd.ShowDialog() == DialogResult.OK)
+            try
             {
-                imagePath = ofd.FileName;
+                ofd.Filter = "Image file - 画像ファイル(*.jpeg;*.jpg;*.bmp;*.png;*.gif)|*.jpeg;*.jpg;*.bmp;*.png;*.gif|All files - すべてのファイル(*.*)|*.*";
+                ofd.FilterIndex = 1;                    // 1: Image file, 2: All files
+                ofd.Title = "Please select a file - ファイルを選択してください";
+                ofd.RestoreDirectory = true;     // Restore to the previously selected directory
+                ofd.ShowHelp = true;
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    imagePath = ofd.FileName;
+                }
             }
-
-            // オブジェクトを破棄する
+            catch(Exception e)
+            {
+                Debug.WriteLine("ERROR tempBmp: {0}", e);
+            }
             ofd.Dispose();
 
             return imagePath;
@@ -843,25 +853,34 @@ namespace ImageInserter
 
         private Excel.Application getApplication()
         {
+            if(Globals.ThisAddIn.Application == null)
+            {
+                return null;
+            }
             Excel.Application application = Globals.ThisAddIn.Application;
             return application;
         }
 
-        // アクティブワークブックの取得
         private Excel.Workbook getActiveWorkBook()
         {
+            if (Globals.ThisAddIn.Application.ActiveWorkbook == null)
+            {
+                return null;
+            }
             Excel.Workbook activeWorkbook = Globals.ThisAddIn.Application.ActiveWorkbook;
             return activeWorkbook;
         }
 
-        // アクティブシートの取得
         private Excel.Worksheet getActiveSheet()
         {
+            if(Globals.ThisAddIn.Application.ActiveSheet == null)
+            {
+                return null;
+            }
             Excel.Worksheet activeSheet = Globals.ThisAddIn.Application.ActiveSheet;
             return activeSheet;
         }
 
-        // 選択範囲の取得
         private Excel.Range getSelection()
         {
             if(Globals.ThisAddIn.Application.Selection == null)
@@ -872,9 +891,12 @@ namespace ImageInserter
             return selection;
         }
 
-        // 選択セルの取得
         private Excel.Range getActiveCell()
         {
+            if(Globals.ThisAddIn.Application.ActiveCell == null)
+            {
+                return null;
+            }
             Excel.Range activeCell = Globals.ThisAddIn.Application.ActiveCell;
             return activeCell;
         }
@@ -882,21 +904,18 @@ namespace ImageInserter
         private string getFolderPath(Excel.Range cell)
         {
             string folderPath = null;
-            if (checkFolderPath(cell.Text))
+            if (isExistFolderPath(cell.Text))
             {
-                // セルから取得
                 folderPath = cell.Text;
             }
             else
             {
-                // ダイアログから取得
                 folderPath = getFolderPathFromDialog();
             }
             return folderPath;
         }
 
-        // フォルダの存在確認
-        private bool checkFolderPath(string path)
+        private bool isExistFolderPath(string path)
         {
             bool isExist = false;
             if (System.IO.Directory.Exists(path))
@@ -909,39 +928,12 @@ namespace ImageInserter
         private string getFolderPathFromDialog()
         {
             string folderPath = null;
-
             FolderSelectDialog dlg = new FolderSelectDialog();
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 folderPath = dlg.Path;
             }
             return folderPath;
-
-#if false   // default dialog (Tree type)
-            // OpenFileDialogクラスのインスタンスを作成
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-
-            // ダイアログの説明文を指定する
-            fbd.Description = "画像フォルダを選択してください";
-
-            // はじめに表示されるフォルダを指定する
-            // 指定しない（空の文字列）の時は、現在のディレクトリが表示される
-            // ofd.SelectedPath = @"C:\";
-
-            // 「新しいフォルダーを作成する」ボタンを表示する
-            fbd.ShowNewFolderButton = true;
-
-            // ダイアログを表示する
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                folderPath = fbd.SelectedPath;
-            }
-
-            // オブジェクトを破棄する
-            fbd.Dispose();
-
-            return folderPath;
-#endif
         }
     }
 }

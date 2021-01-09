@@ -36,7 +36,7 @@ namespace ImageInserter
         {
         }
 
-#region VSTO で生成されたコード
+        #region VSTO で生成されたコード
 
         /// <summary>
         /// デザイナーのサポートに必要なメソッドです。

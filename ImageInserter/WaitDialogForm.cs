@@ -35,6 +35,9 @@ namespace WaitDialogForm
             this.ProgressMin   = 0;  // 処理件数の最小値（0件から開始）
             this.ProgressStep  = 1;  // 何件ごとにメーターを進めるか
             this.ProgressValue = 0;  // 最初の件数
+
+            this.Activate();                // Get focus
+            this.TopMost = true;      // 最前面
         }
 
         /// <summary>
