@@ -399,6 +399,7 @@ namespace ImageInserter
                         if (!checkCellKeep)
                         {
                             shapeRange.Value = "";
+                            shapeRange.Hyperlinks.Delete();
                         }
                         // Delete an image in a cell
                         shape.Delete();
