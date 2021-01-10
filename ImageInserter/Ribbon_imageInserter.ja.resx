@@ -184,10 +184,16 @@
     <value>しない</value>
   </data>
   <data name="ribbonDropDownItemImpl5.Label" xml:space="preserve">
-    <value>ファイル名</value>
+    <value>ファイル名（テキスト）</value>
   </data>
   <data name="ribbonDropDownItemImpl6.Label" xml:space="preserve">
-    <value>ファイルパス</value>
+    <value>ファイル名（リンク）</value>
+  </data>
+  <data name="ribbonDropDownItemImpl7.Label" xml:space="preserve">
+    <value>ファイルパス（テキスト）</value>
+  </data>
+  <data name="ribbonDropDownItemImpl8.Label" xml:space="preserve">
+    <value>ファイルパス（リンク）</value>
   </data>
   <data name="dropDown_writeCell.Label" xml:space="preserve">
     <value>情報書込</value>
@@ -195,10 +201,10 @@
   <data name="dropDown_writeCell.SuperTip" xml:space="preserve">
     <value>セルにファイル名やファイルパスをセルに記入します</value>
   </data>
-  <data name="ribbonDropDownItemImpl7.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl9.Label" xml:space="preserve">
     <value>内容を削除</value>
   </data>
-  <data name="ribbonDropDownItemImpl8.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
     <value>内容を保持</value>
   </data>
   <data name="dropDown_deleteCell.Label" xml:space="preserve">
@@ -210,10 +216,10 @@
   <data name="label2.Label" xml:space="preserve">
     <value>複数セルへの配置</value>
   </data>
-  <data name="ribbonDropDownItemImpl9.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl11.Label" xml:space="preserve">
     <value>下</value>
   </data>
-  <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl12.Label" xml:space="preserve">
     <value>右</value>
   </data>
   <data name="dropDown_direction.Label" xml:space="preserve">
@@ -231,13 +237,13 @@
   <data name="editBox_maxH.Label" xml:space="preserve">
     <value>高さ</value>
   </data>
-  <data name="ribbonDropDownItemImpl11.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl13.Label" xml:space="preserve">
     <value>しない</value>
   </data>
-  <data name="ribbonDropDownItemImpl12.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl14.Label" xml:space="preserve">
     <value>ファイル名</value>
   </data>
-  <data name="ribbonDropDownItemImpl13.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl15.Label" xml:space="preserve">
     <value>ファイルパス</value>
   </data>
   <data name="dropDown_writeMemo.Label" xml:space="preserve">
@@ -246,10 +252,10 @@
   <data name="dropDown_writeMemo.SuperTip" xml:space="preserve">
     <value>メモにファイル名やファイルパスをセルに記入します</value>
   </data>
-  <data name="ribbonDropDownItemImpl14.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl16.Label" xml:space="preserve">
     <value>内容を削除</value>
   </data>
-  <data name="ribbonDropDownItemImpl15.Label" xml:space="preserve">
+  <data name="ribbonDropDownItemImpl17.Label" xml:space="preserve">
     <value>内容を保持</value>
   </data>
   <data name="dropDown_deleteMemo.Label" xml:space="preserve">

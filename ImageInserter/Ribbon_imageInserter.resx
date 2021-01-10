@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="dropDown_writeCell.Label" xml:space="preserve">
-    <value>Writing information</value>
-  </data>
   <data name="&gt;&gt;dropDown_shrink.Name" xml:space="preserve">
     <value>dropDown_shrink</value>
   </data>
-  <data name="&gt;&gt;group_cell.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.GroupView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="dropDown_deleteCell.SuperTip" xml:space="preserve">
+    <value>Specifies whether to erase or keep the contents of the cell</value>
+  </data>
+  <data name="&gt;&gt;group_memo.Name" xml:space="preserve">
+    <value>group_memo</value>
   </data>
   <data name="&gt;&gt;button_insertFolder.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -144,14 +144,11 @@
   <data name="&gt;&gt;group_control.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;button_deleteAll.Parent" xml:space="preserve">
-    <value>splitButton_delete.Items</value>
+  <data name="&gt;&gt;splitButton_delete.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SplitButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;dropDown_writeCell.ZOrder" xml:space="preserve">
     <value>4</value>
-  </data>
-  <data name="&gt;&gt;separator2.ZOrder" xml:space="preserve">
-    <value>6</value>
   </data>
   <data name="&gt;&gt;checkBox_memo.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -168,11 +165,11 @@
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.LabelView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;dropDown_shrink.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="&gt;&gt;Ribbon_imageInserter.OfficeMenu.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
+    <value>Keep contents</value>
   </data>
   <data name="editBox_maxH.Label" xml:space="preserve">
     <value>Height</value>
@@ -189,11 +186,14 @@
   <data name="&gt;&gt;editBox_maxW.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="&gt;&gt;splitButton_delete.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="&gt;&gt;button_insertLink.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;button_deleteAll.Name" xml:space="preserve">
-    <value>button_deleteAll</value>
+  <data name="dropDown_deleteMemo.SuperTip" xml:space="preserve">
+    <value>Specifies whether to erase the memo or keep the contents of the memo</value>
   </data>
   <data name="editBox_maxW.Label" xml:space="preserve">
     <value>Width</value>
@@ -206,6 +206,9 @@
   </data>
   <data name="&gt;&gt;button_deleteSelection.Name" xml:space="preserve">
     <value>button_deleteSelection</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="dropDown_shrink.Label" xml:space="preserve">
     <value>Strorage method</value>
@@ -237,6 +240,9 @@
   <data name="&gt;&gt;dropDown_writeMemo.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="&gt;&gt;checkBox_maxSize.Parent" xml:space="preserve">
+    <value>group_memo</value>
+  </data>
   <data name="label1.Label" xml:space="preserve">
     <value>Target insert/delete</value>
   </data>
@@ -247,7 +253,7 @@
     <value>Delete the images of the selected cell</value>
   </data>
   <data name="ribbonDropDownItemImpl6.Label" xml:space="preserve">
-    <value>File path</value>
+    <value>File name (Link)</value>
   </data>
   <data name="editBox_maxW.Text" xml:space="preserve">
     <value>512</value>
@@ -259,19 +265,25 @@
     <value>General setting</value>
   </data>
   <data name="ribbonDropDownItemImpl9.Label" xml:space="preserve">
-    <value>Under</value>
+    <value>Erase contents</value>
   </data>
   <data name="tab_imageInserter.Label" xml:space="preserve">
     <value>Insert image</value>
   </data>
-  <data name="&gt;&gt;splitButton_delete.Name" xml:space="preserve">
-    <value>splitButton_delete</value>
+  <data name="ribbonDropDownItemImpl8.Label" xml:space="preserve">
+    <value>File path (Link)</value>
   </data>
-  <data name="button_insertLink.Label" xml:space="preserve">
-    <value>Insert the entered linked image in the selected cell</value>
+  <data name="&gt;&gt;tab_imageInserter.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.TabView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="&gt;&gt;group_control.Parent" xml:space="preserve">
+    <value>tab_imageInserter</value>
   </data>
   <data name="splitButton_delete.Label" xml:space="preserve">
     <value>Delete image</value>
+  </data>
+  <data name="ribbonDropDownItemImpl13.Label" xml:space="preserve">
+    <value>Do not write</value>
   </data>
   <data name="&gt;&gt;editBox_setH.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -282,14 +294,18 @@
   <data name="editBox_setH.Label" xml:space="preserve">
     <value>Height</value>
   </data>
+  <data name="button_insertLink.Label" xml:space="preserve">
+    <value>Insert the entered linked image in the selected cell</value>
+  </data>
   <data name="editBox_setH.SuperTip" xml:space="preserve">
     <value>unit is point</value>
   </data>
   <data name="&gt;&gt;group_control.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.GroupView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;editBox_setW.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="editBox_setH.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="editBox_maxH.Text" xml:space="preserve">
     <value>512</value>
@@ -300,17 +316,11 @@
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="dropDown_direction.SuperTip" xml:space="preserve">
-    <value>Specifies the direction in which images are added from the selected cell when inserting multiple images</value>
-  </data>
-  <data name="dropDown_deleteCell.Label" xml:space="preserve">
-    <value>Behavior when deleting</value>
+  <data name="ribbonDropDownItemImpl12.Label" xml:space="preserve">
+    <value>Right</value>
   </data>
   <data name="&gt;&gt;splitButton_delete.Parent" xml:space="preserve">
     <value>group_control</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>group_cell</value>
   </data>
   <data name="&gt;&gt;button_deleteAll.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -328,13 +338,13 @@
     <value>group_cell</value>
   </data>
   <data name="ribbonDropDownItemImpl14.Label" xml:space="preserve">
-    <value>Erase contents</value>
-  </data>
-  <data name="ribbonDropDownItemImpl12.Label" xml:space="preserve">
     <value>File name</value>
   </data>
+  <data name="&gt;&gt;splitButton_delete.Name" xml:space="preserve">
+    <value>splitButton_delete</value>
+  </data>
   <data name="ribbonDropDownItemImpl11.Label" xml:space="preserve">
-    <value>Do not write</value>
+    <value>Under</value>
   </data>
   <data name="&gt;&gt;dropDown_writeCell.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -354,11 +364,14 @@
   <data name="&gt;&gt;Ribbon_imageInserter.OfficeMenu.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;checkBox_maxSize.Parent" xml:space="preserve">
-    <value>group_memo</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Ribbon_imageInserter</value>
   </data>
-  <data name="ribbonDropDownItemImpl10.Label" xml:space="preserve">
-    <value>Right</value>
+  <data name="dropDown_direction.SuperTip" xml:space="preserve">
+    <value>Specifies the direction in which images are added from the selected cell when inserting multiple images</value>
+  </data>
+  <data name="&gt;&gt;dropDown_deleteCell.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;dropDown_direction.Parent" xml:space="preserve">
     <value>group_cell</value>
@@ -378,11 +391,8 @@
   <data name="&gt;&gt;dropDown_deleteMemo.Parent" xml:space="preserve">
     <value>group_memo</value>
   </data>
-  <data name="&gt;&gt;dropDown_deleteCell.Name" xml:space="preserve">
-    <value>dropDown_deleteCell</value>
-  </data>
   <data name="ribbonDropDownItemImpl5.Label" xml:space="preserve">
-    <value>File name</value>
+    <value>File name (Text)</value>
   </data>
   <data name="&gt;&gt;group_setting.Name" xml:space="preserve">
     <value>group_setting</value>
@@ -390,8 +400,8 @@
   <data name="ribbonDropDownItemImpl4.Label" xml:space="preserve">
     <value>Do not write</value>
   </data>
-  <data name="&gt;&gt;tab_imageInserter.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.TabView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ribbonDropDownItemImpl7.Label" xml:space="preserve">
+    <value>File path (Text)</value>
   </data>
   <data name="&gt;&gt;dropDown_writeMemo.Parent" xml:space="preserve">
     <value>group_memo</value>
@@ -399,11 +409,17 @@
   <data name="group_memo.Label" xml:space="preserve">
     <value>Memo settings</value>
   </data>
+  <data name="&gt;&gt;group_cell.Parent" xml:space="preserve">
+    <value>tab_imageInserter</value>
+  </data>
   <data name="dropDown_writeCell.SuperTip" xml:space="preserve">
     <value>Specifies the information to write to the cell (filename or path)</value>
   </data>
   <data name="&gt;&gt;dropDown_deleteCell.ZOrder" xml:space="preserve">
     <value>5</value>
+  </data>
+  <data name="&gt;&gt;group_setting.Parent" xml:space="preserve">
+    <value>tab_imageInserter</value>
   </data>
   <data name="&gt;&gt;checkBox_maxSize.Name" xml:space="preserve">
     <value>checkBox_maxSize</value>
@@ -414,17 +430,23 @@
   <data name="&gt;&gt;editBox_maxW.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ribbonDropDownItemImpl7.Label" xml:space="preserve">
-    <value>Erase contents</value>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>group_cell</value>
   </data>
   <data name="&gt;&gt;group_control.Name" xml:space="preserve">
     <value>group_control</value>
+  </data>
+  <data name="ribbonDropDownItemImpl15.Label" xml:space="preserve">
+    <value>File path</value>
   </data>
   <data name="checkBox_memo.Label" xml:space="preserve">
     <value>Memo</value>
   </data>
   <data name="&gt;&gt;dropDown_deleteCell.Parent" xml:space="preserve">
     <value>group_cell</value>
+  </data>
+  <data name="&gt;&gt;button_deleteAll.Name" xml:space="preserve">
+    <value>button_deleteAll</value>
   </data>
   <data name="&gt;&gt;dropDown_deleteMemo.Name" xml:space="preserve">
     <value>dropDown_deleteMemo</value>
@@ -438,8 +460,8 @@
   <data name="&gt;&gt;dropDown_direction.Name" xml:space="preserve">
     <value>dropDown_direction</value>
   </data>
-  <data name="&gt;&gt;group_control.Parent" xml:space="preserve">
-    <value>tab_imageInserter</value>
+  <data name="&gt;&gt;checkBox_setSize.Parent" xml:space="preserve">
+    <value>group_cell</value>
   </data>
   <data name="&gt;&gt;button_deleteAll.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -447,20 +469,11 @@
   <data name="splitButton_insert.Label" xml:space="preserve">
     <value>Insert image</value>
   </data>
-  <data name="dropDown_deleteMemo.SuperTip" xml:space="preserve">
-    <value>Specifies whether to erase the memo or keep the contents of the memo</value>
-  </data>
-  <data name="&gt;&gt;group_memo.Name" xml:space="preserve">
-    <value>group_memo</value>
-  </data>
   <data name="&gt;&gt;checkBox_memo.Name" xml:space="preserve">
     <value>checkBox_memo</value>
   </data>
   <data name="&gt;&gt;Ribbon_imageInserter.OfficeMenu.Name" xml:space="preserve">
     <value>Ribbon_imageInserter.OfficeMenu</value>
-  </data>
-  <data name="&gt;&gt;splitButton_delete.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SplitButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ribbonDropDownItemImpl1.Label" xml:space="preserve">
     <value>Fit in cell</value>
@@ -483,15 +496,11 @@
   <data name="&gt;&gt;dropDown_deleteMemo.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="editBox_setH.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="&gt;&gt;separator2.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SeparatorView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ribbonDropDownItemImpl13.Label" xml:space="preserve">
-    <value>File path</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Ribbon_imageInserter</value>
+  <data name="ribbonDropDownItemImpl17.Label" xml:space="preserve">
+    <value>Keep contents</value>
   </data>
   <data name="checkBox_setSize.Label" xml:space="preserve">
     <value>Specify cell size</value>
@@ -505,26 +514,17 @@
   <data name="dropDown_deleteMemo.Label" xml:space="preserve">
     <value>Behavior when deleting</value>
   </data>
-  <data name="&gt;&gt;separator2.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.SeparatorView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.GenericRibbonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="dropDown_writeCell.Label" xml:space="preserve">
+    <value>Writing information</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>group_setting</value>
   </data>
-  <data name="&gt;&gt;button_deleteSelection.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ribbonDropDownItemImpl8.Label" xml:space="preserve">
-    <value>Keep contents</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.GenericRibbonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;button_insertFolder.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="&gt;&gt;checkBox_setSize.Parent" xml:space="preserve">
-    <value>group_cell</value>
   </data>
   <data name="&gt;&gt;dropDown_writeMemo.Name" xml:space="preserve">
     <value>dropDown_writeMemo</value>
@@ -544,14 +544,11 @@
   <data name="&gt;&gt;editBox_setW.Parent" xml:space="preserve">
     <value>group_cell</value>
   </data>
-  <data name="&gt;&gt;dropDown_deleteCell.Type" xml:space="preserve">
-    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="dropDown_deleteCell.Label" xml:space="preserve">
+    <value>Behavior when deleting</value>
   </data>
   <data name="button_insertFile.Label" xml:space="preserve">
     <value>Insert an image in the selected cell</value>
-  </data>
-  <data name="&gt;&gt;group_memo.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="&gt;&gt;checkBox_maxSize.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.CheckBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -562,26 +559,29 @@
   <data name="&gt;&gt;editBox_maxH.Name" xml:space="preserve">
     <value>editBox_maxH</value>
   </data>
+  <data name="checkBox_maxSize.Label" xml:space="preserve">
+    <value>Maximum size of image</value>
+  </data>
   <data name="&gt;&gt;button_insertLink.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="&gt;&gt;Ribbon_imageInserter.OfficeMenu.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.OfficeMenuView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;dropDown_deleteCell.Name" xml:space="preserve">
+    <value>dropDown_deleteCell</value>
   </data>
   <data name="&gt;&gt;label2.Name" xml:space="preserve">
     <value>label2</value>
   </data>
-  <data name="&gt;&gt;splitButton_delete.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;group_cell.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.GroupView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;group_cell.Parent" xml:space="preserve">
-    <value>tab_imageInserter</value>
+  <data name="&gt;&gt;dropDown_shrink.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="&gt;&gt;group_setting.Parent" xml:space="preserve">
-    <value>tab_imageInserter</value>
+  <data name="&gt;&gt;button_deleteSelection.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.ButtonView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="&gt;&gt;group_memo.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.GroupView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -613,8 +613,11 @@
   <data name="&gt;&gt;editBox_maxW.Name" xml:space="preserve">
     <value>editBox_maxW</value>
   </data>
-  <data name="dropDown_shrink.SuperTip" xml:space="preserve">
-    <value>Specifies how to insert the image inside the cell</value>
+  <data name="ribbonDropDownItemImpl16.Label" xml:space="preserve">
+    <value>Erase contents</value>
+  </data>
+  <data name="&gt;&gt;button_deleteAll.Parent" xml:space="preserve">
+    <value>splitButton_delete.Items</value>
   </data>
   <data name="&gt;&gt;dropDown_deleteMemo.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.DropDownView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -637,14 +640,17 @@
   <data name="&gt;&gt;checkBox_cell.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.CheckBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="dropDown_direction.Label" xml:space="preserve">
+    <value>Placement direction</value>
+  </data>
   <data name="editBox_setH.Text" xml:space="preserve">
     <value>15</value>
   </data>
-  <data name="dropDown_deleteCell.SuperTip" xml:space="preserve">
-    <value>Specifies whether to erase or keep the contents of the cell</value>
+  <data name="&gt;&gt;editBox_setW.Type" xml:space="preserve">
+    <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ribbonDropDownItemImpl15.Label" xml:space="preserve">
-    <value>Keep contents</value>
+  <data name="dropDown_shrink.SuperTip" xml:space="preserve">
+    <value>Specifies how to insert the image inside the cell</value>
   </data>
   <data name="&gt;&gt;checkBox_maxSize.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -652,11 +658,11 @@
   <data name="&gt;&gt;editBox_setH.Type" xml:space="preserve">
     <value>Microsoft.VisualStudio.Tools.Office.Ribbon.View.EditBoxView, Microsoft.VisualStudio.Tools.Office.Designer, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="checkBox_maxSize.Label" xml:space="preserve">
-    <value>Maximum size of image</value>
+  <data name="&gt;&gt;group_memo.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
-  <data name="dropDown_direction.Label" xml:space="preserve">
-    <value>Placement direction</value>
+  <data name="&gt;&gt;separator2.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
   <data name="&gt;&gt;dropDown_direction.ZOrder" xml:space="preserve">
     <value>8</value>

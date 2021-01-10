@@ -225,6 +225,10 @@ namespace ImageInserter
 
                     // Processing
                     string imagePath = cell.Text;
+                    foreach(Excel.Hyperlink link in cell.Hyperlinks)
+                    {
+                        imagePath = link.Address;
+                    }
 
                     // Paste image
                     if (checkImagePath(imagePath) == true)
@@ -569,6 +573,7 @@ namespace ImageInserter
             bool isSetW = false;
             bool isSetH = false;
             string writeInfoCell = "";
+            bool isLink = false;
             string writeInfoMemo = "";
             string comment = "";
             try
@@ -584,6 +589,7 @@ namespace ImageInserter
                 isSetW = editBox_setW.Enabled;
                 isSetH = editBox_setH.Enabled;
                 writeInfoCell = dropDown_writeCell.SelectedItem.Tag.ToString();
+                isLink = ((writeInfoCell == "nameLink") || (writeInfoCell == "pathLink")) ? true : false;
                 writeInfoMemo = dropDown_writeMemo.SelectedItem.Tag.ToString();
                 comment = (cell.Comment != null) ? cell.Comment.Text() : "";
             }
@@ -606,6 +612,10 @@ namespace ImageInserter
             {
                 string writeInfo = getWriteInfo(imageOrgPath, writeInfoCell, cell.Value);
                 pasteImageOnCell(sheet, cell, writeInfo, imagePath, imageW, imageH, isSetW, isSetH);
+                if (isLink)
+                {
+                    sheet.Hyperlinks.Add(cell, imageOrgPath);
+                }
             }
 
             // Paste image on Memo
@@ -629,11 +639,11 @@ namespace ImageInserter
             {
                 ;
             }
-            else if (type == "name")
+            else if ( (type == "name") || (type == "nameLink") )
             {
                 info = System.IO.Path.GetFileName(imagePath);
             }
-            else if (type == "path")
+            else if ( (type == "path") || (type == "pathLink") )
             {
                 info = imagePath;
             }
