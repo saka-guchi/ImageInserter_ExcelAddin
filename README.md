@@ -3,7 +3,7 @@
 <h1>ImageInserter for Excel Addin</h1>
 </div>
 
-- [日本語版](/docs/README_JP.md)
+- [日本語版](https://qiita.com/saka-guti/items/5fc67c76e42fe95d9f2d)
 
 This is an Excel add-in that inserts images into cells and notes.
 
