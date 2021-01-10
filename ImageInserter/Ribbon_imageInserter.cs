@@ -129,8 +129,15 @@ namespace ImageInserter
 
         private void switch_control_state(bool enable)
         {
+            if (enable)
+            {
+                Globals.ThisAddIn.Application.ScreenUpdating = enable;
+                Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
+                Application.DoEvents();
+            }
+
             // Get all UI controls
-            foreach(RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
+            foreach (RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
             {
                 foreach (RibbonControl ctrl in group.Items)
                 {
@@ -173,7 +180,13 @@ namespace ImageInserter
                 editBox_setW.Enabled = set_w;
                 editBox_setH.Enabled = set_h;
             }
-            Application.DoEvents();
+
+            if (!enable)
+            {
+                Globals.ThisAddIn.Application.ScreenUpdating = enable;
+                Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
+                Application.DoEvents();
+            }
         }
 
         private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
@@ -201,11 +214,6 @@ namespace ImageInserter
 
                 // Progress bar: Show
                 waitDlg.Show();
-
-                // Stop screen updating
-                Excel.Application app = getApplication();
-                app.ScreenUpdating = false;
-
                 Application.DoEvents();
 
                 int count = 1;
@@ -238,18 +246,13 @@ namespace ImageInserter
                     count++;
                 }
 
-                // Statr screen updating
-                app.ScreenUpdating = true;
-
                 // Progress bar: Close
                 waitDlg.Close();
 
-                Application.DoEvents();
+                // Enable UI
+                switch_control_state(true);
             }
 //         );
-
-            // Enable UI
-            switch_control_state(true);
         }
 
         private List<string> GetFilesInFolder(string path, string[] exts)
@@ -271,11 +274,6 @@ namespace ImageInserter
 
                 // Progress bar: Show
                 waitDlg.Show();
-
-                // Stop screen updating
-                Excel.Application app = getApplication();
-                app.ScreenUpdating = false;
-
                 Application.DoEvents();
 
                 int count = 1;
@@ -304,18 +302,13 @@ namespace ImageInserter
                     count++;
                 }
 
-                // Statr screen updating
-                app.ScreenUpdating = true;
-
                 // Progress bar: Close
                 waitDlg.Close();
 
-                Application.DoEvents();
+                // Enable UI
+                switch_control_state(true);
             }
 //         );
-
-            // Enable UI
-            switch_control_state(true);
         }
 
         private /*async*/ void deleteImagesInSelection(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
@@ -329,11 +322,6 @@ namespace ImageInserter
 
                 // Progress bar: Show
                 waitDlg.Show();
-
-                // Stop screen updating
-                Excel.Application app = getApplication();
-                app.ScreenUpdating = false;
-
                 Application.DoEvents();
 
                 int count = 1;
@@ -356,18 +344,13 @@ namespace ImageInserter
                     count++;
                 }
 
-                // Statr screen updating
-                app.ScreenUpdating = true;
-
                 // Progress bar: Close
                 waitDlg.Close();
 
-                Application.DoEvents();
+                // Enable UI
+                switch_control_state(true);
             }
 //         );
-
-            // Enable UI
-            switch_control_state(true);
         }
 
         private void deleteImage(Excel.Worksheet sheet, Excel.Shape shape, Excel.Range selectedCells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep, bool isAll)
