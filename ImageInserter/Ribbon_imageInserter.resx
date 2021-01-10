@@ -374,7 +374,7 @@
     <value>Fit to cell height (Adjust cell width)</value>
   </data>
   <data name="dropDown_shrink.Label" xml:space="preserve">
-    <value>Strorage method</value>
+    <value>Storage method</value>
   </data>
   <data name="dropDown_shrink.SuperTip" xml:space="preserve">
     <value>Specifies how to insert the image inside the cell</value>
