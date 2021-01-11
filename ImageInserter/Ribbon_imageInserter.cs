@@ -53,7 +53,7 @@ namespace ImageInserter
             }
 
             // Disable UI
-            switch_control_state(false);
+            switchControlState(false);
 
             // Paste Linked images on cells
             pasteLinkedImages(sheet, cells);
@@ -81,10 +81,10 @@ namespace ImageInserter
             List<string> imgList = GetFilesInFolder(folderPath, exts);
 
             // Disable UI
-            switch_control_state(false);
+            switchControlState(false);
 
             // Paste images on cells
-            pasteImages(imgList, sheet, cell, offsetCol, offsetRow);
+            pasteImages(sheet, cell, imgList, offsetCol, offsetRow);
         }
 
         private void button_deleteSelection_Click(object sender, RibbonControlEventArgs e)
@@ -104,7 +104,7 @@ namespace ImageInserter
             }
 
             // Disable UI
-            switch_control_state(false);
+            switchControlState(false);
 
             // Delete Images in selection
             deleteImagesInSelection(sheet, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
@@ -121,16 +121,17 @@ namespace ImageInserter
             bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
 
             // Disable UI
-            switch_control_state(false);
+            switchControlState(false);
 
             // Delete all images
             deleteAllImages(sheet, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
         }
 
-        private void switch_control_state(bool enable)
+        private void switchControlState(bool enable)
         {
             if (enable)
             {
+                Globals.ThisAddIn.Application.Interactive = enable;
                 Globals.ThisAddIn.Application.ScreenUpdating = enable;
                 Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
                 Application.DoEvents();
@@ -183,30 +184,31 @@ namespace ImageInserter
 
             if (!enable)
             {
-                Globals.ThisAddIn.Application.ScreenUpdating = enable;
                 Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
+                Globals.ThisAddIn.Application.ScreenUpdating = enable;
+                Globals.ThisAddIn.Application.Interactive = enable;
                 Application.DoEvents();
             }
         }
 
         private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
         {
-            switch_control_state(true);
+            switchControlState(true);
         }
         private void checkBox_maxSize_Click(object sender, RibbonControlEventArgs e)
         {
-            switch_control_state(true);
+            switchControlState(true);
         }
 
         private void dropDown_shrink_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
-            switch_control_state(true);
+            switchControlState(true);
         }
 
-        private /*async*/ void pasteLinkedImages(Excel.Worksheet sheet, Excel. Range cells)
+        private async void pasteLinkedImages(Excel.Worksheet sheet, Excel. Range cells)
         {
             int countMax = cells.Count;
-//         await System.Threading.Tasks.Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
@@ -226,23 +228,11 @@ namespace ImageInserter
                     }
 
                     // Display progress message
-                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
-                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
+                    waitDialogDisplay(waitDlg, count, countMax);
 
                     // Processing
-                    string imagePath = cell.Text;
-                    foreach(Excel.Hyperlink link in cell.Hyperlinks)
-                    {
-                        imagePath = link.Address;
-                    }
+                    pasteImage(sheet, cell, getImagePathFromHyperlink(cell));
 
-                    // Paste image
-                    if (checkImagePath(imagePath) == true)
-                    {
-                        pasteImage(sheet, cell, imagePath);
-                    }
                     count++;
                 }
 
@@ -250,9 +240,9 @@ namespace ImageInserter
                 waitDlg.Close();
 
                 // Enable UI
-                switch_control_state(true);
+                switchControlState(true);
             }
-//         );
+            );
         }
 
         private List<string> GetFilesInFolder(string path, string[] exts)
@@ -263,10 +253,19 @@ namespace ImageInserter
             return files;
         }
 
-        private /*async*/ void pasteImages(List<string> imgList, Excel.Worksheet sheet, Excel.Range cell, int offsetCol, int offsetRow)
+        private void waitDialogDisplay(WaitDialog waitDlg, int count, int countMax)
+        {
+            // Display progress message
+            waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+            waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
+            waitDlg.PerformStep();
+            Application.DoEvents();
+        }
+
+        private async void pasteImages(Excel.Worksheet sheet, Excel.Range cell, List<string> imgList, int offsetCol, int offsetRow)
         {
             int countMax = imgList.Count;
-//         await System.Threading.Tasks.Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
@@ -286,19 +285,12 @@ namespace ImageInserter
                     }
 
                     // Display progress message
-                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
-                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
+                    waitDialogDisplay(waitDlg, count, countMax);
 
                     // Processing
                     cell = (count == 1) ? cell.Offset[0, 0] : cell.Offset[offsetCol, offsetRow];
+                    pasteImage(sheet, cell, imagePath);
 
-                    // Paste image
-                    if (checkImagePath(imagePath) == true)
-                    {
-                        pasteImage(sheet, cell, imagePath);
-                    }
                     count++;
                 }
 
@@ -306,15 +298,15 @@ namespace ImageInserter
                 waitDlg.Close();
 
                 // Enable UI
-                switch_control_state(true);
+                switchControlState(true);
             }
-//         );
+            );
         }
 
-        private /*async*/ void deleteImagesInSelection(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        private async void deleteImagesInSelection(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
         {
             int countMax = sheet.Shapes.Count;
-//         await System.Threading.Tasks.Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
@@ -334,11 +326,9 @@ namespace ImageInserter
                     }
 
                     // Display progress message
-                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
-                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
+                    waitDialogDisplay(waitDlg, count, countMax);
 
+                    // Processing
                     deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, false);
 
                     count++;
@@ -348,9 +338,9 @@ namespace ImageInserter
                 waitDlg.Close();
 
                 // Enable UI
-                switch_control_state(true);
+                switchControlState(true);
             }
-//         );
+            );
         }
 
         private void deleteImage(Excel.Worksheet sheet, Excel.Shape shape, Excel.Range selectedCells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep, bool isAll)
@@ -424,10 +414,10 @@ namespace ImageInserter
             }
         }
 
-        private /*async*/ void deleteAllImages(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
+        private async void deleteAllImages(Excel.Worksheet sheet, Excel.Range cells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep)
         {
             int countMax = sheet.Shapes.Count;
-//         await System.Threading.Tasks.Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 // Progress bar: Setting
                 WaitDialog waitDlg = new WaitDialog();
@@ -435,11 +425,6 @@ namespace ImageInserter
 
                 // Progress bar: Show
                 waitDlg.Show();
-
-                // Stop screen updating
-                Excel.Application app = getApplication();
-                app.ScreenUpdating = false;
-
                 Application.DoEvents();
 
                 int count = 1;
@@ -452,28 +437,22 @@ namespace ImageInserter
                     }
 
                     // Display progress message
-                    waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
-                    waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
-                    waitDlg.PerformStep();
-                    Application.DoEvents();
+                    waitDialogDisplay(waitDlg, count, countMax);
 
+                    // Processing
                     deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, true);
 
                     count++;
                 }
 
-                // Statr screen updating
-                app.ScreenUpdating = true;
-
                 // Progress bar: Close
                 waitDlg.Close();
 
-                Application.DoEvents();
+                // Enable UI
+                switchControlState(true);
             }
-//         );
+            );
 
-            // Enable UI
-            switch_control_state(true);
         }
 
         private string preloadImage(ref string imagePath, ref float imageW, ref float imageH)
@@ -548,6 +527,11 @@ namespace ImageInserter
 
         private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imageOrgPath)
         {
+            if (checkImagePath(imageOrgPath) == false)
+            {
+                return;
+            }
+
             // Get UI params
             bool pasteCell = false;
             bool pasteMemo = false;
@@ -579,7 +563,7 @@ namespace ImageInserter
             }
             catch(Exception e)
             {
-                Debug.WriteLine("ERROR pasteImage() Get UI params: {0}", e);
+                Debug.WriteLine("<<< ERROR >>> Get UI params: {0}", e);
                 return;
             }
 
@@ -599,6 +583,7 @@ namespace ImageInserter
                 if (isLink)
                 {
                     sheet.Hyperlinks.Add(cell, imageOrgPath);
+                    Debug.WriteLine("Add hyperlink to Cell: \"{0}\"", imageOrgPath);
                 }
             }
 
@@ -638,8 +623,8 @@ namespace ImageInserter
         {
             Debug.WriteLine("<<< pasteImageOnCell() >>>");
 
-            Debug.WriteLine("Write \"{0}\" to Cell", writeInfo);
             cell.Value = writeInfo;
+            Debug.WriteLine("Write \"{0}\" to Cell", writeInfo);
 
             // Calculation ratio for unit conversion
             //  - ColumnWidth: 1 character width (DPI dependent)
@@ -792,12 +777,13 @@ namespace ImageInserter
             cell.Comment.Shape.Height = shapeH;
         }
 
-        private string getImagePathFromCell(Excel.Range cell)
+        private string getImagePathFromHyperlink(Excel.Range cell)
         {
             string imagePath = null;
-            if (checkImagePath(cell.Text))
+            foreach (Excel.Hyperlink link in cell.Hyperlinks)
             {
-                imagePath = cell.Text;
+                imagePath = link.Address;
+                break;
             }
             return imagePath;
         }
