@@ -35,6 +35,7 @@ namespace ImageInserter
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon_imageInserter));
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl1 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl2 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl3 = this.Factory.CreateRibbonDropDownItem();
@@ -52,9 +53,15 @@ namespace ImageInserter
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl15 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl16 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl17 = this.Factory.CreateRibbonDropDownItem();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon_imageInserter));
             this.tab_imageInserter = this.Factory.CreateRibbonTab();
             this.group_control = this.Factory.CreateRibbonGroup();
+            this.splitButton_insert = this.Factory.CreateRibbonSplitButton();
+            this.button_insertFile = this.Factory.CreateRibbonButton();
+            this.button_insertLink = this.Factory.CreateRibbonButton();
+            this.button_insertFolder = this.Factory.CreateRibbonButton();
+            this.splitButton_delete = this.Factory.CreateRibbonSplitButton();
+            this.button_deleteSelection = this.Factory.CreateRibbonButton();
+            this.button_deleteAll = this.Factory.CreateRibbonButton();
             this.group_setting = this.Factory.CreateRibbonGroup();
             this.label1 = this.Factory.CreateRibbonLabel();
             this.checkBox_cell = this.Factory.CreateRibbonCheckBox();
@@ -75,13 +82,6 @@ namespace ImageInserter
             this.editBox_maxH = this.Factory.CreateRibbonEditBox();
             this.dropDown_writeMemo = this.Factory.CreateRibbonDropDown();
             this.dropDown_deleteMemo = this.Factory.CreateRibbonDropDown();
-            this.splitButton_insert = this.Factory.CreateRibbonSplitButton();
-            this.button_insertFile = this.Factory.CreateRibbonButton();
-            this.button_insertLink = this.Factory.CreateRibbonButton();
-            this.button_insertFolder = this.Factory.CreateRibbonButton();
-            this.splitButton_delete = this.Factory.CreateRibbonSplitButton();
-            this.button_deleteSelection = this.Factory.CreateRibbonButton();
-            this.button_deleteAll = this.Factory.CreateRibbonButton();
             this.tab_imageInserter.SuspendLayout();
             this.group_control.SuspendLayout();
             this.group_setting.SuspendLayout();
@@ -105,6 +105,67 @@ namespace ImageInserter
             this.group_control.Items.Add(this.splitButton_delete);
             resources.ApplyResources(this.group_control, "group_control");
             this.group_control.Name = "group_control";
+            // 
+            // splitButton_insert
+            // 
+            this.splitButton_insert.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.splitButton_insert.Items.Add(this.button_insertFile);
+            this.splitButton_insert.Items.Add(this.button_insertLink);
+            this.splitButton_insert.Items.Add(this.button_insertFolder);
+            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
+            this.splitButton_insert.Name = "splitButton_insert";
+            this.splitButton_insert.OfficeImageId = "RestoreImageSize";
+            this.splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
+            // 
+            // button_insertFile
+            // 
+            resources.ApplyResources(this.button_insertFile, "button_insertFile");
+            this.button_insertFile.Name = "button_insertFile";
+            this.button_insertFile.OfficeImageId = "RestoreImageSize";
+            this.button_insertFile.ShowImage = true;
+            this.button_insertFile.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
+            // 
+            // button_insertLink
+            // 
+            resources.ApplyResources(this.button_insertLink, "button_insertLink");
+            this.button_insertLink.Name = "button_insertLink";
+            this.button_insertLink.OfficeImageId = "OmsImageFromClip";
+            this.button_insertLink.ShowImage = true;
+            this.button_insertLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertLink_Click);
+            // 
+            // button_insertFolder
+            // 
+            resources.ApplyResources(this.button_insertFolder, "button_insertFolder");
+            this.button_insertFolder.Name = "button_insertFolder";
+            this.button_insertFolder.OfficeImageId = "ApplyImageBackgroundTile";
+            this.button_insertFolder.ShowImage = true;
+            this.button_insertFolder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFolder_Click);
+            // 
+            // splitButton_delete
+            // 
+            this.splitButton_delete.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.splitButton_delete.Items.Add(this.button_deleteSelection);
+            this.splitButton_delete.Items.Add(this.button_deleteAll);
+            resources.ApplyResources(this.splitButton_delete, "splitButton_delete");
+            this.splitButton_delete.Name = "splitButton_delete";
+            this.splitButton_delete.OfficeImageId = "SketchpadToolDeleteBackground";
+            this.splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteSelection_Click);
+            // 
+            // button_deleteSelection
+            // 
+            resources.ApplyResources(this.button_deleteSelection, "button_deleteSelection");
+            this.button_deleteSelection.Name = "button_deleteSelection";
+            this.button_deleteSelection.OfficeImageId = "SketchpadToolDeleteBackground";
+            this.button_deleteSelection.ShowImage = true;
+            this.button_deleteSelection.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteSelection_Click);
+            // 
+            // button_deleteAll
+            // 
+            resources.ApplyResources(this.button_deleteAll, "button_deleteAll");
+            this.button_deleteAll.Name = "button_deleteAll";
+            this.button_deleteAll.OfficeImageId = "DeleteTable";
+            this.button_deleteAll.ShowImage = true;
+            this.button_deleteAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteAll_Click);
             // 
             // group_setting
             // 
@@ -311,67 +372,6 @@ namespace ImageInserter
             this.dropDown_deleteMemo.Name = "dropDown_deleteMemo";
             this.dropDown_deleteMemo.OfficeImageId = "EraserMode";
             this.dropDown_deleteMemo.ShowImage = true;
-            // 
-            // splitButton_insert
-            // 
-            this.splitButton_insert.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.splitButton_insert.Items.Add(this.button_insertFile);
-            this.splitButton_insert.Items.Add(this.button_insertLink);
-            this.splitButton_insert.Items.Add(this.button_insertFolder);
-            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
-            this.splitButton_insert.Name = "splitButton_insert";
-            this.splitButton_insert.OfficeImageId = "RestoreImageSize";
-            this.splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
-            // 
-            // button_insertFile
-            // 
-            resources.ApplyResources(this.button_insertFile, "button_insertFile");
-            this.button_insertFile.Name = "button_insertFile";
-            this.button_insertFile.OfficeImageId = "RestoreImageSize";
-            this.button_insertFile.ShowImage = true;
-            this.button_insertFile.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
-            // 
-            // button_insertLink
-            // 
-            resources.ApplyResources(this.button_insertLink, "button_insertLink");
-            this.button_insertLink.Name = "button_insertLink";
-            this.button_insertLink.OfficeImageId = "OmsImageFromClip";
-            this.button_insertLink.ShowImage = true;
-            this.button_insertLink.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertLink_Click);
-            // 
-            // button_insertFolder
-            // 
-            resources.ApplyResources(this.button_insertFolder, "button_insertFolder");
-            this.button_insertFolder.Name = "button_insertFolder";
-            this.button_insertFolder.OfficeImageId = "ApplyImageBackgroundTile";
-            this.button_insertFolder.ShowImage = true;
-            this.button_insertFolder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFolder_Click);
-            // 
-            // splitButton_delete
-            // 
-            this.splitButton_delete.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.splitButton_delete.Items.Add(this.button_deleteSelection);
-            this.splitButton_delete.Items.Add(this.button_deleteAll);
-            resources.ApplyResources(this.splitButton_delete, "splitButton_delete");
-            this.splitButton_delete.Name = "splitButton_delete";
-            this.splitButton_delete.OfficeImageId = "SketchpadToolDeleteBackground";
-            this.splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteSelection_Click);
-            // 
-            // button_deleteSelection
-            // 
-            resources.ApplyResources(this.button_deleteSelection, "button_deleteSelection");
-            this.button_deleteSelection.Name = "button_deleteSelection";
-            this.button_deleteSelection.OfficeImageId = "SketchpadToolDeleteBackground";
-            this.button_deleteSelection.ShowImage = true;
-            this.button_deleteSelection.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteSelection_Click);
-            // 
-            // button_deleteAll
-            // 
-            resources.ApplyResources(this.button_deleteAll, "button_deleteAll");
-            this.button_deleteAll.Name = "button_deleteAll";
-            this.button_deleteAll.OfficeImageId = "DeleteTable";
-            this.button_deleteAll.ShowImage = true;
-            this.button_deleteAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteAll_Click);
             // 
             // Ribbon_imageInserter
             // 

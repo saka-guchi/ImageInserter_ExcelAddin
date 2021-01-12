@@ -231,7 +231,17 @@ namespace ImageInserter
                     waitDialogDisplay(waitDlg, count, countMax);
 
                     // Processing
-                    pasteImage(sheet, cell, getImagePathFromHyperlink(cell));
+                    string imagePath = getImagePathFromCell(cell);
+                    if (imagePath == null)
+                    {
+                        imagePath = getImagePathFromHyperlink(cell);
+                    }
+
+                    // Check params
+                    if (imagePath != null)
+                    {
+                        pasteImage(sheet, cell, imagePath);
+                    }
 
                     count++;
                 }
@@ -289,7 +299,12 @@ namespace ImageInserter
 
                     // Processing
                     cell = (count == 1) ? cell.Offset[0, 0] : cell.Offset[offsetCol, offsetRow];
-                    pasteImage(sheet, cell, imagePath);
+
+                    // Check params
+                    if (imagePath != null)
+                    {
+                        pasteImage(sheet, cell, imagePath);
+                    }
 
                     count++;
                 }
@@ -527,11 +542,6 @@ namespace ImageInserter
 
         private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imageOrgPath)
         {
-            if (checkImagePath(imageOrgPath) == false)
-            {
-                return;
-            }
-
             // Get UI params
             bool pasteCell = false;
             bool pasteMemo = false;
@@ -777,13 +787,26 @@ namespace ImageInserter
             cell.Comment.Shape.Height = shapeH;
         }
 
+        private string getImagePathFromCell(Excel.Range cell)
+        {
+            string imagePath = null;
+            if (checkImagePath(cell.Text))
+            {
+                imagePath = cell.Text;
+            }
+            return imagePath;
+        }
+
         private string getImagePathFromHyperlink(Excel.Range cell)
         {
             string imagePath = null;
             foreach (Excel.Hyperlink link in cell.Hyperlinks)
             {
-                imagePath = link.Address;
-                break;
+                if (checkImagePath(link.Address))
+                {
+                    imagePath = link.Address;
+                    break;
+                }
             }
             return imagePath;
         }
