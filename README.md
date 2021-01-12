@@ -1,6 +1,6 @@
 <div align="left">
 <img src="./images/icon.png" alt="icon" title="icon" width="10%">
-<h1>ImageInserter for Excel Addin</h1>
+<h1>Image Inserter Add-in for Microsoft Excel</h1>
 </div>
 
 - [日本語版](https://qiita.com/saka-guti/items/5fc67c76e42fe95d9f2d)
