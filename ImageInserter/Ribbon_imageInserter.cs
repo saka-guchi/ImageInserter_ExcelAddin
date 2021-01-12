@@ -680,7 +680,7 @@ namespace ImageInserter
 
                 // Shape setting
                 shape.LockAspectRatio = MsoTriState.msoFalse;           // Shape retains its original proportions
-                shape.Placement = Excel.XlPlacement.xlFreeFloating;     // Shape is free floating
+                shape.Placement = Excel.XlPlacement.xlMove;                // Shape is moved with the cells.
 
                 // Resize Shape
                 Debug.WriteLine("Resize shape: ");
