@@ -64,7 +64,9 @@ namespace ImageInserter
 
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
-            Excel.Range cells = getSelection();
+            Excel.Range cellsSelect = getSelection();
+            Excel.Range cellsFill = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeConstants, Excel.XlSpecialCellsValue.xlTextValues);     // Constants and Text
+            Excel.Range cells = sheet.Application.Intersect(cellsSelect, cellsFill);
 
             // Check params
             if (cells == null)
@@ -143,6 +145,7 @@ namespace ImageInserter
 
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
+            // (sheet.Cells.Comment == null): There are no cells with comments in the sheet
             Excel.Range cells = (sheet.Cells.Comment == null) ? sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments): null;
             bool checkCell = checkBox_cell.Checked;
             bool checkMemo = checkBox_memo.Checked;
