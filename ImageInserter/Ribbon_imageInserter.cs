@@ -44,9 +44,20 @@ namespace ImageInserter
             changeEvent_splitButton(splitButton_insert, button_insertFile, button_insertFile_Click);
 
             // Get UI params
-            Excel.Worksheet sheet = getActiveSheet();
-            Excel.Range cell = getActiveCell();
-            string imagePath = getImagePathFromDialog();
+            Excel.Worksheet sheet = null;
+            Excel.Range cell = null;
+            string imagePath = "";
+
+            try
+            {
+                sheet = getActiveSheet();
+                cell = getActiveCell();
+                imagePath = getImagePathFromDialog();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("ERROR: {0}", ex);
+            }
 
             // Check params
             if (imagePath == null)
@@ -63,10 +74,22 @@ namespace ImageInserter
             changeEvent_splitButton(splitButton_insert, button_insertLink, button_insertLink_Click);
 
             // Get UI params
-            Excel.Worksheet sheet = getActiveSheet();
-            Excel.Range cellsSelect = getSelection();
-            Excel.Range cellsFill = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeConstants, Excel.XlSpecialCellsValue.xlTextValues);     // Constants and Text
-            Excel.Range cells = sheet.Application.Intersect(cellsSelect, cellsFill);
+            Excel.Worksheet sheet = null;
+            Excel.Range cellsSelect = null;
+            Excel.Range cellsFill = null;
+            Excel.Range cells = null;
+
+            try
+            {
+                sheet = getActiveSheet();
+                cellsSelect = getSelection();
+                cellsFill = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeConstants, Excel.XlSpecialCellsValue.xlTextValues);     // Constants and Text
+                cells = sheet.Application.Intersect(cellsSelect, cellsFill);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("ERROR: {0}", ex);
+            }
 
             // Check params
             if (cells == null)
@@ -87,10 +110,22 @@ namespace ImageInserter
             changeEvent_splitButton(splitButton_insert, button_insertFolder, button_insertFolder_Click);
 
             // Get UI params
-            Excel.Worksheet sheet = getActiveSheet();
-            Excel.Range cell = getActiveCell();
-            string direction = dropDown_direction.SelectedItem.Tag.ToString();
-            string folderPath = getFolderPath(cell);
+            Excel.Worksheet sheet = null;
+            Excel.Range cell = null;
+            string direction = "";
+            string folderPath = "";
+
+            try
+            {
+                sheet = getActiveSheet();
+                cell = getActiveCell();
+                direction = dropDown_direction.SelectedItem.Tag.ToString();
+                folderPath = getFolderPath(cell);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("ERROR: {0}", ex);
+            }
 
             // Check params
             if (folderPath == null)
@@ -118,12 +153,26 @@ namespace ImageInserter
             changeEvent_splitButton(splitButton_delete, button_deleteSelection, button_deleteSelection_Click);
 
             // Get UI params
-            Excel.Worksheet sheet = getActiveSheet();
-            Excel.Range cells = getSelection();
-            bool checkCell = checkBox_cell.Checked;
-            bool checkMemo = checkBox_memo.Checked;
-            bool checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
-            bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
+            Excel.Worksheet sheet = null;
+            Excel.Range cells = null;
+            bool checkCell = false;
+            bool checkMemo = false;
+            bool checkCellKeep = false;
+            bool checkMemoKeep = false;
+
+            try
+            {
+                sheet = getActiveSheet();
+                cells = getSelection();
+                checkCell = checkBox_cell.Checked;
+                checkMemo = checkBox_memo.Checked;
+                checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
+                checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("ERROR: {0}", ex);
+            }
 
             // Check params
             if (cells == null)
@@ -144,13 +193,31 @@ namespace ImageInserter
             changeEvent_splitButton(splitButton_delete, button_deleteAll, button_deleteAll_Click);
 
             // Get UI params
-            Excel.Worksheet sheet = getActiveSheet();
-            // (sheet.Cells.Comment == null): There are no cells with comments in the sheet
-            Excel.Range cells = (sheet.Cells.Comment == null) ? sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments): null;
-            bool checkCell = checkBox_cell.Checked;
-            bool checkMemo = checkBox_memo.Checked;
-            bool checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
-            bool checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
+            Excel.Worksheet sheet = null;
+            Excel.Range cells = null;
+            bool checkCell = false;
+            bool checkMemo = false;
+            bool checkCellKeep = false;
+            bool checkMemoKeep = false;
+            try
+            {
+                sheet = getActiveSheet();
+                cells = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments);
+                checkCell = checkBox_cell.Checked;
+                checkMemo = checkBox_memo.Checked;
+                checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
+                checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("ERROR: {0}", ex);
+            }
+
+            // Check params
+            if (cells == null)
+            {
+                return;
+            }
 
             // Disable UI
             switchControlState(false);
@@ -283,6 +350,10 @@ namespace ImageInserter
 
                 // Enable UI
                 switchControlState(true);
+
+                // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
+                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
             }
             );
         }
@@ -346,6 +417,10 @@ namespace ImageInserter
 
                 // Enable UI
                 switchControlState(true);
+
+                // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
+                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
             }
             );
         }
@@ -386,6 +461,10 @@ namespace ImageInserter
 
                 // Enable UI
                 switchControlState(true);
+
+                // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
+                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
             }
             );
         }
@@ -497,6 +576,10 @@ namespace ImageInserter
 
                 // Enable UI
                 switchControlState(true);
+
+                // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
+                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
             }
             );
 
@@ -539,9 +622,9 @@ namespace ImageInserter
                 }
                 Debug.WriteLine("Image: rotaion = {0}", rotation.ToString());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", e);
+                Debug.WriteLine("ERROR: {0}", ex);
             }
 
             // Comment.Shape.Fil.UserPicture() is displayed without rotation.
@@ -561,9 +644,9 @@ namespace ImageInserter
                     imagePath = tempPath;
                     Debug.WriteLine("Image rotated: Path = {0}, (w, h) = ({1:F2}, {2:F2})", tempPath, imageW, imageH);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("ERROR tempBmp: {0}", e);
+                    Debug.WriteLine("ERROR tempBmp: {0}", ex);
                 }
                 tempBmp.Dispose();
             }
@@ -603,9 +686,9 @@ namespace ImageInserter
                 writeInfoMemo = dropDown_writeMemo.SelectedItem.Tag.ToString();
                 comment = (cell.Comment != null) ? cell.Comment.Text() : "";
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                Debug.WriteLine("<<< ERROR >>> Get UI params: {0}", e);
+                Debug.WriteLine("<<< ERROR >>>: {0}", ex);
                 return;
             }
 
@@ -776,9 +859,9 @@ namespace ImageInserter
                     shape.Top = cellTop - topMargin;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine("ERROR shape: {0}", e);
+                Debug.WriteLine("ERROR shape: {0}", ex);
             }
             Debug.WriteLine("<After>");
             Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2},{1:F2})", (float)shape.Left, (float)shape.Top);
@@ -877,9 +960,9 @@ namespace ImageInserter
                     imagePath = ofd.FileName;
                 }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                Debug.WriteLine("ERROR tempBmp: {0}", e);
+                Debug.WriteLine("ERROR tempBmp: {0}", ex);
             }
             ofd.Dispose();
 

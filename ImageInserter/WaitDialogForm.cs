@@ -36,8 +36,8 @@ namespace WaitDialogForm
             this.ProgressStep  = 1;  // 何件ごとにメーターを進めるか
             this.ProgressValue = 0;  // 最初の件数
 
-            this.Activate();                // Get focus
-            this.TopMost = true;      // 最前面
+            System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+            Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
         }
 
         /// <summary>
@@ -111,6 +111,7 @@ namespace WaitDialogForm
             this.MinimizeBox = false;
             this.Name = "WaitDialog";
             this.ShowInTaskbar = false;
+            this.TopMost = true;
             this.Closing += new System.ComponentModel.CancelEventHandler(this.WaitDialog_Closing);
             this.ResumeLayout(false);
 
