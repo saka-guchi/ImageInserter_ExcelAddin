@@ -163,7 +163,7 @@
     <value>2</value>
   </data>
   <data name="splitButton_insert.Label" xml:space="preserve">
-    <value>Insert image</value>
+    <value>Insert an image in the selected cell</value>
   </data>
   <data name="&gt;&gt;splitButton_insert.Name" xml:space="preserve">
     <value>splitButton_insert</value>
@@ -208,7 +208,7 @@
     <value>1</value>
   </data>
   <data name="splitButton_delete.Label" xml:space="preserve">
-    <value>Delete image</value>
+    <value>Delete the images of the selected cell</value>
   </data>
   <data name="&gt;&gt;splitButton_delete.Name" xml:space="preserve">
     <value>splitButton_delete</value>

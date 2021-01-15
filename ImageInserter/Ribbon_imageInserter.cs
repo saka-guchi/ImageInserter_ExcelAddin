@@ -24,8 +24,25 @@ namespace ImageInserter
             dropDown_deleteMemo.SelectedItemIndex = 0; // Keep memo contents when deleting
         }
 
+        private void changeEvent_splitButton(RibbonSplitButton btnDst, RibbonButton btnSrc, Action<object,RibbonControlEventArgs> clickSrc)
+        {
+            // Delete all because registration event is unknown
+            btnDst.Click -= button_insertFile_Click;
+            btnDst.Click -= button_insertFolder_Click;
+            btnDst.Click -= button_insertLink_Click;
+            btnDst.Click -= button_deleteSelection_Click;
+            btnDst.Click -= button_deleteAll_Click;
+
+            btnDst.Label = btnSrc.Label;
+            btnDst.OfficeImageId = btnSrc.OfficeImageId;
+            btnDst.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(clickSrc);
+        }
+
         private void button_insertFile_Click(object sender, RibbonControlEventArgs e)
         {
+            // Change UI params
+            changeEvent_splitButton(splitButton_insert, button_insertFile, button_insertFile_Click);
+
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cell = getActiveCell();
@@ -42,6 +59,9 @@ namespace ImageInserter
 
         private void button_insertLink_Click(object sender, RibbonControlEventArgs e)
         {
+            // Change UI params
+            changeEvent_splitButton(splitButton_insert, button_insertLink, button_insertLink_Click);
+
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cells = getSelection();
@@ -61,6 +81,9 @@ namespace ImageInserter
 
         private void button_insertFolder_Click(object sender, RibbonControlEventArgs e)
         {
+            // Change UI params
+            changeEvent_splitButton(splitButton_insert, button_insertFolder, button_insertFolder_Click);
+
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cell = getActiveCell();
@@ -89,6 +112,9 @@ namespace ImageInserter
 
         private void button_deleteSelection_Click(object sender, RibbonControlEventArgs e)
         {
+            // Change UI params
+            changeEvent_splitButton(splitButton_delete, button_deleteSelection, button_deleteSelection_Click);
+
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cells = getSelection();
@@ -112,6 +138,9 @@ namespace ImageInserter
 
         private void button_deleteAll_Click(object sender, RibbonControlEventArgs e)
         {
+            // Change UI params
+            changeEvent_splitButton(splitButton_delete, button_deleteAll, button_deleteAll_Click);
+
             // Get UI params
             Excel.Worksheet sheet = getActiveSheet();
             Excel.Range cells = (sheet.Cells.Comment == null) ? sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments): null;
