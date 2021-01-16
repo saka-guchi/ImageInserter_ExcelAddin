@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Debug = System.Diagnostics.Debug;
-using System.Drawing;
-using Image = System.Drawing.Image;
 using System.Windows.Forms;
 using System.Linq;
 using Microsoft.Office.Core;
@@ -15,6 +12,15 @@ namespace ImageInserter
 {
     public partial class Ribbon_imageInserter
     {
+        private void print(
+            string message,
+            [System.Runtime.CompilerServices.CallerMemberName] string function = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string path = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int line = 0
+            )
+        {
+            System.Diagnostics.Trace.WriteLine($"{System.IO.Path.GetFileName(path), 15} (L:{line, 4}) | {function, -20} | {message}");
+        }
         private void Ribbon_imageInserter_Load(object sender, RibbonUIEventArgs e)
         {
             // Initialize UI
@@ -56,7 +62,7 @@ namespace ImageInserter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", ex);
+                print($"ERROR: {ex}");
             }
 
             // Check params
@@ -88,7 +94,7 @@ namespace ImageInserter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", ex);
+                print($"ERROR: {ex}");
             }
 
             // Check params
@@ -124,7 +130,7 @@ namespace ImageInserter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", ex);
+                print($"ERROR: {ex}");
             }
 
             // Check params
@@ -171,7 +177,7 @@ namespace ImageInserter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", ex);
+                print($"ERROR: {ex}");
             }
 
             // Check params
@@ -210,7 +216,7 @@ namespace ImageInserter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", ex);
+                print($"ERROR: {ex}");
             }
 
             // Check params
@@ -369,7 +375,7 @@ namespace ImageInserter
         private void waitDialogDisplay(WaitDialog waitDlg, int count, int countMax)
         {
             // Display progress message
-            waitDlg.Count = String.Format("{0}/{1}", count.ToString(), countMax.ToString());
+            waitDlg.Count = $"{count:G}/{countMax:G}";
             waitDlg.Percentage = String.Format("{0:P}", (float)count / (float)countMax);
             waitDlg.PerformStep();
             Application.DoEvents();
@@ -592,7 +598,7 @@ namespace ImageInserter
             System.Drawing.RotateFlipType rotation = System.Drawing.RotateFlipType.RotateNoneFlipNone;
             imageW = bmp.Width;
             imageH = bmp.Height;
-            Debug.WriteLine("Image: Path = {0}, (w, h) = ({1:F2}, {2:F2})", imagePath, imageW, imageH);
+            print($"Image: Path = {imagePath}, (w, h) = ({imageW:F2}, {imageH:F2})");
             try
             {
                 foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems)
@@ -620,11 +626,11 @@ namespace ImageInserter
                         break;
                     }
                 }
-                Debug.WriteLine("Image: rotaion = {0}", rotation.ToString());
+                print($"Image: rotaion = {rotation}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR: {0}", ex);
+                print($"ERROR: {ex}");
             }
 
             // Comment.Shape.Fil.UserPicture() is displayed without rotation.
@@ -642,11 +648,11 @@ namespace ImageInserter
                     imageW = tempBmp.Width;
                     imageH = tempBmp.Height;
                     imagePath = tempPath;
-                    Debug.WriteLine("Image rotated: Path = {0}, (w, h) = ({1:F2}, {2:F2})", tempPath, imageW, imageH);
+                    print($"Rotated image: Path = {tempPath}, (w, h) = ({imageW:F2}, {imageH:F2})");
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("ERROR tempBmp: {0}", ex);
+                    print($"ERROR tempBmp: {ex}");
                 }
                 tempBmp.Dispose();
             }
@@ -688,7 +694,7 @@ namespace ImageInserter
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("<<< ERROR >>>: {0}", ex);
+                print($"<<< ERROR >>>: {ex}");
                 return;
             }
 
@@ -708,7 +714,7 @@ namespace ImageInserter
                 if (isLink)
                 {
                     sheet.Hyperlinks.Add(cell, imageOrgPath);
-                    Debug.WriteLine("Add hyperlink to Cell: \"{0}\"", imageOrgPath);
+                    print($"Add hyperlink to Cell: \"{imageOrgPath}\"");
                 }
             }
 
@@ -746,10 +752,8 @@ namespace ImageInserter
 
         private void pasteImageOnCell(Excel.Worksheet sheet, Excel.Range cell, string writeInfo, string imagePath, float imageW, float imageH, bool isSetW, bool isSetH)
         {
-            Debug.WriteLine("<<< pasteImageOnCell() >>>");
-
             cell.Value = writeInfo;
-            Debug.WriteLine("Write \"{0}\" to Cell", writeInfo);
+            print($"Write \"{writeInfo}\" to Cell");
 
             // Calculation ratio for unit conversion
             //  - ColumnWidth: 1 character width (DPI dependent)
@@ -757,11 +761,11 @@ namespace ImageInserter
             //  - RowHeight: point
             //  - Height: point
             double convRatioW = cell.ColumnWidth / cell.Width;
-            Debug.WriteLine("Conversion ratio: ColumnWidth / Width = {0:F2} / {1:F2} = {2:F2}", (double)cell.ColumnWidth, (double)cell.Width, convRatioW);
+            print($"Conversion ratio: ColumnWidth / Width = {(float)cell.ColumnWidth:F2} / {(float)cell.Width:F2} = {convRatioW:F2}");
 
             // Resize to the specified Cell size
-            Debug.WriteLine("Change cell size to specified size: Before");
-            Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2},{1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+            print("Change cell size to specified size: Before");
+            print($" - Cell: (cw,rh) = ({(float)cell.ColumnWidth:F2},{(float)cell.RowHeight:F2})");
             if (isSetW)
             {
                 cell.ColumnWidth = int.Parse(editBox_setW.Text) * convRatioW;       // point to 1 character width
@@ -770,15 +774,15 @@ namespace ImageInserter
             {
                 cell.RowHeight = int.Parse(editBox_setH.Text);
             }
-            Debug.WriteLine("Change cell size to specified size: After");
-            Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2},{1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+            print("Change cell size to specified size: After");
+            print($" - Cell: (cw,rh) = ({(float)cell.ColumnWidth:F2},{(float)cell.RowHeight:F2})");
 
             // Paste image
-            Debug.WriteLine("Paste image to Shape:");
+            print("Paste image to Shape:");
             float cellLeft = (float)cell.Left;
             float cellTop = (float)cell.Top;
-            Debug.WriteLine(" - Cell: (Left, Top) = ({0:F2},{1:F2})", cellLeft, cellTop);
-            Debug.WriteLine(" - Image: (w, h) = ({0:F2},{1:F2})", imageW, imageH);
+            print($" - Cell: (Left, Top) = ({cellLeft:F2},{cellTop:F2})");
+            print($" - Image: (w, h) = ({imageW:F2},{imageH:F2})");
 
             Excel.Shape shape = sheet.Shapes.AddPicture2(
                 imagePath,
@@ -798,9 +802,9 @@ namespace ImageInserter
                 shape.Placement = Excel.XlPlacement.xlMove;                // Shape is moved with the cells.
 
                 // Resize Shape
-                Debug.WriteLine("Resize shape: ");
+                print("Resize shape: ");
                 string shrink = dropDown_shrink.SelectedItem.Tag.ToString();    // Image placement settings
-                Debug.WriteLine(" - mode: " + shrink);
+                print($" - mode: {shrink}");
 
                 // Calculate considering rotation
                 float cellRotWidth = (float)cell.Width;
@@ -810,18 +814,18 @@ namespace ImageInserter
                     cellRotWidth = (float)cell.Height;
                     cellRotHeight = (float)cell.Width;
                 }
-                Debug.WriteLine(" - Cell (Rotation): (Width, Height) = ({0:F2},{1:F2})", cellRotWidth, cellRotHeight);
+                print($" - Cell (Rotation): (Width, Height) = ({cellRotWidth:F2},{cellRotHeight:F2})");
 
                 // Keep aspect and scale
                 double resizeRatioW = (double)shape.Width / (double)cellRotWidth;
                 double resizeRatioH = (double)shape.Height / (double)cellRotHeight;
-                Debug.WriteLine(" - resizeRatioW: shape.Width / cellRotWidth = {0:F2} / {1:F2} = {2:F2}", (double)shape.Width, (double)cellRotWidth, resizeRatioW);
-                Debug.WriteLine(" - resizeRatioH: shape.Height / cellRotHeight = {0:F2} / {1:F2} = {2:F2}", (double)shape.Height, (double)cellRotHeight, resizeRatioH);
+                print($" - resizeRatioW: shape.Width / cellRotWidth = {shape.Width:F2} / {cellRotWidth:F2} = {resizeRatioW:F2}");
+                print($" - resizeRatioH: shape.Height / cellRotHeight = {shape.Height:F2} / {cellRotHeight:F2} = {resizeRatioH:F2}");
 
-                Debug.WriteLine("<Before>");
-                Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2}, {1:F2})", (float)shape.Left, (float)shape.Top);
-                Debug.WriteLine(" - Shape: (w, h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
-                Debug.WriteLine(" - Cell: (cw, rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+                print("<Before>");
+                print($" - Shape: (Left, Top) = ({shape.Left:F2}, {shape.Top:F2})");
+                print($" - Shape: (w, h) = ({shape.Width:F2}, {shape.Height:F2})");
+                print($" - Cell: (cw, rh) = ({(float)cell.ColumnWidth:F2}, {(float)cell.RowHeight:F2})");
 
                 if (shrink == "fit")
                 {
@@ -861,25 +865,23 @@ namespace ImageInserter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR shape: {0}", ex);
+                print($"ERROR shape: {ex}");
             }
-            Debug.WriteLine("<After>");
-            Debug.WriteLine(" - Shape: (Left, Top) = ({0:F2},{1:F2})", (float)shape.Left, (float)shape.Top);
-            Debug.WriteLine(" - Shape: (w,h) = ({0:F2}, {1:F2})", (double)shape.Width, (double)shape.Height);
-            Debug.WriteLine(" - Cell: (cw,rh) = ({0:F2}, {1:F2})", (double)cell.ColumnWidth, (double)cell.RowHeight);
+            print("<After>");
+            print($" - Shape: (Left, Top) = ({shape.Left:F2},{shape.Top:F2})");
+            print($" - Shape: (w,h) = ({shape.Width:F2}, {shape.Height:F2})");
+            print($" - Cell: (cw,rh) = ({(float)cell.ColumnWidth:F2}, {(float)cell.RowHeight:F2})");
         }
 
         private void pasteImageOnMemo(Excel.Worksheet sheet, Excel.Range cell, string writeInfo, string imagePath, float imageW, float imageH, int maxW, int maxH)
         {
-            Debug.WriteLine("<<< pasteImageOnMemo() >>>");
-
             // Reduce to the specified maximum size (Keep aspect ratio)
-            Debug.WriteLine("Specified max size: (w, h) = ({0:D}, {1:D})", maxW, maxH);
+            print($"Specified max size: (w, h) = ({maxW:D}, {maxH:D})");
             float shapeW = (maxW != 0) ? maxW : imageW;
             float shapeH = (maxH != 0) ? maxH : imageH;
             float ratioW = imageW / shapeW;
             float ratioH = imageH / shapeH;
-            Debug.WriteLine("Resize ratio of Shape: (w, h) = ({0:F2}, {1:F2})", ratioW, ratioH);
+            print($"Resize ratio of Shape: (w, h) = ({ratioW:F2}, {ratioH:F2})");
 
             if (ratioW < ratioH)
             {
@@ -889,13 +891,13 @@ namespace ImageInserter
             {
                 shapeH = imageH / ratioW;
             }
-            Debug.WriteLine("Shape: (w, h) = ({0:F2}, {1:F2})", shapeW, shapeH);
+            print($"Shape: (w, h) = ({shapeW:F2}, {shapeH:F2})");
 
             // Initialize Memo
             cell.ClearComments();
 
             // Add information and image to Memo
-            Debug.WriteLine("Write \"{0}\" to Memo", writeInfo);
+            print($"Write \"{writeInfo}\" to Memo");
             cell.AddComment(writeInfo);
             cell.Comment.Shape.Fill.UserPicture(imagePath);
             cell.Comment.Shape.Width = shapeW;
@@ -962,7 +964,7 @@ namespace ImageInserter
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("ERROR tempBmp: {0}", ex);
+                print($"ERROR tempBmp: {ex}");
             }
             ofd.Dispose();
 
