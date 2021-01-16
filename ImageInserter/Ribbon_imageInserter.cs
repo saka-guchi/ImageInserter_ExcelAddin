@@ -23,11 +23,102 @@ namespace ImageInserter
         }
         private void Ribbon_imageInserter_Load(object sender, RibbonUIEventArgs e)
         {
-            // Initialize UI
-            dropDown_writeCell.SelectedItemIndex = 2;       // Write path in cell when images inserting
-            dropDown_writeMemo.SelectedItemIndex = 1;   // Write file name in memo when images inserting
-            dropDown_deleteCell.SelectedItemIndex = 1;     // Keep cell contents when deleting
-            dropDown_deleteMemo.SelectedItemIndex = 0; // Keep memo contents when deleting
+            // Load config & Change UI params
+            loadSetting();
+        }
+
+        private void loadSetting()
+        {
+            // w/ System.Configuration
+            System.Configuration.Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
+            print($"Load config file: {config.FilePath}");
+
+            Properties.Settings setting = Properties.Settings.Default;
+
+            // When updating, the settings of the previous version are not inherited
+            // Inherit the settings of the previous version only for the first time
+            if (!Properties.Settings.Default.IsUpgrated)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.IsUpgrated = true;
+            }
+
+            try
+            {
+                checkBox_cell.Checked = setting.checkBox_cell;
+                checkBox_memo.Checked = setting.checkBox_memo;
+                checkBox_setSize.Checked = setting.checkBox_setSize;
+                editBox_setW.Text = $"{setting.editBox_setW}";
+                editBox_setH.Text = $"{setting.editBox_setH}";
+                dropDown_shrink.SelectedItemIndex = setting.dropDown_shrink;
+                dropDown_writeCell.SelectedItemIndex = setting.dropDown_writeCell;
+                dropDown_deleteCell.SelectedItemIndex = setting.dropDown_deleteCell;
+                dropDown_direction.SelectedItemIndex = setting.dropDown_direction;
+                checkBox_cell.Checked = setting.checkBox_maxSize;
+                editBox_maxW.Text = $"{setting.editBox_maxW:D}";
+                editBox_maxH.Text = $"{setting.editBox_maxH:D}";
+                dropDown_writeMemo.SelectedItemIndex = setting.dropDown_writeMemo;
+                dropDown_deleteMemo.SelectedItemIndex = setting.dropDown_deleteMemo;
+            }
+            catch(Exception ex)
+            {
+                print($"<<< ERROR >>>: {ex}");
+            }
+
+            switch (setting.splitButton_insert)
+            {
+                case "select":
+                    changeEvent_splitButton(splitButton_insert, button_insertFile, button_insertFile_Click);
+                    break;
+                case "link":
+                    changeEvent_splitButton(splitButton_insert, button_insertLink, button_insertLink_Click);
+                    break;
+                case "folder":
+                    changeEvent_splitButton(splitButton_insert, button_insertFolder, button_insertFolder_Click);
+                    break;
+                default:
+                    break;
+            }
+            switch (setting.splitButton_delete)
+            {
+                case "select":
+                    changeEvent_splitButton(splitButton_delete, button_deleteSelection, button_deleteSelection_Click);
+                    break;
+                case "all":
+                    changeEvent_splitButton(splitButton_delete, button_deleteAll, button_deleteAll_Click);
+                    break;
+                default:
+                    break;
+            }
+            updateControlState(true);
+        }
+
+        private void saveSetting()
+        {
+            Properties.Settings setting = Properties.Settings.Default;
+
+            setting.checkBox_cell = checkBox_cell.Checked;
+            setting.checkBox_memo = checkBox_memo.Checked;
+            setting.checkBox_setSize = checkBox_setSize.Checked;
+            setting.editBox_setW = int.Parse(editBox_setW.Text);
+            setting.editBox_setH = int.Parse(editBox_setH.Text);
+            setting.dropDown_shrink = dropDown_shrink.SelectedItemIndex;
+            setting.dropDown_writeCell = dropDown_writeCell.SelectedItemIndex;
+            setting.dropDown_deleteCell = dropDown_deleteCell.SelectedItemIndex;
+            setting.dropDown_direction = dropDown_direction.SelectedItemIndex;
+            setting.checkBox_maxSize = checkBox_cell.Checked;
+            setting.editBox_maxW = int.Parse(editBox_maxW.Text);
+            setting.editBox_maxH = int.Parse(editBox_maxH.Text);
+            setting.dropDown_writeMemo = dropDown_writeMemo.SelectedItemIndex;
+            setting.dropDown_deleteMemo = dropDown_deleteMemo.SelectedItemIndex;
+            setting.splitButton_insert = splitButton_insert.Tag.ToString();
+            setting.splitButton_delete = splitButton_delete.Tag.ToString();
+
+            setting.Save();
+
+            // w/ System.Configuration
+            System.Configuration.Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
+            print($"Save config file: {config.FilePath}");
         }
 
         private void changeEvent_splitButton(RibbonSplitButton btnDst, RibbonButton btnSrc, Action<object,RibbonControlEventArgs> clickSrc)
@@ -40,6 +131,7 @@ namespace ImageInserter
             btnDst.Click -= button_deleteAll_Click;
 
             btnDst.Label = btnSrc.Label;
+            btnDst.Tag = btnSrc.Tag;
             btnDst.OfficeImageId = btnSrc.OfficeImageId;
             btnDst.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(clickSrc);
         }
@@ -232,81 +324,105 @@ namespace ImageInserter
             deleteAllImages(sheet, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep);
         }
 
+        private void switchUIBehavior(bool enable)
+        {
+            try
+            {
+                Globals.ThisAddIn.Application.Interactive = enable;
+                Globals.ThisAddIn.Application.ScreenUpdating = enable;
+                Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
+                Application.DoEvents();
+            }
+            catch (Exception ex)
+            {
+                print($"<<< ERROR >>>: {ex}");
+            }
+        }
+
+        private void updateControlState(bool enable)
+        {
+            try
+            {
+                // Get all UI controls
+                foreach (RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
+                {
+                    foreach (RibbonControl ctrl in group.Items)
+                    {
+                        ctrl.Enabled = enable;
+                    }
+                }
+
+                // Correspond individually
+                if (enable)
+                {
+                    bool max_w = false;
+                    bool max_h = false;
+                    if (checkBox_maxSize.Checked)
+                    {
+                        max_w = true;
+                        max_h = true;
+                    }
+                    editBox_maxW.Enabled = max_w;
+                    editBox_maxH.Enabled = max_h;
+
+                    bool set_w = false;
+                    bool set_h = false;
+                    if (checkBox_setSize.Checked)
+                    {
+                        string shrink = dropDown_shrink.SelectedItem.Tag.ToString();
+                        if (shrink == "fit")
+                        {
+                            set_w = true;
+                            set_h = true;
+                        }
+                        else if (shrink == "fitW")
+                        {
+                            set_w = true;
+                        }
+                        else if (shrink == "fitH")
+                        {
+                            set_h = true;
+                        }
+                    }
+                    editBox_setW.Enabled = set_w;
+                    editBox_setH.Enabled = set_h;
+                }
+            }
+            catch (Exception ex)
+            {
+                print($"<<< ERROR >>>: {ex}");
+            }
+        }
+
         private void switchControlState(bool enable)
         {
             if (enable)
             {
-                Globals.ThisAddIn.Application.Interactive = enable;
-                Globals.ThisAddIn.Application.ScreenUpdating = enable;
-                Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
-                Application.DoEvents();
+                switchUIBehavior(enable);
             }
 
-            // Get all UI controls
-            foreach (RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
-            {
-                foreach (RibbonControl ctrl in group.Items)
-                {
-                    ctrl.Enabled = enable;
-                }
-            }
-
-            // Correspond individually
-            if (enable)
-            {
-                bool max_w = false;
-                bool max_h = false;
-                if (checkBox_maxSize.Checked)
-                {
-                    max_w = true;
-                    max_h = true;
-                }
-                editBox_maxW.Enabled = max_w;
-                editBox_maxH.Enabled = max_h;
-
-                bool set_w = false;
-                bool set_h = false;
-                if (checkBox_setSize.Checked)
-                {
-                    string shrink = dropDown_shrink.SelectedItem.Tag.ToString();
-                    if (shrink == "fit")
-                    {
-                        set_w = true;
-                        set_h = true;
-                    }
-                    else if (shrink == "fitW")
-                    {
-                        set_w = true;
-                    }
-                    else if (shrink == "fitH")
-                    {
-                        set_h = true;
-                    }
-                }
-                editBox_setW.Enabled = set_w;
-                editBox_setH.Enabled = set_h;
-            }
+            updateControlState(enable);
 
             if (!enable)
             {
-                Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
-                Globals.ThisAddIn.Application.ScreenUpdating = enable;
-                Globals.ThisAddIn.Application.Interactive = enable;
-                Application.DoEvents();
+                switchUIBehavior(enable);
             }
         }
 
         private void checkBox_setSize_Click(object sender, RibbonControlEventArgs e)
         {
+            saveSetting();
             switchControlState(true);
         }
         private void checkBox_maxSize_Click(object sender, RibbonControlEventArgs e)
         {
+            saveSetting();
             switchControlState(true);
         }
 
         private void dropDown_shrink_SelectionChanged(object sender, RibbonControlEventArgs e)
         {
+            saveSetting();
             switchControlState(true);
         }
 
@@ -1054,6 +1170,105 @@ namespace ImageInserter
                 folderPath = dlg.Path;
             }
             return folderPath;
+        }
+
+        private void checkBox_cell_Click(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
+        }
+
+        private void checkBox_memo_Click(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
+        }
+
+        private void editBox_setW_TextChanged(object sender, RibbonControlEventArgs e)
+        {
+            // Check params
+            try
+            {
+                int w = int.Parse(editBox_setW.Text);
+            }
+            catch(Exception ex)
+            {
+                print($"<<< Parse error >>>: {ex}");
+                editBox_setW.Text = "15";
+                return;
+            }
+            saveSetting();
+        }
+
+        private void editBox_setH_TextChanged(object sender, RibbonControlEventArgs e)
+        {
+            // Check params
+            try
+            {
+                int h = int.Parse(editBox_setH.Text);
+            }
+            catch (Exception ex)
+            {
+                print($"<<< Parse error >>>: {ex}");
+                editBox_setH.Text = "15";
+                return;
+            }
+            saveSetting();
+        }
+
+        private void dropDown_writeCell_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
+        }
+
+        private void dropDown_deleteCell_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
+        }
+
+        private void dropDown_direction_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
+        }
+
+        private void editBox_maxW_TextChanged(object sender, RibbonControlEventArgs e)
+        {
+            // Check params
+            try
+            {
+                int h = int.Parse(editBox_maxW.Text);
+            }
+            catch (Exception ex)
+            {
+                print($"<<< Parse error >>>: {ex}");
+                editBox_maxW.Text = "512";
+                return;
+            }
+            saveSetting();
+        }
+
+        private void editBox_maxH_TextChanged(object sender, RibbonControlEventArgs e)
+        {
+            // Check params
+            try
+            {
+                int h = int.Parse(editBox_maxH.Text);
+            }
+            catch (Exception ex)
+            {
+                print($"<<< Parse error >>>: {ex}");
+                editBox_maxH.Text = "512";
+                return;
+            }
+            saveSetting();
+        }
+
+        private void dropDown_writeMemo_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
+        }
+
+        private void dropDown_deleteMemo_SelectionChanged(object sender, RibbonControlEventArgs e)
+        {
+            saveSetting();
         }
     }
 }

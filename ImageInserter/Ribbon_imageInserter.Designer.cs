@@ -124,12 +124,14 @@ namespace ImageInserter
             this.checkBox_cell.Checked = true;
             resources.ApplyResources(this.checkBox_cell, "checkBox_cell");
             this.checkBox_cell.Name = "checkBox_cell";
+            this.checkBox_cell.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox_cell_Click);
             // 
             // checkBox_memo
             // 
             this.checkBox_memo.Checked = true;
             resources.ApplyResources(this.checkBox_memo, "checkBox_memo");
             this.checkBox_memo.Name = "checkBox_memo";
+            this.checkBox_memo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox_memo_Click);
             // 
             // group_cell
             // 
@@ -156,12 +158,14 @@ namespace ImageInserter
             resources.ApplyResources(this.editBox_setW, "editBox_setW");
             this.editBox_setW.MaxLength = 4;
             this.editBox_setW.Name = "editBox_setW";
+            this.editBox_setW.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.editBox_setW_TextChanged);
             // 
             // editBox_setH
             // 
             resources.ApplyResources(this.editBox_setH, "editBox_setH");
             this.editBox_setH.MaxLength = 4;
             this.editBox_setH.Name = "editBox_setH";
+            this.editBox_setH.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.editBox_setH_TextChanged);
             // 
             // dropDown_shrink
             // 
@@ -209,7 +213,7 @@ namespace ImageInserter
             this.dropDown_writeCell.Name = "dropDown_writeCell";
             this.dropDown_writeCell.OfficeImageId = "IconPencilTool";
             this.dropDown_writeCell.ShowImage = true;
-            this.dropDown_writeCell.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_shrink_SelectionChanged);
+            this.dropDown_writeCell.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_writeCell_SelectionChanged);
             // 
             // dropDown_deleteCell
             // 
@@ -225,6 +229,7 @@ namespace ImageInserter
             this.dropDown_deleteCell.Name = "dropDown_deleteCell";
             this.dropDown_deleteCell.OfficeImageId = "EraserMode";
             this.dropDown_deleteCell.ShowImage = true;
+            this.dropDown_deleteCell.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_deleteCell_SelectionChanged);
             // 
             // separator2
             // 
@@ -247,6 +252,7 @@ namespace ImageInserter
             this.dropDown_direction.Items.Add(ribbonDropDownItemImpl12);
             resources.ApplyResources(this.dropDown_direction, "dropDown_direction");
             this.dropDown_direction.Name = "dropDown_direction";
+            this.dropDown_direction.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_direction_SelectionChanged);
             // 
             // group_memo
             // 
@@ -270,12 +276,14 @@ namespace ImageInserter
             resources.ApplyResources(this.editBox_maxW, "editBox_maxW");
             this.editBox_maxW.MaxLength = 4;
             this.editBox_maxW.Name = "editBox_maxW";
+            this.editBox_maxW.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.editBox_maxW_TextChanged);
             // 
             // editBox_maxH
             // 
             resources.ApplyResources(this.editBox_maxH, "editBox_maxH");
             this.editBox_maxH.MaxLength = 4;
             this.editBox_maxH.Name = "editBox_maxH";
+            this.editBox_maxH.TextChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.editBox_maxH_TextChanged);
             // 
             // dropDown_writeMemo
             // 
@@ -295,7 +303,7 @@ namespace ImageInserter
             this.dropDown_writeMemo.Name = "dropDown_writeMemo";
             this.dropDown_writeMemo.OfficeImageId = "IconPencilTool";
             this.dropDown_writeMemo.ShowImage = true;
-            this.dropDown_writeMemo.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_shrink_SelectionChanged);
+            this.dropDown_writeMemo.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_writeMemo_SelectionChanged);
             // 
             // dropDown_deleteMemo
             // 
@@ -311,6 +319,7 @@ namespace ImageInserter
             this.dropDown_deleteMemo.Name = "dropDown_deleteMemo";
             this.dropDown_deleteMemo.OfficeImageId = "EraserMode";
             this.dropDown_deleteMemo.ShowImage = true;
+            this.dropDown_deleteMemo.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_deleteMemo_SelectionChanged);
             // 
             // splitButton_insert
             // 

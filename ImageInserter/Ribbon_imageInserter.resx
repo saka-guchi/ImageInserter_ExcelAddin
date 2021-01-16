@@ -120,6 +120,9 @@
   <data name="button_insertFile.Label" xml:space="preserve">
     <value>Insert an image in the selected cell</value>
   </data>
+  <data name="button_insertFile.Tag" xml:space="preserve">
+    <value>select</value>
+  </data>
   <data name="&gt;&gt;button_insertFile.Name" xml:space="preserve">
     <value>button_insertFile</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="button_insertLink.Label" xml:space="preserve">
     <value>Insert the entered linked image in the selected cell</value>
+  </data>
+  <data name="button_insertLink.Tag" xml:space="preserve">
+    <value>link</value>
   </data>
   <data name="&gt;&gt;button_insertLink.Name" xml:space="preserve">
     <value>button_insertLink</value>
@@ -150,6 +156,9 @@
   <data name="button_insertFolder.Label" xml:space="preserve">
     <value>Insert images in the specified folder</value>
   </data>
+  <data name="button_insertFolder.Tag" xml:space="preserve">
+    <value>folder</value>
+  </data>
   <data name="&gt;&gt;button_insertFolder.Name" xml:space="preserve">
     <value>button_insertFolder</value>
   </data>
@@ -164,6 +173,9 @@
   </data>
   <data name="splitButton_insert.Label" xml:space="preserve">
     <value>Insert an image in the selected cell</value>
+  </data>
+  <data name="splitButton_insert.Tag" xml:space="preserve">
+    <value>select</value>
   </data>
   <data name="&gt;&gt;splitButton_insert.Name" xml:space="preserve">
     <value>splitButton_insert</value>
@@ -180,6 +192,9 @@
   <data name="button_deleteSelection.Label" xml:space="preserve">
     <value>Delete the images of the selected cell</value>
   </data>
+  <data name="button_deleteSelection.Tag" xml:space="preserve">
+    <value>select</value>
+  </data>
   <data name="&gt;&gt;button_deleteSelection.Name" xml:space="preserve">
     <value>button_deleteSelection</value>
   </data>
@@ -195,6 +210,9 @@
   <data name="button_deleteAll.Label" xml:space="preserve">
     <value>Delete all images on the active sheet</value>
   </data>
+  <data name="button_deleteAll.Tag" xml:space="preserve">
+    <value>all</value>
+  </data>
   <data name="&gt;&gt;button_deleteAll.Name" xml:space="preserve">
     <value>button_deleteAll</value>
   </data>
@@ -209,6 +227,9 @@
   </data>
   <data name="splitButton_delete.Label" xml:space="preserve">
     <value>Delete the images of the selected cell</value>
+  </data>
+  <data name="splitButton_delete.Tag" xml:space="preserve">
+    <value>select</value>
   </data>
   <data name="&gt;&gt;splitButton_delete.Name" xml:space="preserve">
     <value>splitButton_delete</value>
