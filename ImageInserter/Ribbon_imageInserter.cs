@@ -68,13 +68,16 @@ namespace ImageInserter
             switch (setting.splitButton_insert)
             {
                 case "select":
-                    changeEvent_splitButton(splitButton_insert, button_insertFile, button_insertFile_Click);
+                    changeEvent_splitButton(splitButton_insert, button_insertFile);
+                    splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertFile_Click);
                     break;
                 case "link":
-                    changeEvent_splitButton(splitButton_insert, button_insertLink, button_insertLink_Click);
+                    changeEvent_splitButton(splitButton_insert, button_insertLink);
+                    splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertLink_Click);
                     break;
                 case "folder":
-                    changeEvent_splitButton(splitButton_insert, button_insertFolder, button_insertFolder_Click);
+                    changeEvent_splitButton(splitButton_insert, button_insertFolder);
+                    splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertFolder_Click);
                     break;
                 default:
                     break;
@@ -82,10 +85,12 @@ namespace ImageInserter
             switch (setting.splitButton_delete)
             {
                 case "select":
-                    changeEvent_splitButton(splitButton_delete, button_deleteSelection, button_deleteSelection_Click);
+                    changeEvent_splitButton(splitButton_delete, button_deleteSelection);
+                    splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_deleteSelection_Click);
                     break;
                 case "all":
-                    changeEvent_splitButton(splitButton_delete, button_deleteAll, button_deleteAll_Click);
+                    changeEvent_splitButton(splitButton_delete, button_deleteAll);
+                    splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_deleteAll_Click);
                     break;
                 default:
                     break;
@@ -121,25 +126,32 @@ namespace ImageInserter
             print($"Save config file: {config.FilePath}");
         }
 
-        private void changeEvent_splitButton(RibbonSplitButton btnDst, RibbonButton btnSrc, Action<object,RibbonControlEventArgs> clickSrc)
+        private void changeEvent_splitButton(RibbonSplitButton btnDst, RibbonButton btnSrc)
         {
-            // Delete all because registration event is unknown
-            btnDst.Click -= button_insertFile_Click;
-            btnDst.Click -= button_insertFolder_Click;
-            btnDst.Click -= button_insertLink_Click;
-            btnDst.Click -= button_deleteSelection_Click;
-            btnDst.Click -= button_deleteAll_Click;
+            try
+            {
+                // Delete all because registration event is unknown
+                btnDst.Click -= button_insertFile_Click;
+                btnDst.Click -= button_insertFolder_Click;
+                btnDst.Click -= button_insertLink_Click;
+                btnDst.Click -= button_deleteSelection_Click;
+                btnDst.Click -= button_deleteAll_Click;
 
-            btnDst.Label = btnSrc.Label;
-            btnDst.Tag = btnSrc.Tag;
-            btnDst.OfficeImageId = btnSrc.OfficeImageId;
-            btnDst.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(clickSrc);
+                btnDst.Label = btnSrc.Label;
+                btnDst.Tag = btnSrc.Tag;
+                btnDst.OfficeImageId = btnSrc.OfficeImageId;
+            }
+            catch(Exception ex)
+            {
+                print($"<<< ERROR >>>: {ex}");
+            }
         }
 
         private void button_insertFile_Click(object sender, RibbonControlEventArgs e)
         {
             // Change UI params
-            changeEvent_splitButton(splitButton_insert, button_insertFile, button_insertFile_Click);
+            changeEvent_splitButton(splitButton_insert, button_insertFile);
+            splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertFile_Click);
 
             // Get UI params
             Excel.Worksheet sheet = null;
@@ -155,6 +167,7 @@ namespace ImageInserter
             catch (Exception ex)
             {
                 print($"ERROR: {ex}");
+                return;
             }
 
             // Check params
@@ -163,13 +176,20 @@ namespace ImageInserter
                 return;
             }
 
+            // Disable UI
+            switchControlState(false);
+
             pasteImage(sheet, cell, imagePath);
+
+            // Enable UI
+            switchControlState(true);
         }
 
         private void button_insertLink_Click(object sender, RibbonControlEventArgs e)
         {
             // Change UI params
-            changeEvent_splitButton(splitButton_insert, button_insertLink, button_insertLink_Click);
+            changeEvent_splitButton(splitButton_insert, button_insertLink);
+            splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertLink_Click);
 
             // Get UI params
             Excel.Worksheet sheet = null;
@@ -187,6 +207,7 @@ namespace ImageInserter
             catch (Exception ex)
             {
                 print($"ERROR: {ex}");
+                return;
             }
 
             // Check params
@@ -205,7 +226,8 @@ namespace ImageInserter
         private void button_insertFolder_Click(object sender, RibbonControlEventArgs e)
         {
             // Change UI params
-            changeEvent_splitButton(splitButton_insert, button_insertFolder, button_insertFolder_Click);
+            changeEvent_splitButton(splitButton_insert, button_insertFolder);
+            splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertFolder_Click);
 
             // Get UI params
             Excel.Worksheet sheet = null;
@@ -223,10 +245,11 @@ namespace ImageInserter
             catch (Exception ex)
             {
                 print($"ERROR: {ex}");
+                return;
             }
 
             // Check params
-            if (folderPath == null)
+            if (folderPath == "")
             {
                 return;
             }
@@ -248,7 +271,8 @@ namespace ImageInserter
         private void button_deleteSelection_Click(object sender, RibbonControlEventArgs e)
         {
             // Change UI params
-            changeEvent_splitButton(splitButton_delete, button_deleteSelection, button_deleteSelection_Click);
+            changeEvent_splitButton(splitButton_delete, button_deleteSelection);
+            splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_deleteSelection_Click);
 
             // Get UI params
             Excel.Worksheet sheet = null;
@@ -270,6 +294,7 @@ namespace ImageInserter
             catch (Exception ex)
             {
                 print($"ERROR: {ex}");
+                return;
             }
 
             // Check params
@@ -288,19 +313,52 @@ namespace ImageInserter
         private void button_deleteAll_Click(object sender, RibbonControlEventArgs e)
         {
             // Change UI params
-            changeEvent_splitButton(splitButton_delete, button_deleteAll, button_deleteAll_Click);
+            changeEvent_splitButton(splitButton_delete, button_deleteAll);
+            splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_deleteAll_Click);
 
             // Get UI params
+            Excel.Application app = null;
             Excel.Worksheet sheet = null;
             Excel.Range cells = null;
+            Excel.Range cellsComments = null;
+            Excel.Range cellsConstants = null;
             bool checkCell = false;
             bool checkMemo = false;
             bool checkCellKeep = false;
             bool checkMemoKeep = false;
             try
             {
+                app = getApplication();
                 sheet = getActiveSheet();
-                cells = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments);
+                try
+                {
+                    cellsComments = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeComments);
+                }
+                catch (Exception)
+                {
+                }
+                try
+                {
+                    cellsConstants = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeConstants);
+                }
+                catch (Exception)
+                {
+                }
+                if (cellsComments != null)
+                {
+                    if (cellsConstants != null)
+                    {
+                        cells = app.Union(cellsComments, cellsConstants);
+                    }
+                    else
+                    {
+                        cells = cellsComments;
+                    }
+                }
+                else if (cellsConstants != null)
+                {
+                    cells = cellsConstants;
+                }
                 checkCell = checkBox_cell.Checked;
                 checkMemo = checkBox_memo.Checked;
                 checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
@@ -309,6 +367,7 @@ namespace ImageInserter
             catch (Exception ex)
             {
                 print($"ERROR: {ex}");
+                return;
             }
 
             // Check params
@@ -1139,7 +1198,7 @@ namespace ImageInserter
 
         private string getFolderPath(Excel.Range cell)
         {
-            string folderPath = null;
+            string folderPath = "";
             if (isExistFolderPath(cell.Text))
             {
                 folderPath = cell.Text;
@@ -1163,7 +1222,7 @@ namespace ImageInserter
 
         private string getFolderPathFromDialog()
         {
-            string folderPath = null;
+            string folderPath = "";
             FolderSelectDialog dlg = new FolderSelectDialog();
             if (dlg.ShowDialog() == DialogResult.OK)
             {
