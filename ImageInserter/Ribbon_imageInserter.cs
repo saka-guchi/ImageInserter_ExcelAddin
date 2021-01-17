@@ -389,8 +389,6 @@ namespace ImageInserter
             {
                 Globals.ThisAddIn.Application.Interactive = enable;
                 Globals.ThisAddIn.Application.ScreenUpdating = enable;
-                Globals.ThisAddIn.Application.ActiveSheet.Application.ScreenUpdating = enable;
-                Application.DoEvents();
             }
             catch (Exception ex)
             {
@@ -402,15 +400,6 @@ namespace ImageInserter
         {
             try
             {
-                // Get all UI controls
-                foreach (RibbonGroup group in Globals.Ribbons.Ribbon1.tab_imageInserter.Groups)
-                {
-                    foreach (RibbonControl ctrl in group.Items)
-                    {
-                        ctrl.Enabled = enable;
-                    }
-                }
-
                 // Correspond individually
                 if (enable)
                 {
