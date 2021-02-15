@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-<!-- バージョンアップ時はProductVersionとProductCode（ツール＞GUIDの作成）を変更する -->
-<?define ProductVersion="1.1.1" ?>
-<?define ProductCode = "752394CC-E14F-4816-AD2C-1EF01E56CFAA" ?>
-<?define UpgradeCode = "661472ad-167f-47e7-b761-562247fda9b4" ?>
-<?define ProductName = "Image Inserter Add-in for Excel" ?>
-<?define Manufacturer = "saka-guchi" ?>
-  
-<!-- 準備：マクロ変数の追加
+  <!-- バージョンアップ時はProductVersionとProductCode（ツール＞GUIDの作成）を変更する -->
+  <?define ProductVersion="1.1.2" ?>
+  <?define ProductCode = "8811A5D5-EC41-4C77-909C-0645BE849A28" ?>
+  <?define UpgradeCode = "661472ad-167f-47e7-b761-562247fda9b4" ?>
+  <?define ProductName = "Image Inserter Add-in for Excel" ?>
+  <?define Manufacturer = "saka-guchi" ?>
+
+  <!-- 準備：マクロ変数の追加
 1.  Setupプロジェクト上で右クリック「プロパティ」を選択
 2. 「Build」タブを選択
 3. 「Define preprocess variabeles」に変数を追加
  - 定義追加: 「AddinFiles=..\ImageInserter\bin\$(Configuration)\」
  - 使用方法: $(var.AddinFiles)
 -->
-  
-<!-- Product
+
+  <!-- Product
 	Id: Windows InstallerのProductCodeに相当、アプリケーションを識別するID「ツール＞GUIDの作成」
 	Name: Windows InstallerのProductNameに相当、インストーラーの画面の各箇所に表示されるアプリケーション名
   Version: Windows InstallerのProductVersionに相当
   UpgradeCode: Windows InstallerのUpgradeCodeに相当
   Manufacturer: インストーラーの作成者やプログラム一覧の発行元
 -->
-<Product
-  Id="$(var.ProductCode)"
-  Name="$(var.ProductName)"
-  Language="1033"
-  Version="$(var.ProductVersion)"
-  Manufacturer="$(var.Manufacturer)"
-  UpgradeCode="$(var.UpgradeCode)"
+  <Product
+    Id="$(var.ProductCode)"
+    Name="$(var.ProductName)"
+    Language="1033"
+    Version="$(var.ProductVersion)"
+    Manufacturer="$(var.Manufacturer)"
+    UpgradeCode="$(var.UpgradeCode)"
 >
 
-  <!-- インストーラの情報 -->
-  <Package
-    InstallerVersion="200"
-    Compressed="yes"
+    <!-- インストーラの情報 -->
+    <Package
+      InstallerVersion="200"
+      Compressed="yes"
   />
 
-  <!-- エラー処理 -->
-  <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+    <!-- エラー処理 -->
+    <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 
-  <!-- MSI形式 -->
-  <Media Id="1" Cabinet="ImageInserter_ExcelAddin.cab" EmbedCab="yes" />
+    <!-- MSI形式 -->
+    <Media Id="1" Cabinet="ImageInserter_ExcelAddin.cab" EmbedCab="yes" />
 
-  <!-- UIRef
+    <!-- UIRef
   使用許諾のみを表示させてインストールする最小構成であれば「WixUI_Minimal」を指定
    - Id: インストールウィザードでどのような画面を表示するかを識別するID
   -->
-  <UIRef Id="WixUI_Minimal" />
+    <UIRef Id="WixUI_Minimal" />
 
-  <!-- WixVariable
+    <!-- WixVariable
   ウィザードのUIで使用するファイル（最小構成の場合3ファイル）を指定
    - Id: 固定
    - Value: ファイル名
   -->
-  <WixVariable Id="WixUILicenseRtf" Value="..\LICENSE.rtf" />
-  <WixVariable Id="WixUIDialogBmp" Value="..\images\dialog.png" />
-  <WixVariable Id="WixUIBannerBmp" Value="..\images\banner.png" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\LICENSE.rtf" />
+    <WixVariable Id="WixUIDialogBmp" Value="..\images\dialog.png" />
+    <WixVariable Id="WixUIBannerBmp" Value="..\images\banner.png" />
 
     <!-- Icon: 「プログラムの追加と削除」などに表示されるアプリケーションのアイコン
       Id: 適当な名前
@@ -67,87 +67,87 @@
     <Icon Id="FAVICON.ICO" SourceFile="..\images\favicon.ico" />
     <Property Id="ARPPRODUCTICON" Value="FAVICON.ICO" />
 
-  <!-- Directory Structure
+    <!-- Directory Structure
   インストール先のフォルダ構成を設定
    - 「Id="ProgramMenuDir"」に設定している「Name」: スタートメニューに配置されるフォルダのショートカット名
    -  Excelアドインの場合はスタートメニューに出す必要はない
   -->
-  <Directory Id="TARGETDIR" Name="SourceDir">
-    <!-- Program Files -->
-    <Directory Id="$(var.InstallFolder)">
-      <Directory Id="INSTALLFOLDER" Name="$(var.ProductName)">
-        <Directory Id="Dir_ja" Name="ja" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Program Files -->
+      <Directory Id="$(var.InstallFolder)">
+        <Directory Id="INSTALLFOLDER" Name="$(var.ProductName)">
+          <Directory Id="Dir_ja" Name="ja" />
+        </Directory>
       </Directory>
-    </Directory>
-    <!-- ProgramData -->
-    <!--
+      <!-- ProgramData -->
+      <!--
     <Directory Id="CommonAppDataFolder">
       <Directory Id="ImageInserterProgramData" Name="ImageInserter_ExcelAddin" />
     </Directory>
     -->
-    <!-- Start Menu -->
-    <!--
+      <!-- Start Menu -->
+      <!--
     <Directory Id="ProgramMenuFolder" Name="Programs">
       <Directory Id="AppStartMenuDir" Name="$(var.Manufacturer) $(var.ProductName)" />
     </Directory>
     -->
-    <!-- Desktop -->
-    <!--
+      <!-- Desktop -->
+      <!--
     <Directory Id="DesktopFolder" Name="Desktop" />
     -->
-  </Directory>
-    
-  <!-- Feature
+    </Directory>
+
+    <!-- Feature
   インストールするコンポーネントを選択
   -->
-  <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1">
-    <ComponentGroupRef Id="EssentialFiles" />
-    <ComponentRef Id="EssentialRegistries" />
-    <!--
+    <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1">
+      <ComponentGroupRef Id="EssentialFiles" />
+      <ComponentRef Id="EssentialRegistries" />
+      <!--
     <ComponentRef Id="EssentialShortcuts" />
     <ComponentRef Id="EssentialDesktopShortcut" />
     -->
-  </Feature>
+    </Feature>
 
-  <!-- Files
+    <!-- Files
   上で定義したフォルダに配置するファイルを設定
    - 1コンポーネントにつき1ファイル
   -->
-  <ComponentGroup Id="EssentialFiles">
-    <Component Id="Component_ImageInserter_vsto" Directory="INSTALLFOLDER">
-      <File Id="ImageInserter_vsto" KeyPath="yes" Source="$(var.AddinFiles)" Name="ImageInserter.vsto" />
-    </Component>
-    <Component Id="Component_ImageInserter_dll" Directory="INSTALLFOLDER">
-      <File Id="ImageInserter_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="ImageInserter.dll" />
-    </Component>
-    <Component Id="Component_ImageInserter_dll_manifest" Directory="INSTALLFOLDER">
-      <File Id="ImageInserter_dll_manifest" KeyPath="yes" Source="$(var.AddinFiles)" Name="ImageInserter.dll.manifest" />
-    </Component>
-    <Component Id="Component_Microsoft_Office_Tools_Common_v4_0_Utilities_dll" Directory="INSTALLFOLDER">
-      <File Id="Microsoft_Office_Tools_Common_v4_0_Utilities_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
-    </Component>
-    <Component Id="Component_ja" Directory="Dir_ja" Guid="6587439C-8D94-4EED-ADDD-6573305CBB2D">
-      <CreateFolder/>
-      <File Id="ImageInserter_resources_dll" KeyPath="yes" Source="$(var.AddinFiles)ja\" Name="ImageInserter.resources.dll" />
-    </Component>
-  </ComponentGroup>
+    <ComponentGroup Id="EssentialFiles">
+      <Component Id="Component_ImageInserter_vsto" Directory="INSTALLFOLDER">
+        <File Id="ImageInserter_vsto" KeyPath="yes" Source="$(var.AddinFiles)" Name="ImageInserter.vsto" />
+      </Component>
+      <Component Id="Component_ImageInserter_dll" Directory="INSTALLFOLDER">
+        <File Id="ImageInserter_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="ImageInserter.dll" />
+      </Component>
+      <Component Id="Component_ImageInserter_dll_manifest" Directory="INSTALLFOLDER">
+        <File Id="ImageInserter_dll_manifest" KeyPath="yes" Source="$(var.AddinFiles)" Name="ImageInserter.dll.manifest" />
+      </Component>
+      <Component Id="Component_Microsoft_Office_Tools_Common_v4_0_Utilities_dll" Directory="INSTALLFOLDER">
+        <File Id="Microsoft_Office_Tools_Common_v4_0_Utilities_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+      </Component>
+      <Component Id="Component_ja" Directory="Dir_ja" Guid="6587439C-8D94-4EED-ADDD-6573305CBB2D">
+        <CreateFolder/>
+        <File Id="ImageInserter_resources_dll" KeyPath="yes" Source="$(var.AddinFiles)ja\" Name="ImageInserter.resources.dll" />
+      </Component>
+    </ComponentGroup>
 
-  <!-- Shortcuts -->
+    <!-- Shortcuts -->
 
-  <!-- Registries
+    <!-- Registries
   レジストリ設定
    - ForceCreateOnInstall, ForceDeleteOnUninstall: yesでインストール（アンインストール）時にファイルを追加（削除）
    -->
-  <DirectoryRef  Id="TARGETDIR">
-    <Component Id="EssentialRegistries" Guid="4499E106-72A5-4BC7-A6D9-FFBC60BCEFA4">
-      <RegistryKey Root="HKCU" Key="Software\Microsoft\Office\Excel\Addins\ImageInserter" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
-        <RegistryValue Type="string" Name="FriendlyName" Value="ImageInserter"  />
-        <RegistryValue Type="string" Name="Description" Value="ImageInserter" />
-        <RegistryValue Type="string" Name="Manifest" Value="[INSTALLFOLDER]ImageInserter.vsto|vstolocal" />
-        <RegistryValue Type="integer" Name="LoadBehavior" Value="3" />
-      </RegistryKey>
-    </Component>
-  </DirectoryRef>
+    <DirectoryRef  Id="TARGETDIR">
+      <Component Id="EssentialRegistries" Guid="4499E106-72A5-4BC7-A6D9-FFBC60BCEFA4">
+        <RegistryKey Root="HKCU" Key="Software\Microsoft\Office\Excel\Addins\ImageInserter" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
+          <RegistryValue Type="string" Name="FriendlyName" Value="ImageInserter"  />
+          <RegistryValue Type="string" Name="Description" Value="ImageInserter" />
+          <RegistryValue Type="string" Name="Manifest" Value="[INSTALLFOLDER]ImageInserter.vsto|vstolocal" />
+          <RegistryValue Type="integer" Name="LoadBehavior" Value="3" />
+        </RegistryKey>
+      </Component>
+    </DirectoryRef>
 
-	</Product>
+  </Product>
 </Wix>
