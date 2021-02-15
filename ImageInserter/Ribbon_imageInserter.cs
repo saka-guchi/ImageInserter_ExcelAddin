@@ -491,6 +491,7 @@ namespace ImageInserter
                 foreach (Excel.Range cell in cells)
                 {
                     // Stop decision
+                    Application.DoEvents();
                     if (waitDlg.IsAborting == true)
                     {
                         break;
@@ -562,6 +563,7 @@ namespace ImageInserter
                 foreach (string imagePath in imgList)
                 {
                     // Stop decision
+                    Application.DoEvents();
                     if (waitDlg.IsAborting == true)
                     {
                         break;
@@ -612,6 +614,7 @@ namespace ImageInserter
                 foreach (Excel.Shape shape in sheet.Shapes)
                 {
                     // Stop decision
+                    Application.DoEvents();
                     if (waitDlg.IsAborting == true)
                     {
                         break;
@@ -621,7 +624,7 @@ namespace ImageInserter
                     waitDialogDisplay(waitDlg, count, countMax);
 
                     // Processing
-                    deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, false);
+                    deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, false, waitDlg);
 
                     count++;
                 }
@@ -639,7 +642,10 @@ namespace ImageInserter
             );
         }
 
-        private void deleteImage(Excel.Worksheet sheet, Excel.Shape shape, Excel.Range selectedCells, bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep, bool isAll)
+        private void deleteImage(
+            Excel.Worksheet sheet, Excel.Shape shape, Excel.Range selectedCells,
+            bool checkCell, bool checkMemo, bool checkCellKeep, bool checkMemoKeep, bool isAll, WaitDialog waitDlg
+            )
         {
             // Target: Cell
             if (checkCell)
@@ -687,6 +693,13 @@ namespace ImageInserter
                     // Get cells containing comment
                     foreach (Excel.Range cell in selectedCells)
                     {
+                        // Stop decision
+                        Application.DoEvents();
+                        if (waitDlg.IsAborting == true)
+                        {
+                            break;
+                        }
+
                         if (cell.Comment == null)
                         {
                             continue;
@@ -727,6 +740,7 @@ namespace ImageInserter
                 foreach (Excel.Shape shape in sheet.Shapes)
                 {
                     // Stop decision
+                    Application.DoEvents();
                     if (waitDlg.IsAborting == true)
                     {
                         break;
@@ -736,7 +750,7 @@ namespace ImageInserter
                     waitDialogDisplay(waitDlg, count, countMax);
 
                     // Processing
-                    deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, true);
+                    deleteImage(sheet, shape, cells, checkCell, checkMemo, checkCellKeep, checkMemoKeep, true, waitDlg);
 
                     count++;
                 }
