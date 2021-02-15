@@ -35,13 +35,6 @@ namespace WaitDialogForm
             this.ProgressMin = 0;  // 処理件数の最小値（0件から開始）
             this.ProgressStep = 1;  // 何件ごとにメーターを進めるか
             this.ProgressValue = 0;  // 最初の件数
-
-            System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
-            try
-            {
-                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
-            }
-            catch (System.Exception) {; }
         }
 
         /// <summary>
@@ -144,6 +137,13 @@ namespace WaitDialogForm
 
             base.Show();
             this.bShowing = true;
+
+            try
+            {
+                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+            }
+            catch (System.Exception) {; }
         }
 
         /// <summary>
@@ -211,6 +211,18 @@ namespace WaitDialogForm
             get
             {
                 return this.bAborting;
+            }
+        }
+
+        /// <summary>
+        /// UIが表示されているかどうかを示す値を取得する。
+        /// 表示しているた場合はtrue。それ以外はfalse。
+        /// </summary>
+        public bool IsShowing
+        {
+            get
+            {
+                return this.bShowing;
             }
         }
 

@@ -216,6 +216,20 @@ namespace ImageInserter
                 return;
             }
 
+            if (cells.CountLarge > 1000)
+            {
+                DialogResult result = MessageBox.Show(
+                    Properties.MessageBox.WarningManyCells,
+                    Properties.MessageBox.WarningManyCellsTitle,
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             // Disable UI
             switchControlState(false);
 
@@ -261,6 +275,20 @@ namespace ImageInserter
             string[] exts = { ".jpg", ".jpeg", ".bmp", ".png", ".gif" };
             List<string> imgList = GetFilesInFolder(folderPath, exts);
 
+            if (imgList.Count > 1000)
+            {
+                DialogResult result = MessageBox.Show(
+                    Properties.MessageBox.WarningManyFiles,
+                    Properties.MessageBox.WarningManyFilesTitle,
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             // Disable UI
             switchControlState(false);
 
@@ -301,6 +329,20 @@ namespace ImageInserter
             if (cells == null)
             {
                 return;
+            }
+
+            if (cells.CountLarge > 1000)
+            {
+                DialogResult result = MessageBox.Show(
+                    Properties.MessageBox.WarningManyCells,
+                    Properties.MessageBox.WarningManyCellsTitle,
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
             }
 
             // Disable UI
@@ -374,6 +416,20 @@ namespace ImageInserter
             if (cells == null)
             {
                 return;
+            }
+
+            if (cells.CountLarge > 1000)
+            {
+                DialogResult result = MessageBox.Show(
+                    Properties.MessageBox.WarningManyCells,
+                    Properties.MessageBox.WarningManyCellsTitle,
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
             }
 
             // Disable UI
@@ -523,8 +579,12 @@ namespace ImageInserter
                 switchControlState(true);
 
                 // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
-                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
-                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                try
+                {
+                    System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                    Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                }
+                catch (Exception) {; }
             }
             );
         }
@@ -591,8 +651,12 @@ namespace ImageInserter
                 switchControlState(true);
 
                 // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
-                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
-                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                try
+                {
+                    System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                    Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                }
+                catch (Exception) {; }
             }
             );
         }
@@ -636,8 +700,12 @@ namespace ImageInserter
                 switchControlState(true);
 
                 // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
-                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
-                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                try
+                {
+                    System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                    Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                }
+                catch (Exception) {; }
             }
             );
         }
@@ -762,8 +830,12 @@ namespace ImageInserter
                 switchControlState(true);
 
                 // Bring the window to the front using your own process. w/ Microsoft.VisualBasic.dll
-                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
-                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                try
+                {
+                    System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                    Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+                }
+                catch (Exception) {; }
             }
             );
 
