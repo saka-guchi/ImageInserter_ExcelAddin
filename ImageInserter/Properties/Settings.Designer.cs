@@ -25,30 +25,6 @@ namespace ImageInserter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool checkBox_cell {
-            get {
-                return ((bool)(this["checkBox_cell"]));
-            }
-            set {
-                this["checkBox_cell"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool checkBox_memo {
-            get {
-                return ((bool)(this["checkBox_memo"]));
-            }
-            set {
-                this["checkBox_memo"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool checkBox_setSize {
             get {
@@ -224,6 +200,30 @@ namespace ImageInserter.Properties {
             }
             set {
                 this["IsUpgrated"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool checkBox_rotate {
+            get {
+                return ((bool)(this["checkBox_rotate"]));
+            }
+            set {
+                this["checkBox_rotate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int dropDown_target {
+            get {
+                return ((int)(this["dropDown_target"]));
+            }
+            set {
+                this["dropDown_target"] = value;
             }
         }
     }

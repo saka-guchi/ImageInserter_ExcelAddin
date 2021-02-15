@@ -45,8 +45,8 @@ namespace ImageInserter
 
             try
             {
-                checkBox_cell.Checked = setting.checkBox_cell;
-                checkBox_memo.Checked = setting.checkBox_memo;
+                dropDown_target.SelectedItemIndex = setting.dropDown_target;
+                checkBox_rotate.Checked = setting.checkBox_rotate;
                 checkBox_setSize.Checked = setting.checkBox_setSize;
                 editBox_setW.Text = $"{setting.editBox_setW}";
                 editBox_setH.Text = $"{setting.editBox_setH}";
@@ -54,7 +54,7 @@ namespace ImageInserter
                 dropDown_writeCell.SelectedItemIndex = setting.dropDown_writeCell;
                 dropDown_deleteCell.SelectedItemIndex = setting.dropDown_deleteCell;
                 dropDown_direction.SelectedItemIndex = setting.dropDown_direction;
-                checkBox_cell.Checked = setting.checkBox_maxSize;
+                checkBox_maxSize.Checked = setting.checkBox_maxSize;
                 editBox_maxW.Text = $"{setting.editBox_maxW:D}";
                 editBox_maxH.Text = $"{setting.editBox_maxH:D}";
                 dropDown_writeMemo.SelectedItemIndex = setting.dropDown_writeMemo;
@@ -102,8 +102,8 @@ namespace ImageInserter
         {
             Properties.Settings setting = Properties.Settings.Default;
 
-            setting.checkBox_cell = checkBox_cell.Checked;
-            setting.checkBox_memo = checkBox_memo.Checked;
+            setting.dropDown_target = dropDown_target.SelectedItemIndex;
+            setting.checkBox_rotate = checkBox_rotate.Checked;
             setting.checkBox_setSize = checkBox_setSize.Checked;
             setting.editBox_setW = int.Parse(editBox_setW.Text);
             setting.editBox_setH = int.Parse(editBox_setH.Text);
@@ -111,7 +111,7 @@ namespace ImageInserter
             setting.dropDown_writeCell = dropDown_writeCell.SelectedItemIndex;
             setting.dropDown_deleteCell = dropDown_deleteCell.SelectedItemIndex;
             setting.dropDown_direction = dropDown_direction.SelectedItemIndex;
-            setting.checkBox_maxSize = checkBox_cell.Checked;
+            setting.checkBox_maxSize = checkBox_maxSize.Checked;
             setting.editBox_maxW = int.Parse(editBox_maxW.Text);
             setting.editBox_maxH = int.Parse(editBox_maxH.Text);
             setting.dropDown_writeMemo = dropDown_writeMemo.SelectedItemIndex;
@@ -314,8 +314,13 @@ namespace ImageInserter
             {
                 sheet = getActiveSheet();
                 cells = getSelection();
-                checkCell = checkBox_cell.Checked;
-                checkMemo = checkBox_memo.Checked;
+                switch (dropDown_target.SelectedItemIndex)
+                {
+                    case 0: checkCell = true; break; // Cell only.
+                    case 1: checkMemo = true; break; // Memo only.
+                    case 2: checkCell = true; checkMemo = true; break; // Cell & Memo.
+                    default: break;
+                }
                 checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
                 checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
             }
@@ -401,8 +406,13 @@ namespace ImageInserter
                 {
                     cells = cellsConstants;
                 }
-                checkCell = checkBox_cell.Checked;
-                checkMemo = checkBox_memo.Checked;
+                switch (dropDown_target.SelectedItemIndex)
+                {
+                    case 0: checkCell = true; break; // Cell only.
+                    case 1: checkMemo = true; break; // Memo only.
+                    case 2: checkCell = true; checkMemo = true; break; // Cell & Memo.
+                    default: break;
+                }
                 checkCellKeep = (dropDown_deleteCell.SelectedItem.Tag.ToString() == "keep");
                 checkMemoKeep = (dropDown_deleteMemo.SelectedItem.Tag.ToString() == "keep");
             }
@@ -841,14 +851,22 @@ namespace ImageInserter
 
         }
 
-        private string preloadImage(ref string imagePath, ref float imageW, ref float imageH)
+        // Temporarily save the image. (two purposes)
+        // 1. Get image size.
+        // 2. Comment.Shape.Fil.UserPicture() cannot rotate images in comments
+        private bool preloadImage(ref string imagePath, ref float imageW, ref float imageH, bool isRotate)
         {
-            // Read image file to get size and rotation
+            bool isTemporary = false;
+
+            // Get size.
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imagePath);
-            System.Drawing.RotateFlipType rotation = System.Drawing.RotateFlipType.RotateNoneFlipNone;
             imageW = bmp.Width;
             imageH = bmp.Height;
             print($"Image: Path = {imagePath}, (w, h) = ({imageW:F2}, {imageH:F2})");
+
+            // Get rotation information.
+            string tempPath = "";
+            System.Drawing.RotateFlipType rotation = System.Drawing.RotateFlipType.RotateNoneFlipNone;
             try
             {
                 foreach (System.Drawing.Imaging.PropertyItem item in bmp.PropertyItems)
@@ -885,19 +903,23 @@ namespace ImageInserter
 
             // Comment.Shape.Fil.UserPicture() is displayed without rotation.
             // Create a rotated image and display it instead
-            string tempPath = "";
             if (rotation != System.Drawing.RotateFlipType.RotateNoneFlipNone)
             {
                 System.Drawing.Bitmap tempBmp = null;
+                if (!isRotate)
+                {
+                    rotation = System.Drawing.RotateFlipType.Rotate180FlipNone;
+                }
                 try
                 {
+                    tempPath = System.IO.Path.GetTempFileName();
                     tempBmp = (System.Drawing.Bitmap)bmp.Clone();
                     tempBmp.RotateFlip(rotation);
-                    tempPath = System.IO.Path.GetTempFileName();
                     tempBmp.Save(tempPath);
                     imageW = tempBmp.Width;
                     imageH = tempBmp.Height;
                     imagePath = tempPath;
+                    isTemporary = true;
                     print($"Rotated image: Path = {tempPath}, (w, h) = ({imageW:F2}, {imageH:F2})");
                 }
                 catch (Exception ex)
@@ -908,7 +930,7 @@ namespace ImageInserter
             }
             bmp.Dispose();
 
-            return tempPath;
+            return isTemporary;
         }
 
         private void pasteImage(Excel.Worksheet sheet, Excel.Range cell, string imageOrgPath)
@@ -916,6 +938,7 @@ namespace ImageInserter
             // Get UI params
             bool pasteCell = false;
             bool pasteMemo = false;
+            bool isRotate = false;
             bool setMaxSize = false;
             int maxW = 0;
             int maxH = 0;
@@ -927,8 +950,14 @@ namespace ImageInserter
             string comment = "";
             try
             {
-                pasteCell = checkBox_cell.Checked;
-                pasteMemo = checkBox_memo.Checked;
+                switch (dropDown_target.SelectedItemIndex)
+                {
+                    case 0: pasteCell = true; break; // Cell only.
+                    case 1: pasteMemo = true; break; // Memo only.
+                    case 2: pasteCell = true; pasteMemo = true; break; // Cell & Memo.
+                    default: break;
+                }
+                isRotate = checkBox_rotate.Checked;
                 setMaxSize = checkBox_maxSize.Checked;
                 if (setMaxSize)
                 {
@@ -949,12 +978,12 @@ namespace ImageInserter
             }
 
             // imageOriginalPath: Path to the original picture
-            // imagePath: Path to the load picture (original or temporary)
             // tempPath: Path to the rotated picture
+            // imagePath: Path to the load picture (original or temporary)
             float imageW = 0f;
             float imageH = 0f;
             string imagePath = imageOrgPath;
-            string tempPath = preloadImage(ref imagePath, ref imageW, ref imageH);
+            bool isTemporary = preloadImage(ref imagePath, ref imageW, ref imageH, isRotate);
 
             // Paste image on Cell
             if (pasteCell)
@@ -976,9 +1005,9 @@ namespace ImageInserter
             }
 
             // Delete temporary file.
-            if (tempPath != "")
+            if (isTemporary)
             {
-                System.IO.File.Delete(tempPath);
+                System.IO.File.Delete(imagePath);
             }
         }
 

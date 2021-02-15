@@ -53,6 +53,9 @@ namespace ImageInserter
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl15 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl16 = this.Factory.CreateRibbonDropDownItem();
             Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl17 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl18 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl19 = this.Factory.CreateRibbonDropDownItem();
+            Microsoft.Office.Tools.Ribbon.RibbonDropDownItem ribbonDropDownItemImpl20 = this.Factory.CreateRibbonDropDownItem();
             this.tab_imageInserter = this.Factory.CreateRibbonTab();
             this.group_control = this.Factory.CreateRibbonGroup();
             this.splitButton_insert = this.Factory.CreateRibbonSplitButton();
@@ -63,9 +66,8 @@ namespace ImageInserter
             this.button_deleteSelection = this.Factory.CreateRibbonButton();
             this.button_deleteAll = this.Factory.CreateRibbonButton();
             this.group_setting = this.Factory.CreateRibbonGroup();
-            this.label1 = this.Factory.CreateRibbonLabel();
-            this.checkBox_cell = this.Factory.CreateRibbonCheckBox();
-            this.checkBox_memo = this.Factory.CreateRibbonCheckBox();
+            this.dropDown_target = this.Factory.CreateRibbonDropDown();
+            this.checkBox_rotate = this.Factory.CreateRibbonCheckBox();
             this.group_cell = this.Factory.CreateRibbonGroup();
             this.checkBox_setSize = this.Factory.CreateRibbonCheckBox();
             this.editBox_setW = this.Factory.CreateRibbonEditBox();
@@ -109,10 +111,10 @@ namespace ImageInserter
             // splitButton_insert
             // 
             this.splitButton_insert.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
             this.splitButton_insert.Items.Add(this.button_insertFile);
             this.splitButton_insert.Items.Add(this.button_insertLink);
             this.splitButton_insert.Items.Add(this.button_insertFolder);
-            resources.ApplyResources(this.splitButton_insert, "splitButton_insert");
             this.splitButton_insert.Name = "splitButton_insert";
             this.splitButton_insert.OfficeImageId = "RestoreImageSize";
             this.splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_insertFile_Click);
@@ -144,9 +146,9 @@ namespace ImageInserter
             // splitButton_delete
             // 
             this.splitButton_delete.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            resources.ApplyResources(this.splitButton_delete, "splitButton_delete");
             this.splitButton_delete.Items.Add(this.button_deleteSelection);
             this.splitButton_delete.Items.Add(this.button_deleteAll);
-            resources.ApplyResources(this.splitButton_delete, "splitButton_delete");
             this.splitButton_delete.Name = "splitButton_delete";
             this.splitButton_delete.OfficeImageId = "SketchpadToolDeleteBackground";
             this.splitButton_delete.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_deleteSelection_Click);
@@ -169,30 +171,35 @@ namespace ImageInserter
             // 
             // group_setting
             // 
-            this.group_setting.Items.Add(this.label1);
-            this.group_setting.Items.Add(this.checkBox_cell);
-            this.group_setting.Items.Add(this.checkBox_memo);
+            this.group_setting.Items.Add(this.dropDown_target);
+            this.group_setting.Items.Add(this.checkBox_rotate);
             resources.ApplyResources(this.group_setting, "group_setting");
             this.group_setting.Name = "group_setting";
             // 
-            // label1
+            // dropDown_target
             // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
+            resources.ApplyResources(this.dropDown_target, "dropDown_target");
+            resources.ApplyResources(ribbonDropDownItemImpl1, "ribbonDropDownItemImpl1");
+            ribbonDropDownItemImpl1.OfficeImageId = "SelectCell";
+            ribbonDropDownItemImpl1.Tag = "cell";
+            resources.ApplyResources(ribbonDropDownItemImpl2, "ribbonDropDownItemImpl2");
+            ribbonDropDownItemImpl2.OfficeImageId = "ReviewShowAllComments";
+            ribbonDropDownItemImpl2.Tag = "memo";
+            resources.ApplyResources(ribbonDropDownItemImpl3, "ribbonDropDownItemImpl3");
+            ribbonDropDownItemImpl3.OfficeImageId = "ConditionalFormattingHighlightCellsMenu";
+            ribbonDropDownItemImpl3.Tag = "both";
+            this.dropDown_target.Items.Add(ribbonDropDownItemImpl1);
+            this.dropDown_target.Items.Add(ribbonDropDownItemImpl2);
+            this.dropDown_target.Items.Add(ribbonDropDownItemImpl3);
+            this.dropDown_target.Name = "dropDown_target";
+            this.dropDown_target.OfficeImageId = "InsertIButton";
+            this.dropDown_target.ShowImage = true;
             // 
-            // checkBox_cell
+            // checkBox_rotate
             // 
-            this.checkBox_cell.Checked = true;
-            resources.ApplyResources(this.checkBox_cell, "checkBox_cell");
-            this.checkBox_cell.Name = "checkBox_cell";
-            this.checkBox_cell.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox_cell_Click);
-            // 
-            // checkBox_memo
-            // 
-            this.checkBox_memo.Checked = true;
-            resources.ApplyResources(this.checkBox_memo, "checkBox_memo");
-            this.checkBox_memo.Name = "checkBox_memo";
-            this.checkBox_memo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.checkBox_memo_Click);
+            this.checkBox_rotate.Checked = true;
+            resources.ApplyResources(this.checkBox_rotate, "checkBox_rotate");
+            this.checkBox_rotate.Name = "checkBox_rotate";
             // 
             // group_cell
             // 
@@ -230,19 +237,19 @@ namespace ImageInserter
             // 
             // dropDown_shrink
             // 
-            resources.ApplyResources(ribbonDropDownItemImpl1, "ribbonDropDownItemImpl1");
-            ribbonDropDownItemImpl1.OfficeImageId = "BackgroundImageGallery";
-            ribbonDropDownItemImpl1.Tag = "fit";
-            resources.ApplyResources(ribbonDropDownItemImpl2, "ribbonDropDownItemImpl2");
-            ribbonDropDownItemImpl2.OfficeImageId = "CellHeight";
-            ribbonDropDownItemImpl2.Tag = "fitW";
-            resources.ApplyResources(ribbonDropDownItemImpl3, "ribbonDropDownItemImpl3");
-            ribbonDropDownItemImpl3.OfficeImageId = "GroupTableCellFormat";
-            ribbonDropDownItemImpl3.Tag = "fitH";
-            this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl1);
-            this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl2);
-            this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl3);
             resources.ApplyResources(this.dropDown_shrink, "dropDown_shrink");
+            resources.ApplyResources(ribbonDropDownItemImpl4, "ribbonDropDownItemImpl4");
+            ribbonDropDownItemImpl4.OfficeImageId = "BackgroundImageGallery";
+            ribbonDropDownItemImpl4.Tag = "fit";
+            resources.ApplyResources(ribbonDropDownItemImpl5, "ribbonDropDownItemImpl5");
+            ribbonDropDownItemImpl5.OfficeImageId = "CellHeight";
+            ribbonDropDownItemImpl5.Tag = "fitW";
+            resources.ApplyResources(ribbonDropDownItemImpl6, "ribbonDropDownItemImpl6");
+            ribbonDropDownItemImpl6.OfficeImageId = "GroupTableCellFormat";
+            ribbonDropDownItemImpl6.Tag = "fitH";
+            this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl4);
+            this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl5);
+            this.dropDown_shrink.Items.Add(ribbonDropDownItemImpl6);
             this.dropDown_shrink.Name = "dropDown_shrink";
             this.dropDown_shrink.OfficeImageId = "DiagramResizeClassic";
             this.dropDown_shrink.ShowImage = true;
@@ -250,27 +257,27 @@ namespace ImageInserter
             // 
             // dropDown_writeCell
             // 
-            resources.ApplyResources(ribbonDropDownItemImpl4, "ribbonDropDownItemImpl4");
-            ribbonDropDownItemImpl4.OfficeImageId = "CancelRequest";
-            ribbonDropDownItemImpl4.Tag = "none";
-            resources.ApplyResources(ribbonDropDownItemImpl5, "ribbonDropDownItemImpl5");
-            ribbonDropDownItemImpl5.OfficeImageId = "FileNew";
-            ribbonDropDownItemImpl5.Tag = "name";
-            resources.ApplyResources(ribbonDropDownItemImpl6, "ribbonDropDownItemImpl6");
-            ribbonDropDownItemImpl6.OfficeImageId = "FileNew";
-            ribbonDropDownItemImpl6.Tag = "nameLink";
+            resources.ApplyResources(this.dropDown_writeCell, "dropDown_writeCell");
             resources.ApplyResources(ribbonDropDownItemImpl7, "ribbonDropDownItemImpl7");
-            ribbonDropDownItemImpl7.OfficeImageId = "GroupImapFolderOptions";
-            ribbonDropDownItemImpl7.Tag = "path";
+            ribbonDropDownItemImpl7.OfficeImageId = "CancelRequest";
+            ribbonDropDownItemImpl7.Tag = "none";
             resources.ApplyResources(ribbonDropDownItemImpl8, "ribbonDropDownItemImpl8");
-            ribbonDropDownItemImpl8.OfficeImageId = "GroupImapFolderOptions";
-            ribbonDropDownItemImpl8.Tag = "pathLink";
-            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl4);
-            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl5);
-            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl6);
+            ribbonDropDownItemImpl8.OfficeImageId = "FileNew";
+            ribbonDropDownItemImpl8.Tag = "name";
+            resources.ApplyResources(ribbonDropDownItemImpl9, "ribbonDropDownItemImpl9");
+            ribbonDropDownItemImpl9.OfficeImageId = "FileNew";
+            ribbonDropDownItemImpl9.Tag = "nameLink";
+            resources.ApplyResources(ribbonDropDownItemImpl10, "ribbonDropDownItemImpl10");
+            ribbonDropDownItemImpl10.OfficeImageId = "GroupImapFolderOptions";
+            ribbonDropDownItemImpl10.Tag = "path";
+            resources.ApplyResources(ribbonDropDownItemImpl11, "ribbonDropDownItemImpl11");
+            ribbonDropDownItemImpl11.OfficeImageId = "GroupImapFolderOptions";
+            ribbonDropDownItemImpl11.Tag = "pathLink";
             this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl7);
             this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl8);
-            resources.ApplyResources(this.dropDown_writeCell, "dropDown_writeCell");
+            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl9);
+            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl10);
+            this.dropDown_writeCell.Items.Add(ribbonDropDownItemImpl11);
             this.dropDown_writeCell.Name = "dropDown_writeCell";
             this.dropDown_writeCell.OfficeImageId = "IconPencilTool";
             this.dropDown_writeCell.ShowImage = true;
@@ -278,15 +285,15 @@ namespace ImageInserter
             // 
             // dropDown_deleteCell
             // 
-            resources.ApplyResources(ribbonDropDownItemImpl9, "ribbonDropDownItemImpl9");
-            ribbonDropDownItemImpl9.OfficeImageId = "ReviewDeleteAllMarkupOnSlide";
-            ribbonDropDownItemImpl9.Tag = "erase";
-            resources.ApplyResources(ribbonDropDownItemImpl10, "ribbonDropDownItemImpl10");
-            ribbonDropDownItemImpl10.OfficeImageId = "OmsDelete";
-            ribbonDropDownItemImpl10.Tag = "keep";
-            this.dropDown_deleteCell.Items.Add(ribbonDropDownItemImpl9);
-            this.dropDown_deleteCell.Items.Add(ribbonDropDownItemImpl10);
             resources.ApplyResources(this.dropDown_deleteCell, "dropDown_deleteCell");
+            resources.ApplyResources(ribbonDropDownItemImpl12, "ribbonDropDownItemImpl12");
+            ribbonDropDownItemImpl12.OfficeImageId = "ReviewDeleteAllMarkupOnSlide";
+            ribbonDropDownItemImpl12.Tag = "erase";
+            resources.ApplyResources(ribbonDropDownItemImpl13, "ribbonDropDownItemImpl13");
+            ribbonDropDownItemImpl13.OfficeImageId = "OmsDelete";
+            ribbonDropDownItemImpl13.Tag = "keep";
+            this.dropDown_deleteCell.Items.Add(ribbonDropDownItemImpl12);
+            this.dropDown_deleteCell.Items.Add(ribbonDropDownItemImpl13);
             this.dropDown_deleteCell.Name = "dropDown_deleteCell";
             this.dropDown_deleteCell.OfficeImageId = "EraserMode";
             this.dropDown_deleteCell.ShowImage = true;
@@ -294,6 +301,7 @@ namespace ImageInserter
             // 
             // separator2
             // 
+            resources.ApplyResources(this.separator2, "separator2");
             this.separator2.Name = "separator2";
             // 
             // label2
@@ -303,15 +311,15 @@ namespace ImageInserter
             // 
             // dropDown_direction
             // 
-            resources.ApplyResources(ribbonDropDownItemImpl11, "ribbonDropDownItemImpl11");
-            ribbonDropDownItemImpl11.OfficeImageId = "ChartNavDrillDown";
-            ribbonDropDownItemImpl11.Tag = "under";
-            resources.ApplyResources(ribbonDropDownItemImpl12, "ribbonDropDownItemImpl12");
-            ribbonDropDownItemImpl12.OfficeImageId = "OrgChartReportMoveRight";
-            ribbonDropDownItemImpl12.Tag = "right";
-            this.dropDown_direction.Items.Add(ribbonDropDownItemImpl11);
-            this.dropDown_direction.Items.Add(ribbonDropDownItemImpl12);
             resources.ApplyResources(this.dropDown_direction, "dropDown_direction");
+            resources.ApplyResources(ribbonDropDownItemImpl14, "ribbonDropDownItemImpl14");
+            ribbonDropDownItemImpl14.OfficeImageId = "ChartNavDrillDown";
+            ribbonDropDownItemImpl14.Tag = "under";
+            resources.ApplyResources(ribbonDropDownItemImpl15, "ribbonDropDownItemImpl15");
+            ribbonDropDownItemImpl15.OfficeImageId = "OrgChartReportMoveRight";
+            ribbonDropDownItemImpl15.Tag = "right";
+            this.dropDown_direction.Items.Add(ribbonDropDownItemImpl14);
+            this.dropDown_direction.Items.Add(ribbonDropDownItemImpl15);
             this.dropDown_direction.Name = "dropDown_direction";
             this.dropDown_direction.SelectionChanged += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.dropDown_direction_SelectionChanged);
             // 
@@ -348,19 +356,19 @@ namespace ImageInserter
             // 
             // dropDown_writeMemo
             // 
-            resources.ApplyResources(ribbonDropDownItemImpl13, "ribbonDropDownItemImpl13");
-            ribbonDropDownItemImpl13.OfficeImageId = "CancelRequest";
-            ribbonDropDownItemImpl13.Tag = "none";
-            resources.ApplyResources(ribbonDropDownItemImpl14, "ribbonDropDownItemImpl14");
-            ribbonDropDownItemImpl14.OfficeImageId = "FileNew";
-            ribbonDropDownItemImpl14.Tag = "name";
-            resources.ApplyResources(ribbonDropDownItemImpl15, "ribbonDropDownItemImpl15");
-            ribbonDropDownItemImpl15.OfficeImageId = "GroupImapFolderOptions";
-            ribbonDropDownItemImpl15.Tag = "path";
-            this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl13);
-            this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl14);
-            this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl15);
             resources.ApplyResources(this.dropDown_writeMemo, "dropDown_writeMemo");
+            resources.ApplyResources(ribbonDropDownItemImpl16, "ribbonDropDownItemImpl16");
+            ribbonDropDownItemImpl16.OfficeImageId = "CancelRequest";
+            ribbonDropDownItemImpl16.Tag = "none";
+            resources.ApplyResources(ribbonDropDownItemImpl17, "ribbonDropDownItemImpl17");
+            ribbonDropDownItemImpl17.OfficeImageId = "FileNew";
+            ribbonDropDownItemImpl17.Tag = "name";
+            resources.ApplyResources(ribbonDropDownItemImpl18, "ribbonDropDownItemImpl18");
+            ribbonDropDownItemImpl18.OfficeImageId = "GroupImapFolderOptions";
+            ribbonDropDownItemImpl18.Tag = "path";
+            this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl16);
+            this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl17);
+            this.dropDown_writeMemo.Items.Add(ribbonDropDownItemImpl18);
             this.dropDown_writeMemo.Name = "dropDown_writeMemo";
             this.dropDown_writeMemo.OfficeImageId = "IconPencilTool";
             this.dropDown_writeMemo.ShowImage = true;
@@ -368,15 +376,15 @@ namespace ImageInserter
             // 
             // dropDown_deleteMemo
             // 
-            resources.ApplyResources(ribbonDropDownItemImpl16, "ribbonDropDownItemImpl16");
-            ribbonDropDownItemImpl16.OfficeImageId = "ReviewDeleteAllMarkupOnSlide";
-            ribbonDropDownItemImpl16.Tag = "erase";
-            resources.ApplyResources(ribbonDropDownItemImpl17, "ribbonDropDownItemImpl17");
-            ribbonDropDownItemImpl17.OfficeImageId = "OmsDelete";
-            ribbonDropDownItemImpl17.Tag = "keep";
-            this.dropDown_deleteMemo.Items.Add(ribbonDropDownItemImpl16);
-            this.dropDown_deleteMemo.Items.Add(ribbonDropDownItemImpl17);
             resources.ApplyResources(this.dropDown_deleteMemo, "dropDown_deleteMemo");
+            resources.ApplyResources(ribbonDropDownItemImpl19, "ribbonDropDownItemImpl19");
+            ribbonDropDownItemImpl19.OfficeImageId = "ReviewDeleteAllMarkupOnSlide";
+            ribbonDropDownItemImpl19.Tag = "erase";
+            resources.ApplyResources(ribbonDropDownItemImpl20, "ribbonDropDownItemImpl20");
+            ribbonDropDownItemImpl20.OfficeImageId = "OmsDelete";
+            ribbonDropDownItemImpl20.Tag = "keep";
+            this.dropDown_deleteMemo.Items.Add(ribbonDropDownItemImpl19);
+            this.dropDown_deleteMemo.Items.Add(ribbonDropDownItemImpl20);
             this.dropDown_deleteMemo.Name = "dropDown_deleteMemo";
             this.dropDown_deleteMemo.OfficeImageId = "EraserMode";
             this.dropDown_deleteMemo.ShowImage = true;
@@ -387,6 +395,7 @@ namespace ImageInserter
             this.Name = "Ribbon_imageInserter";
             this.RibbonType = "Microsoft.Excel.Workbook";
             this.Tabs.Add(this.tab_imageInserter);
+            resources.ApplyResources(this, "$this");
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon_imageInserter_Load);
             this.tab_imageInserter.ResumeLayout(false);
             this.tab_imageInserter.PerformLayout();
@@ -413,13 +422,10 @@ namespace ImageInserter
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox editBox_maxW;
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox editBox_maxH;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDown_direction;
-        internal Microsoft.Office.Tools.Ribbon.RibbonLabel label1;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel label2;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group_cell;
         internal Microsoft.Office.Tools.Ribbon.RibbonSplitButton splitButton_insert;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_insertFolder;
-        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBox_cell;
-        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBox_memo;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group_control;
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox editBox_setW;
@@ -433,6 +439,8 @@ namespace ImageInserter
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_deleteSelection;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDown_deleteMemo;
         internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDown_deleteCell;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown dropDown_target;
+        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBox_rotate;
     }
 
     partial class ThisRibbonCollection
