@@ -19,7 +19,7 @@ namespace ImageInserter
             [System.Runtime.CompilerServices.CallerLineNumber] int line = 0
             )
         {
-            System.Diagnostics.Trace.WriteLine($"{System.IO.Path.GetFileName(path), 15} (L:{line, 4}) | {function, -20} | {message}");
+            System.Diagnostics.Trace.WriteLine($"{System.IO.Path.GetFileName(path),15} (L:{line,4}) | {function,-20} | {message}");
         }
         private void Ribbon_imageInserter_Load(object sender, RibbonUIEventArgs e)
         {
@@ -60,7 +60,7 @@ namespace ImageInserter
                 dropDown_writeMemo.SelectedItemIndex = setting.dropDown_writeMemo;
                 dropDown_deleteMemo.SelectedItemIndex = setting.dropDown_deleteMemo;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 print($"<<< ERROR >>>: {ex}");
             }
@@ -141,7 +141,7 @@ namespace ImageInserter
                 btnDst.Tag = btnSrc.Tag;
                 btnDst.OfficeImageId = btnSrc.OfficeImageId;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 print($"<<< ERROR >>>: {ex}");
             }
@@ -474,7 +474,7 @@ namespace ImageInserter
             switchControlState(true);
         }
 
-        private async void pasteLinkedImages(Excel.Worksheet sheet, Excel. Range cells)
+        private async void pasteLinkedImages(Excel.Worksheet sheet, Excel.Range cells)
         {
             int countMax = cells.Count;
             await System.Threading.Tasks.Task.Run(() =>
@@ -651,14 +651,14 @@ namespace ImageInserter
 
                     // Erase the contents of the cell
                     bool isValueClear = false;
-                    if ( isAll )
+                    if (isAll)
                     {
                         isValueClear = true;
                     }
                     else
                     {
                         // Check the intersection of Shape and Selected cells
-                        if(sheet.Application.Intersect(shapeRange, selectedCells) != null)
+                        if (sheet.Application.Intersect(shapeRange, selectedCells) != null)
                         {
                             isValueClear = true;
                         }
@@ -856,7 +856,7 @@ namespace ImageInserter
                 writeInfoMemo = dropDown_writeMemo.SelectedItem.Tag.ToString();
                 comment = (cell.Comment != null) ? cell.Comment.Text() : "";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 print($"<<< ERROR >>>: {ex}");
                 return;
@@ -903,11 +903,11 @@ namespace ImageInserter
             {
                 ;
             }
-            else if ( (type == "name") || (type == "nameLink") )
+            else if ((type == "name") || (type == "nameLink"))
             {
                 info = System.IO.Path.GetFileName(imagePath);
             }
-            else if ( (type == "path") || (type == "pathLink") )
+            else if ((type == "path") || (type == "pathLink"))
             {
                 info = imagePath;
             }
@@ -1097,8 +1097,8 @@ namespace ImageInserter
             // Checking the existence and extension
             bool isExist = false;
             string ext = System.IO.Path.GetExtension(path);
-            string[] extCheck = {".jpg",".jpeg", ".bmp", ".png", ".gif"};
-            if ( extCheck.Contains(ext, System.StringComparer.OrdinalIgnoreCase))
+            string[] extCheck = { ".jpg", ".jpeg", ".bmp", ".png", ".gif" };
+            if (extCheck.Contains(ext, System.StringComparer.OrdinalIgnoreCase))
             {
                 if (System.IO.File.Exists(path))
                 {
@@ -1126,7 +1126,7 @@ namespace ImageInserter
                     imagePath = ofd.FileName;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 print($"ERROR tempBmp: {ex}");
             }
@@ -1137,7 +1137,7 @@ namespace ImageInserter
 
         private Excel.Application getApplication()
         {
-            if(Globals.ThisAddIn.Application == null)
+            if (Globals.ThisAddIn.Application == null)
             {
                 return null;
             }
@@ -1157,7 +1157,7 @@ namespace ImageInserter
 
         private Excel.Worksheet getActiveSheet()
         {
-            if(Globals.ThisAddIn.Application.ActiveSheet == null)
+            if (Globals.ThisAddIn.Application.ActiveSheet == null)
             {
                 return null;
             }
@@ -1167,7 +1167,7 @@ namespace ImageInserter
 
         private Excel.Range getSelection()
         {
-            if(Globals.ThisAddIn.Application.Selection == null)
+            if (Globals.ThisAddIn.Application.Selection == null)
             {
                 return null;
             }
@@ -1177,7 +1177,7 @@ namespace ImageInserter
 
         private Excel.Range getActiveCell()
         {
-            if(Globals.ThisAddIn.Application.ActiveCell == null)
+            if (Globals.ThisAddIn.Application.ActiveCell == null)
             {
                 return null;
             }
@@ -1237,7 +1237,7 @@ namespace ImageInserter
             {
                 int w = int.Parse(editBox_setW.Text);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 print($"<<< Parse error >>>: {ex}");
                 editBox_setW.Text = "15";

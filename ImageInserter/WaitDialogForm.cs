@@ -32,12 +32,16 @@ namespace WaitDialogForm
             //
             // TODO: InitializeComponent 呼び出しの後に、コンストラクタ コードを追加してください。
             //
-            this.ProgressMin   = 0;  // 処理件数の最小値（0件から開始）
-            this.ProgressStep  = 1;  // 何件ごとにメーターを進めるか
+            this.ProgressMin = 0;  // 処理件数の最小値（0件から開始）
+            this.ProgressStep = 1;  // 何件ごとにメーターを進めるか
             this.ProgressValue = 0;  // 最初の件数
 
             System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
-            Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+            try
+            {
+                Microsoft.VisualBasic.Interaction.AppActivate(p.Id);
+            }
+            catch (System.Exception) {; }
         }
 
         /// <summary>
