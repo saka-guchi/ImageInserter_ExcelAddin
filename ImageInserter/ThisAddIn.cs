@@ -6,6 +6,9 @@ using System.Xml.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace ImageInserter
 {
@@ -14,6 +17,7 @@ namespace ImageInserter
         //アドイン起動時にリボンの読み込みを行う処理
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
+            AppCenter.Start(AppCenterConfiguration.secret, typeof(Analytics), typeof(Crashes));
 #if false
             // 設定前のカルチャを表示
             System.Diagnostics.Debug.WriteLine("CurrentCulture: {0}", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
@@ -47,7 +51,7 @@ namespace ImageInserter
             this.Startup += new System.EventHandler(ThisAddIn_Startup);
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
         }
-        
-#endregion
+
+        #endregion
     }
 }
