@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Linq;
 using Microsoft.Office.Core;
@@ -180,6 +182,63 @@ namespace ImageInserter
             switchControlState(false);
 
             pasteImage(sheet, cell, imagePath);
+
+            // Enable UI
+            switchControlState(true);
+        }
+
+        private void button_insertClip_Click(object sender, RibbonControlEventArgs e)
+        {
+            // Change UI params
+            changeEvent_splitButton(splitButton_insert, button_insertClip);
+            splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertClip_Click);
+
+            // Get UI params
+            Excel.Worksheet sheet = null;
+            Excel.Range cell = null;
+
+            try
+            {
+                sheet = getActiveSheet();
+                cell = getActiveCell();
+            }
+            catch (Exception ex)
+            {
+                print($"ERROR: {ex}");
+                return;
+            }
+
+            // Get Clipboard image
+            string tempPath = "";
+            tempPath = System.IO.Path.GetTempFileName();
+
+            try
+            {
+                Image img = Clipboard.GetImage();
+                img.Save(tempPath, ImageFormat.Jpeg);
+            }
+            catch (Exception ex)
+            {
+                print($"ERROR: {ex}");
+                return;
+            }
+
+            // Disable UI
+            switchControlState(false);
+
+            // Temporarily change the setting to not record the path.
+            // clipboard image does not have a path.
+            int tempCellIndex = dropDown_writeCell.SelectedItemIndex;
+            int tempMemoIndex = dropDown_writeMemo.SelectedItemIndex;
+
+            dropDown_writeCell.SelectedItemIndex = 0;   // Do not write
+            dropDown_writeMemo.SelectedItemIndex = 0;   // Do not write
+
+            pasteImage(sheet, cell, tempPath);
+            System.IO.File.Delete(tempPath);
+
+            dropDown_writeCell.SelectedItemIndex = tempCellIndex;
+            dropDown_writeMemo.SelectedItemIndex = tempMemoIndex;
 
             // Enable UI
             switchControlState(true);

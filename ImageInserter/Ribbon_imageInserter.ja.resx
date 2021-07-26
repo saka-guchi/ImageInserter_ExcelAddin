@@ -120,6 +120,12 @@
   <data name="button_insertFile.Label" xml:space="preserve">
     <value>画像を選択セルに挿入</value>
   </data>
+  <data name="button_insertClip.Label" xml:space="preserve">
+    <value>クリップボードの画像を選択セルに挿入</value>
+  </data>
+  <data name="button_insertClip.Tag" xml:space="preserve">
+    <value>clip</value>
+  </data>
   <data name="button_insertLink.Label" xml:space="preserve">
     <value>選択セルに記入されたリンク先の画像を挿入</value>
   </data>
