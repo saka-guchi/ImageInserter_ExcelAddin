@@ -252,9 +252,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Ribbon_imageInserter.ja-JP.resx">
-      <DependentUpon>Ribbon_imageInserter.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Ribbon_imageInserter.ja.resx">
       <DependentUpon>Ribbon_imageInserter.cs</DependentUpon>
     </EmbeddedResource>

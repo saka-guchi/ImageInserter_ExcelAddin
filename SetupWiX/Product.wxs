@@ -2,8 +2,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
   <!-- バージョンアップ時はProductVersionとProductCode（ツール＞GUIDの作成）を変更する -->
-  <?define ProductVersion="1.1.5" ?>
-  <?define ProductCode = "822ADA7C-7965-4691-A86D-3205DAB0E20A" ?>
+  <?define ProductVersion="1.1.6" ?>
+  <?define ProductCode = "897B0E5F-588C-430E-9250-9DCB2F3E1BF2" ?>
   <?define UpgradeCode = "661472ad-167f-47e7-b761-562247fda9b4" ?>
   <?define ProductName = "Image Inserter Add-in for Excel" ?>
   <?define Manufacturer = "saka-guchi" ?>
@@ -125,6 +125,30 @@
       </Component>
       <Component Id="Component_Microsoft_Office_Tools_Common_v4_0_Utilities_dll" Directory="INSTALLFOLDER">
         <File Id="Microsoft_Office_Tools_Common_v4_0_Utilities_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+      </Component>
+      <Component Id="Component_Microsoft_AppCenter_Analytics_dll" Directory="INSTALLFOLDER">
+        <File Id="Microsoft_AppCenter_Analytics_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Microsoft.AppCenter.Analytics.dll" />
+      </Component>
+      <Component Id="Component_Microsoft_AppCenter_Crashes_dll" Directory="INSTALLFOLDER">
+        <File Id="Microsoft_AppCenter_Crashes_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Microsoft.AppCenter.Crashes.dll" />
+      </Component>
+      <Component Id="Component_Microsoft_AppCenter_dll" Directory="INSTALLFOLDER">
+        <File Id="Microsoft_AppCenter_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Microsoft.AppCenter.dll" />
+      </Component>
+      <Component Id="Component_Newtonsoft_Json_dll" Directory="INSTALLFOLDER">
+        <File Id="Newtonsoft_Json_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="Newtonsoft.Json.dll" />
+      </Component>
+      <Component Id="Component_SQLitePCLRaw_batteries_v2_dll" Directory="INSTALLFOLDER">
+        <File Id="SQLitePCLRaw_batteries_v2_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="SQLitePCLRaw.batteries_v2.dll" />
+      </Component>
+      <Component Id="Component_SQLitePCLRaw_core_dll" Directory="INSTALLFOLDER">
+        <File Id="SQLitePCLRaw_core_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="SQLitePCLRaw.core.dll" />
+      </Component>
+      <Component Id="Component_SQLitePCLRaw_nativelibrary_dll" Directory="INSTALLFOLDER">
+        <File Id="SQLitePCLRaw_nativelibrary_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="SQLitePCLRaw.nativelibrary.dll" />
+      </Component>
+      <Component Id="Component_SQLitePCLRaw_provider_dynamic_cdecl_dll" Directory="INSTALLFOLDER">
+        <File Id="SQLitePCLRaw_provider_dynamic_cdecl_dll" KeyPath="yes" Source="$(var.AddinFiles)" Name="SQLitePCLRaw.provider.dynamic_cdecl.dll" />
       </Component>
       <Component Id="Component_ja" Directory="Dir_ja" Guid="6587439C-8D94-4EED-ADDD-6573305CBB2D">
         <CreateFolder/>
