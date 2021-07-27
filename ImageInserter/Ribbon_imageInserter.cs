@@ -73,6 +73,10 @@ namespace ImageInserter
                     changeEvent_splitButton(splitButton_insert, button_insertFile);
                     splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertFile_Click);
                     break;
+                case "clip":
+                    changeEvent_splitButton(splitButton_insert, button_insertClip);
+                    splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertClip_Click);
+                    break;
                 case "link":
                     changeEvent_splitButton(splitButton_insert, button_insertLink);
                     splitButton_insert.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(button_insertLink_Click);
@@ -134,6 +138,7 @@ namespace ImageInserter
             {
                 // Delete all because registration event is unknown
                 btnDst.Click -= button_insertFile_Click;
+                btnDst.Click -= button_insertClip_Click;
                 btnDst.Click -= button_insertFolder_Click;
                 btnDst.Click -= button_insertLink_Click;
                 btnDst.Click -= button_deleteSelection_Click;
