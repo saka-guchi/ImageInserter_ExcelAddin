@@ -2,8 +2,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
   <!-- バージョンアップ時はProductVersionとProductCode（ツール＞GUIDの作成）を変更する -->
-  <?define ProductVersion="1.1.6" ?>
-  <?define ProductCode = "897B0E5F-588C-430E-9250-9DCB2F3E1BF2" ?>
+  <?define ProductVersion="1.1.7" ?>
+  <?define ProductCode = "14254568-02EF-4333-B73B-97F47B88632E" ?>
   <?define UpgradeCode = "661472ad-167f-47e7-b761-562247fda9b4" ?>
   <?define ProductName = "Image Inserter Add-in for Excel" ?>
   <?define Manufacturer = "saka-guchi" ?>
